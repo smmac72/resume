@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: var(--bg-primary);
   display: flex;
   align-items: flex-start;
@@ -11,44 +11,65 @@
   z-index: 9999;
   font-family: var(--font-mono);
   font-size: 12px;
-  padding: 20px;
   overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 .loading-content {
   width: 100%;
   max-width: 100%;
-  height: 90vh;
+  height: 100vh;
   padding: 0;
   color: var(--text-terminal);
   overflow: hidden;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.loading-header {
-  font-family: var(--font-mono);
-  font-size: 18px;
-  margin-bottom: 20px;
-  color: var(--text-bright);
-  font-weight: bold;
-}
-
+/* Амогус в центре экрана */
 .amogus-logo {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 100vh;
   white-space: pre;
   font-size: 16px;
   color: var(--info-color);
+  padding: 0;
+  margin: 0;
+}
+
+.loading-header {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  padding: 10px;
+  margin: 0;
+  color: var(--text-bright);
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Контейнер логов занимает всю оставшуюся высоту */
+.boot-logs-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Начинаем отображать сверху */
+  height: calc(100vh - 39px); /* Точно вычитаем высоту заголовка */
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 .log-entry {
-  margin-bottom: 0;
+  margin: 0;
+  padding: 0 10px;
   white-space: pre;
   font-family: var(--font-mono);
-  line-height: 1.2;
+  line-height: 1.5;
+  animation: fadeInUp 0.2s ease-out;
 }
 
 .log-entry.success {
@@ -65,4 +86,16 @@
 
 .log-entry.info {
   color: var(--info-color);
+}
+
+/* Анимация для плавного исчезновения старых логов */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -373,7 +373,23 @@ class CommandProcessor {
     const result = fileSystem.getFileContent(filePath);
     
     if (result.success) {
-      // Open the file in ContentBox
+      // Если это текстовый файл и содержит ссылку, открываем её в новой вкладке
+      if (result.type === 'text' && result.content.trim().startsWith('http')) {
+        console.log('link');
+        // Открываем ссылку в новой вкладке браузера
+        window.open(result.content.trim(), '_blank');
+        
+        // Разблокируем достижение за открытие ссылки
+        this.unlockAchievement('link_opened', filePath);
+        
+        // Показываем сообщение в терминале
+        return {
+          success: true,
+          message: `Opening link: ${result.content}`,
+        };
+      }
+      
+      // Для всех остальных типов файлов - открываем в ContentBox
       if (callbacks.onRun) {
         callbacks.onRun({
           title: filePath,
@@ -382,20 +398,18 @@ class CommandProcessor {
         });
       }
 
-      // Also unlock achievement based on file type
+      // Разблокировка достижений в зависимости от типа файла
       if (result.type === 'image') {
         this.unlockAchievement('image_opened', filePath);
       } else if (result.type === 'timeline') {
         this.unlockAchievement('timeline_opened', filePath);
-      } else if (result.content.startsWith('http')) {
-        this.unlockAchievement('link_opened', filePath);
       }
       
-      // For text files, also show content in terminal like cat command
+      // Для текстовых файлов также показываем содержимое в терминале
       if (result.type === 'text') {
         const content = result.content.replace(/\\n/g, '\r\n');
         
-        // Check for login credentials in text
+        // Проверяем наличие учетных данных в тексте
         this.processLoginInfo(content);
         
         this.unlockAchievement('file_executed', filePath);
