@@ -1,0 +1,87 @@
+.keyboard {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  gap: 5px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.keyboard-key {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  min-width: 0;
+  flex: 1;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.1s ease;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  padding: 0;
+}
+
+.keyboard-key.active {
+  background-color: var(--accent-color);
+  color: var(--text-bright);
+}
+
+.keyboard-key.held {
+  background-color: var(--accent-color);
+  color: var(--text-bright);
+  opacity: 0.7;
+}
+
+.keyboard-key.key-1-25x {
+  flex: 1.25;
+}
+
+.keyboard-key.key-1-5x {
+  flex: 1.5;
+}
+
+.keyboard-key.key-2x {
+  flex: 2;
+}
+
+.keyboard-key.key-2-25x {
+  flex: 2.25;
+}
+
+.keyboard-key.key-6x {
+  flex: 6;
+}
+
+.keyboard-spacebar {
+  flex: 6;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.1s ease;
+}
+
+.keyboard-spacebar.active {
+  background-color: var(--accent-color);
+  color: var(--text-bright);
+}

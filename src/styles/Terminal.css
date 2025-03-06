@@ -1,0 +1,89 @@
+.terminal {
+  font-family: var(--font-mono);
+  background-color: var(--bg-terminal);
+  color: var(--text-terminal);
+  height: 100%;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  padding: 5px 10px;
+}
+
+.terminal-title {
+  font-weight: bold;
+  color: var(--text-bright);
+}
+
+.terminal-content {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-x: hidden;
+  max-height: 300px; /* Fixed height for terminal content */
+}
+
+.terminal-line {
+  margin-bottom: 5px;
+}
+
+.terminal-input-line {
+  display: flex;
+  margin-top: 10px;
+}
+
+.terminal-prompt {
+  margin-right: 5px;
+}
+
+.terminal-user {
+  color: var(--info-color);
+  font-weight: bold;
+}
+
+.terminal-at {
+  color: var(--text-terminal);
+}
+
+.terminal-server {
+  color: var(--warning-color);
+}
+
+.terminal-colon {
+  color: var(--text-terminal);
+}
+
+.terminal-path {
+  color: var(--text-bright);
+}
+
+.terminal-dollar {
+  color: var(--success-color);
+}
+
+.terminal-input {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+.directory {
+  color: var(--info-color);
+  font-weight: bold;
+}
+
+.file {
+  color: var(--text-bright);
+}

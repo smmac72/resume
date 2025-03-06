@@ -1,0 +1,68 @@
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  z-index: 9999;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.loading-content {
+  width: 100%;
+  max-width: 100%;
+  height: 90vh;
+  padding: 0;
+  color: var(--text-terminal);
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.loading-header {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--text-bright);
+  font-weight: bold;
+}
+
+.amogus-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  white-space: pre;
+  font-size: 16px;
+  color: var(--info-color);
+}
+
+.log-entry {
+  margin-bottom: 0;
+  white-space: pre;
+  font-family: var(--font-mono);
+  line-height: 1.2;
+}
+
+.log-entry.success {
+  color: var(--success-color);
+}
+
+.log-entry.error {
+  color: var(--error-color);
+}
+
+.log-entry.warning {
+  color: var(--warning-color);
+}
+
+.log-entry.info {
+  color: var(--info-color);
+}

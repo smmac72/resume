@@ -1,0 +1,41 @@
+:root {
+  --bg-primary: #000000;
+  --text-primary: #c0c0c0;
+  --text-bright: #e0e0e0;
+  --bg-secondary: #202020;
+  --text-secondary: #909090;
+  --bg-terminal: #000000;
+  --text-terminal: #c0c0c0;
+  --bg-content: #131313;
+  --accent-color: #505050;
+  --error-color: #ff0033;
+  --success-color: #00cc66;
+  --info-color: #3498db;
+  --warning-color: #f39c12;
+  --bg-planet: #00212f;
+  
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-sans: 'JetBrains Mono', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  --border-radius: 4px;
+  --border-color: #333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
