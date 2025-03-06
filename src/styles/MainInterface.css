@@ -91,6 +91,18 @@
   border-radius: var(--border-radius);
   margin-bottom: 6px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inventory-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.inventory-item:active {
+  transform: translateY(0);
 }
 
 .inventory-item-header {

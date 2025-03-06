@@ -113,7 +113,11 @@ const MainInterface = ({
                 {language === 'ru' ? 'Инвентарь' : 'Inventory'}
               </div>
               <div className="inventory-items">
-                <Inventory language={language} key={`inv-${updateCounter}`} />
+                <Inventory 
+                  language={language} 
+                  key={`inv-${updateCounter}`} 
+                  onConnect={handleConnect} 
+                />
               </div>
             </div>
             <div className="achievements">
