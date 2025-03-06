@@ -119,17 +119,19 @@
 }
 
 .achievement-icon-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 2px;
+  justify-content: center;
+  padding: 4px 2px;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: var(--border-radius);
   cursor: help;
   transition: transform 0.2s;
   position: relative;
   z-index: 10;
+  height: 100%;
+  max-height: 40px;
 }
 
 .achievement-icon-container:hover {
@@ -174,6 +176,11 @@
   opacity: 0;
   transition: opacity 0.3s;
   z-index: 20;
+  
+  max-width: 120px;
+  text-align: center;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.3s, opacity 0.3s;
 }
 
 .achievement-tooltip::after {
@@ -189,6 +196,7 @@
 
 .achievement-icon-container:hover .achievement-tooltip {
   opacity: 1;
+  clip-path: inset(0);
 }
 
 .achievements-unlocked-animation {
@@ -206,4 +214,112 @@
 @keyframes blink {
   from { opacity: 0.6; }
   to { opacity: 1; }
+}
+
+.tooltip-bottom {
+  bottom: 110%; /* Чуть выше элемента */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
+.tooltip-top {
+  top: 110%; /* Чуть ниже элемента */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-top::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+}
+
+.tooltip-bottom-left {
+  bottom: 110%;
+  right: 100%;
+  transform: translateX(50%);
+}
+
+.tooltip-bottom-left::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+  transform: rotate(45deg);
+}
+
+.tooltip-bottom-right {
+  bottom: 110%;
+  left: 100%;
+  transform: translateX(-50%);
+}
+
+.tooltip-bottom-right::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+  transform: rotate(-45deg);
+}
+
+.tooltip-top-left {
+  top: 110%;
+  right: 100%;
+  transform: translateX(50%);
+}
+
+.tooltip-top-left::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+  transform: rotate(45deg);
+}
+
+.tooltip-top-right {
+  top: 110%;
+  left: 100%;
+  transform: translateX(-50%);
+}
+
+.tooltip-top-right::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+  transform: rotate(-45deg);
+}.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 5px;
+  height: 100%;
 }

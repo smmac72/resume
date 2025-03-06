@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import commandProcessor from '../utils/commandProcessor';
 
 const Achievements = ({ language }) => {
-  const achievements = commandProcessor.getAchievements();
-  const totalAchievements = 8; // Теперь у нас 8 достижений
+  const [achievements, setAchievements] = useState(commandProcessor.getAchievements());
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
-  
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0, visible: false, content: null });
+  const totalAchievements = 8;
+
   // Определение всех возможных достижений
   const allAchievements = [
     {
@@ -105,24 +106,61 @@ const Achievements = ({ language }) => {
       }
     }
   ];
-  
-  // Check if achievements were just unlocked
-  useEffect(() => {
-    if (commandProcessor.achievementsUnlocked && achievements.length > 0) {
-      setShowUnlockAnimation(true);
-      
-      // Reset the flag
-      commandProcessor.achievementsUnlocked = false;
-      
-      // Show animation for 3 seconds
-      const timer = setTimeout(() => {
-        setShowUnlockAnimation(false);
-      }, 3000);
-      
-      return () => clearTimeout(timer);
+
+  // Обработчик наведения на достижение
+  const handleMouseEnter = (e, achievement) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const tooltipContent = (
+      <>
+        <div className="achievement-tooltip-title">
+          {achievement.title[language] || achievement.title.en}
+        </div>
+        <div className="achievement-tooltip-desc">
+          {achievement.description[language] || achievement.description.en}
+        </div>
+      </>
+    );
+
+    // Определение позиции тултипа
+    const spaceAbove = rect.top;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceLeft = rect.left;
+    const spaceRight = window.innerWidth - rect.right;
+
+    let x = rect.left + rect.width / 2;
+    let y = rect.top;
+
+    // Вертикальное позиционирование
+    if (spaceBelow > spaceAbove) {
+      // Больше места снизу
+      y = rect.bottom;
+    } else {
+      // Больше места сверху
+      y = rect.top - 10;
     }
-  }, [achievements.length]);
-  
+
+    // Горизонтальное позиционирование
+    if (spaceLeft < 60) {
+      // Слева мало места
+      x = rect.right + 15;
+    } else if (spaceRight < 60) {
+      // Справа мало места
+      x = rect.left - 15;
+    }
+
+    setTooltipPosition({ 
+      x, 
+      y, 
+      visible: true, 
+      content: tooltipContent 
+    });
+  };
+
+  // Обработчик ухода мыши
+  const handleMouseLeave = () => {
+    setTooltipPosition(prev => ({ ...prev, visible: false }));
+  };
+
   // Рендер сетки достижений
   const renderAchievementGrid = () => {
     return (
@@ -134,24 +172,47 @@ const Achievements = ({ language }) => {
             <div 
               key={achievement.type} 
               className={`achievement-icon-container ${achieved ? 'achieved' : 'locked'}`}
+              onMouseEnter={(e) => handleMouseEnter(e, achievement)}
+              onMouseLeave={handleMouseLeave}
             >
               <div className="achievement-icon">{achievement.icon}</div>
-              <div className="achievement-tooltip">
-                <div className="achievement-tooltip-title">
-                  {achievement.title[language] || achievement.title.en}
-                </div>
-                <div className="achievement-tooltip-desc">
-                  {achievement.description[language] || achievement.description.en}
-                </div>
-              </div>
             </div>
           );
         })}
+
+        {tooltipPosition.visible && (
+          <div 
+            className="achievement-tooltip" 
+            style={{
+              position: 'fixed',
+              top: `${tooltipPosition.y}px`,
+              left: `${tooltipPosition.x}px`,
+              transform: 'translate(-50%, -100%)',
+              opacity: 1
+            }}
+          >
+            {tooltipPosition.content}
+          </div>
+        )}
       </div>
     );
   };
-  
-  // Если нет достижений, показываем заблокированное сообщение
+
+  // Эффект для отслеживания разблокировки достижений
+  useEffect(() => {
+    if (commandProcessor.achievementsUnlocked && achievements.length > 0) {
+      setShowUnlockAnimation(true);
+      commandProcessor.achievementsUnlocked = false;
+      
+      const timer = setTimeout(() => {
+        setShowUnlockAnimation(false);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [achievements.length]);
+
+  // Условный рендеринг для различных состояний достижений
   if (achievements.length === 0) {
     return (
       <>
@@ -165,7 +226,6 @@ const Achievements = ({ language }) => {
     );
   }
   
-  // Если идет анимация разблокировки
   if (showUnlockAnimation) {
     return (
       <>
@@ -179,7 +239,6 @@ const Achievements = ({ language }) => {
     );
   }
   
-  // Нормальный вид с достижениями
   return (
     <>
       <div className="achievements-header-line">
