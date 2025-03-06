@@ -146,6 +146,22 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
     const fileResult = fileSystem.getFileContent(filePath);
     
     if (fileResult.success) {
+      // Проверяем, является ли файл URL-ссылкой
+      if (fileResult.type === 'url' || 
+          (fileResult.type === 'text' && 
+           (fileResult.content.trim().startsWith('http://') || 
+            fileResult.content.trim().startsWith('https://')))) {
+        // Открываем URL в новой вкладке браузера
+        window.open(fileResult.content.trim(), '_blank');
+        
+        // Импортируем commandProcessor для разблокирования достижения
+        import('../utils/commandProcessor').then(module => {
+          const commandProcessor = module.default;
+          commandProcessor.unlockAchievement('link_opened', file);
+        });
+        
+        return; // Важно - прерываем выполнение функции здесь
+      }
       const fileObject = {
         title: file,
         content: fileResult.content,

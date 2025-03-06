@@ -371,11 +371,29 @@ class CommandProcessor {
 
     const filePath = args[0];
     const result = fileSystem.getFileContent(filePath);
-    
+    console.log("Running file:", filePath);
+  console.log("File type:", result.type);
+  console.log("Content starts with:", result.content.substring(0, 50));
     if (result.success) {
-      // Если это текстовый файл и содержит ссылку, открываем её в новой вкладке
-      if (result.type === 'text' && result.content.trim().startsWith('http')) {
-        console.log('link');
+      // Добавлен новый тип 'url'
+      if (result.type === 'url') {
+        // Открываем ссылку в новой вкладке браузера
+        window.open(result.content.trim(), '_blank');
+        
+        // Разблокируем достижение за открытие ссылки
+        this.unlockAchievement('link_opened', filePath);
+        
+        // Показываем сообщение в терминале
+        return {
+          success: true,
+          message: `Opening link: ${result.content}`,
+        };
+      }
+      
+      // Для обратной совместимости - проверка на текстовые файлы с http
+      if (result.type === 'text' && 
+          (result.content.trim().startsWith('http://') || 
+          result.content.trim().startsWith('https://'))) {
         // Открываем ссылку в новой вкладке браузера
         window.open(result.content.trim(), '_blank');
         

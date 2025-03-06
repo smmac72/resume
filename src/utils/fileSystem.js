@@ -481,6 +481,8 @@ class FileSystem {
       return 'image';
     } else if (content.startsWith('timeline:')) {
       return 'timeline';
+    } else if (content.trim().startsWith('http://') || content.trim().startsWith('https://')) {
+      return 'url'; // Новый тип для URL
     } else {
       return 'text';
     }
