@@ -112,12 +112,7 @@ class FileSystem {
               'meme5.sh': 'image:meme5.jpg',
               'meme6.sh': 'image:meme6.jpg',
               'meme7.sh': 'image:meme7.jpg',
-              'meme8.sh': 'image:meme8.jpg',
-              'meme9.sh': 'image:meme9.jpg',
-              'meme10.sh': 'image:meme10.jpg',
-              'meme11.sh': 'image:meme11.jpg',
-              'meme12.sh': 'image:meme12.jpg',
-              'cool-site.sh': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+              'cool-site.sh': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             },
           },
           background: 'server1_bg.jpg',

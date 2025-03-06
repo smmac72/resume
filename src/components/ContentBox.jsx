@@ -201,45 +201,47 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
         {innerPath}
       </div>
       
-      <ul className="directory-list">
-        {innerPath !== '/' && (
-          <li 
-            className="directory-item directory-item-folder" 
-            onClick={handleGoUp}
-          >
-            <span className="directory-item-icon">⬆️</span>
-            <span>..</span>
-          </li>
-        )}
-        
-        {directories.map(dir => (
-          <li 
-            key={dir} 
-            className="directory-item directory-item-folder"
-            onClick={() => handleDirectoryClick(dir)}
-          >
-            <span className="directory-item-icon">📁</span>
-            <span>{dir}</span>
-          </li>
-        ))}
-        
-        {files.map(file => (
-          <li 
-            key={file} 
-            className="directory-item directory-item-file"
-            onClick={() => handleFileClick(file)}
-          >
-            <span className="directory-item-icon">📄</span>
-            <span>{file}</span>
-          </li>
-        ))}
-        
-        {directories.length === 0 && files.length === 0 && (
-          <li className="directory-item-empty">
-            {language === 'ru' ? 'Пустая директория' : 'Empty directory'}
-          </li>
-        )}
-      </ul>
+      <div className="directory-list-container">
+        <ul className="directory-list">
+          {innerPath !== '/' && (
+            <li 
+              className="directory-item directory-item-folder" 
+              onClick={handleGoUp}
+            >
+              <span className="directory-item-icon">⬆️</span>
+              <span>..</span>
+            </li>
+          )}
+          
+          {directories.map(dir => (
+            <li 
+              key={dir} 
+              className="directory-item directory-item-folder"
+              onClick={() => handleDirectoryClick(dir)}
+            >
+              <span className="directory-item-icon">📁</span>
+              <span>{dir}</span>
+            </li>
+          ))}
+          
+          {files.map(file => (
+            <li 
+              key={file} 
+              className="directory-item directory-item-file"
+              onClick={() => handleFileClick(file)}
+            >
+              <span className="directory-item-icon">📄</span>
+              <span>{file}</span>
+            </li>
+          ))}
+          
+          {directories.length === 0 && files.length === 0 && (
+            <li className="directory-item-empty">
+              {language === 'ru' ? 'Пустая директория' : 'Empty directory'}
+            </li>
+          )}
+        </ul>
+      </div>
     </div>
   );
 };
