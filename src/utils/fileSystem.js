@@ -194,7 +194,10 @@ class FileSystem {
     const server = this.root.servers[this.currentServer];
     if (server.username === username && server.password === password) {
       // Mark this server as authenticated
-      this.authenticatedServers[this.currentServer] = true;
+      this.authenticatedServers[this.currentServer] = {
+        username: username,
+        authenticated: true
+      };
       
       return {
         success: true,
@@ -257,7 +260,8 @@ class FileSystem {
 
     // Check if server is protected and we're not authenticated
     if (this.root.servers[this.currentServer].protected && 
-        !this.authenticatedServers[this.currentServer]) {
+        (!this.authenticatedServers[this.currentServer] || 
+         !this.authenticatedServers[this.currentServer].authenticated)) {
       return { success: false, message: 'Authentication required' };
     }
 

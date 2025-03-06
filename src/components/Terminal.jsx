@@ -70,9 +70,10 @@ const Terminal = ({
   // Рендер приглашения командной строки
   const renderPrompt = () => {
     if (server) {
+      const username = fileSystem.authenticatedServers[fileSystem.currentServer]?.username || server.username;
       return (
         <span className="terminal-prompt">
-          <span className="terminal-user">{server.username}</span>
+          <span className="terminal-user">{username}</span>
           <span className="terminal-at">@</span>
           <span className="terminal-server">{fileSystem.currentServer}</span>
           <span className="terminal-colon">:</span>
