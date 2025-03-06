@@ -74,6 +74,7 @@ const MainInterface = ({
       onConnect(newServer);
     }
     setCurrentPath('/');
+    setActiveTab(0);
     
     setUpdateCounter(prev => prev + 1);
   };
