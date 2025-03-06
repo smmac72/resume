@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import commandProcessor from '../utils/commandProcessor';
 
 const Achievements = ({ language }) => {
-  // Получаем текущие достижения
   const [achievements, setAchievements] = useState(commandProcessor.getAchievements());
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
@@ -10,7 +9,7 @@ const Achievements = ({ language }) => {
   const containerRefs = useRef({});
   const totalAchievements = 8;
 
-  // Определения достижений с названиями и описаниями
+  // defining achievements and their details
   const achievementDetails = {
     any_file: {
       icon: '📄',
@@ -70,7 +69,7 @@ const Achievements = ({ language }) => {
     },
   };
 
-  // Эффект для анимации разблокировки достижений
+  // unlocking animation
   useEffect(() => {
     if (commandProcessor.achievementsUnlocked && achievements.length > 0) {
       setShowUnlockAnimation(true);
@@ -82,7 +81,7 @@ const Achievements = ({ language }) => {
     }
   }, [achievements.length]);
 
-  // Clean up any timers when component unmounts
+  // clean up any timers when component unmounts
   useEffect(() => {
     return () => {
       if (tooltipTimeout.current) {
@@ -91,24 +90,24 @@ const Achievements = ({ language }) => {
     };
   }, []);
 
-  // Get all achievement types
+  // get all achievement types
   const allAchievementTypes = Object.keys(achievementDetails);
   
-  // Get tooltip position class based on the icon's position in the grid
+  // get tooltip position class based on the icon's position in the grid
   const getTooltipPositionClass = (index) => {
-    const row = Math.floor(index / 4); // Assuming 4 columns in our grid
+    const row = Math.floor(index / 4); // only four icons per row
     const col = index % 4;
     
     let positionClass = '';
     
-    // Determine vertical position (top/bottom)
+    // determine vertical position (top/bottom)
     if (row === 0) {
-      positionClass += 'tooltip-top '; // Show tooltip ABOVE for top row
+      positionClass += 'tooltip-top '; // show tooltip ABOVE for top row
     } else {
-      positionClass += 'tooltip-bottom '; // Show tooltip BELOW for bottom row
+      positionClass += 'tooltip-bottom '; // show tooltip BELOW for bottom row
     }
     
-    // Determine horizontal alignment (left/center/right)
+    // determine horizontal alignment (left/center/right)
     if (col === 0) {
       positionClass += 'tooltip-left';
     } else if (col === 3) {
@@ -120,15 +119,12 @@ const Achievements = ({ language }) => {
     return positionClass;
   };
 
-  // This function will be called repeatedly to check if mouse is over container
+  // check if mouse is over container
   const checkHover = (type) => {
     const container = containerRefs.current[type];
     if (!container) return;
-    
-    // Get the rect of the container
     const rect = container.getBoundingClientRect();
     
-    // Check if mouse is over container
     if (
       rect &&
       window.event && 
@@ -137,7 +133,7 @@ const Achievements = ({ language }) => {
       window.event.clientY >= rect.top &&
       window.event.clientY <= rect.bottom
     ) {
-      // Mouse is over container, keep tooltip open
+      // keep tooltip open
       if (tooltipTimeout.current) {
         clearTimeout(tooltipTimeout.current);
         tooltipTimeout.current = null;
@@ -147,34 +143,31 @@ const Achievements = ({ language }) => {
         setActiveTooltip(type);
       }
       
-      // Continue checking
       requestAnimationFrame(() => checkHover(type));
     } else {
-      // Mouse left container, schedule tooltip to hide
+      // schedule tooltip to hide
       if (!tooltipTimeout.current) {
         tooltipTimeout.current = setTimeout(() => {
           setActiveTooltip(null);
           tooltipTimeout.current = null;
-        }, 500); // Longer delay of 500ms
+        }, 500);
       }
     }
   };
 
-  // Handler for showing tooltip
+  // handler for showing tooltip
   const handleMouseEnter = (type) => {
-    // Cancel any pending hide
     if (tooltipTimeout.current) {
       clearTimeout(tooltipTimeout.current);
       tooltipTimeout.current = null;
     }
     
     setActiveTooltip(type);
-    
-    // Start checking for hover status
+    // start checking for hover status
     requestAnimationFrame(() => checkHover(type));
   };
 
-  // Render tooltip for an achievement
+  // render tooltip for an achievement
   const renderTooltip = (type, index) => {
     const details = achievementDetails[type];
     if (!details) return null;
@@ -193,7 +186,7 @@ const Achievements = ({ language }) => {
     );
   };
 
-  // Рендер сетки достижений: каждый бокс содержит только иконку достижения с тултипом
+  // render achievement grid - icons with tooltips
   const renderAchievementGrid = () => {
     return (
       <div className="achievements-grid">
@@ -217,7 +210,7 @@ const Achievements = ({ language }) => {
     );
   };
 
-  // Условный рендеринг для разных состояний
+  // if no achievements, show locked message, otherwise show grid
   if (achievements.length === 0) {
     return (
       <>

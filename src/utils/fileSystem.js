@@ -19,12 +19,12 @@ class FileSystem {
           protected: false, // This server is accessible without auth
           root: {
             home: {
-              'readme.txt': 'Welcome to my interactive resume terminal!\n\nUse commands like ls, cd, cat, run, scan to navigate and explore.\nThe SCAN command will help you discover additional servers.\n\nType "help" for a full list of commands.',
-              'resume.sh': 'pdf:resume.pdf',
-              'photo.sh': 'image:profile.jpg',
+              'readme.txt': `note to the future me - if you don't know what this server is, amnesia came. check the logins.txt if you're still making games. read my old dev notes and make me proud mate!\notherwise, if you aren't me but interested in my personal data, use the 'help' command - there's a custom terminal here. gl mate!\n\n- me`,
+              'linkedin.sh': 'https://www.linkedin.com/in/oleg-bogomolov-035713335/',
+              'hh.sh': 'https://hh.ru/resume/aede5f73ff0b7f9f570039ed1f6d6a6736696c'
             },
             etc: {
-              'logins.txt': 'zeromac:naughtshad@31.31.196.2\nzeromac:allsspent@31.31.196.3\nzeromac:whereourdesireisgotwithoutcontent@31.31.196.4',
+              'logins.txt': 'zeromac:naughtshad@31.31.196.2\nzeromac:allsspent@31.31.196.3\nzeromac:whereourdesire@31.31.196.4',
               'servers.conf': 'Available servers on network:\n31.31.196.2 - Work Server\n31.31.196.3 - Pet Projects\n31.31.196.4 - Personal Server',
             },
           },
@@ -40,7 +40,7 @@ class FileSystem {
               'globalcity.sh': 'timeline:globalcity',
               'nextrp.sh': 'timeline:nextrp',
               'samprp.sh': 'timeline:samprp',
-              'readme.txt': 'This server contains information about my work projects and experiences.\nUse the "run" command on the .sh files to view detailed timelines.',
+              'readme.txt': `a small compilation of my workplaces. timeline files contain the most important events and achievements. due to a little funny document, i won't be storing any sensitive documents here\nbut if you want to know what i did - you're welcome`,
             },
           },
           background: 'server2_bg.jpg',
@@ -52,31 +52,36 @@ class FileSystem {
           protected: true, // This server requires authentication
           root: {
             renderer: {
-              'renderer.sh': 'https://github.com/username/renderer',
-              'readme.txt': 'A custom rendering engine project for real-time graphics applications.',
-              'screenshot.sh': 'image:renderer_screenshot.jpg',
+              'github.sh': 'https://github.com/smmac72/zeroRender',
+              'readme.txt': 'note to self - making game content is cool, but you know what is cooler? low-level programming. god i miss my risc-v days...\nanyways, a cool thing i did on my redbull-driven three-night bonanza. code is acceptable by my standards',
             },
             chernograd: {
-              'chernograd.sh': 'https://github.com/username/chernograd',
-              'readme.txt': 'A procedural city generation project for game environments.',
-              'demo.sh': 'image:chernograd_demo.jpg',
+              'steam.sh': 'https://store.steampowered.com/app/3047300/CHERNOGRAD/',
+              'readme.txt': 'a small piece of our kgb-simulator indie game. pretty hard to finish rn, but i had finally returned to the developer me, not gamedesigner me\nit is broken, but i will get to chernograd when my happiness is back',
+              'demomemory.png': 'image:demomemory.jpg',
+              'firststreamer.png': 'image:firststreamer.jpg',
+              'deck.png': 'image:deck.jpg',
+              'rei.png': 'image:rei.jpg',
+              'release.png': 'image:release.jpg',
+              'techdocs.png': 'image:techdocs.jpg',
+              'localization.png': 'image:localization.jpg',
             },
             tabletop: {
-              'readme.txt': 'Collection of tabletop game tools and resources I\'ve created.',
-              'vtt.sh': 'https://github.com/username/vtt-tool',
-              'map-generator.sh': 'https://github.com/username/map-generator',
-              'character-sheet.sh': 'https://github.com/username/character-sheet',
-              'preview.sh': 'image:tabletop_preview.jpg',
+              'readme.txt': 'got ourselves a publisher. just decided not to. i kinda understand the tabletops, but cannot get to like it\ni guess just not my thing, but it was certainly cool to try',
+              'pitch.pptx': 'https://docs.google.com/presentation/d/1J4tuk1PBqaa_iccFenoiTlEkYEqwNX_MLkmcNfFSGdY/edit#slide=id.g2a8926ffb75_0_180',
+              'rules.docx': 'https://docs.google.com/document/d/19DbA54xCZQKHBdRlbtjiAGJOyVrb8hMoPSZ3KZ85fto/edit?tab=t.0',
+              'pnp.pdf': 'https://docs.google.com/presentation/d/19v1cJ2s1ihUtJwkHXWO1YGk-gcp6o7jutL2dYMVd7Z8/edit#slide=id.g28e64aa2097_0_206',
+              'printedgame.png': 'image:tabletop.jpg',
             },
             web: {
-              'portfolio.sh': 'https://username.github.io',
-              'blog.sh': 'https://username.medium.com',
-              'readme.txt': 'My web development projects and online presence.',
-              'screenshot.sh': 'image:web_screenshot.jpg',
+              'github.sh': 'https://github.com/smmac72/resume',
+              'sluchka.sh': 'https://sluchka.market',
+              'readme.txt': 'this web-page is free like the wikipedia the free online encyclopedia that anyone from black mesa from edit!\nah no, the free online encyclopedia that no one will ever edit again!\ndid not understand the reference? check out half life vr, funny as hell\n\nanyways, i do not like web-dev, but have you seen a student with no prior experience getting a position without a cool resume? take a look at my first site, i made it in flask and will never share the sources, it was terrible.\n\nalso there is a sluchka.market website - a work in progress marketplace for the pet matching. it is a birthday gift for my best friend, as he wished for this project to come true, but big coporate men usually do not have time for their dreams :(\nso i made it for him. it can be down, cloud servers are expensive',
+              'oldsite.sh': 'image:old_site.jpg',
             },
             gtao: {
-              'gtao.sh': 'https://github.com/username/gtao-tools',
-              'readme.txt': 'Tools and scripts for GTA Online development.',
+              'balancedoc.xlsx': 'https://docs.google.com/spreadsheets/d/1oeNenv0Jt3pAe_Esq6SDZbESOZO94cTeWWO31des5Dw/edit?usp=sharing',
+              'readme.txt': 'i most certainly believe i did a better job than rockstar. i mean, i did not, but i am not the richest gamedev company in the world\nalas, they did not hire me. but they did send my friends a cease and desist letter (we did a lot of gta modding in the past). i guess i was close to them in some way\n\noutdated as hell, will not try that again until i make roleplay games again',
             },
           },
           background: 'server3_bg.jpg',
@@ -84,15 +89,15 @@ class FileSystem {
         '31.31.196.4': {
           name: 'Personal Server',
           username: 'zeromac',
-          password: 'whereourdesireisgotwithoutcontent',
+          password: 'whereourdesire',
           protected: true, // This server requires authentication
           root: {
             personal: {
-              'about-me.txt': 'I am a passionate developer with interests in graphics programming, game development, and web technologies.\n\nI enjoy solving complex problems and creating immersive digital experiences.',
-              'hobbies.txt': 'When not coding, I enjoy photography, playing chess, reading science fiction, and exploring new technologies.',
-              'skills.txt': 'Programming Languages: C++, JavaScript, Python, C#\nFrameworks: React, Node.js, Unity\nTools: Git, Docker, VS Code\nSpecialties: Graphics Programming, Web Development, Game Development',
-              'philosophy.txt': 'I believe in creating software that is not only functional but also intuitive and enjoyable to use. I value clean code, continuous learning, and collaborative development.',
-              'goals.txt': 'My professional goals include developing innovative tools for creative industries, contributing to open-source projects, and mentoring aspiring developers.',
+              'readme.txt': `hiya! my name's oleg, i am a full-time game designer (mobile f2p and mmorpg), even more full-time student. game design stuff is on the other servers, here's more about me. i am a:\n– programming guy at my core\n– cameraman and video editor since middle school\n– home trained half-professional cook with a decade of learning and experimenting\n– true shakespearean (new) english enjoyer - you did get the mcbeth reference from the server passwords, right? or you can accept it as a metal gear solid 2: sons of liberty reference\n– long airsoft enjoyer with my masada acr and lots of custom gear. alas, i gave my hobby away to grow as a professional\n\nactually, i am pretty cool! if you are not hiring, we can at least share the best sandwich in saint-p!`,
+              'favgames.txt': `reminder to myself if there are no games i wish to play:\n1. drakenier - yoko taro is a genius at creating the perfect story and atmosphere\n2. metal gear - kojima is god! i hear it's amazing when the famous purple stuffed worm in flap-jaw space with the tuning fork does a raw blink on hara-kiri Rock. i need scissors! 61!\n3. yakuza - peak meme potential\n4. lisa (both the painful and the joyful) - truly a beautiful story that makes a man cry\n5. persona 5 (sorry i caught the hype wave) - BY THE MYRIAD TRUTHS\n6. call of duty: modern warfare 2 - if you thought of the new 2022 MW2, that's the wrong list\n7. stalker - the new one is a masterpiece. probably won't replay it, but peak story, cutscene directing, gameplay, atmosphere. truly the best experience of my 2024\n8. undertale - sans undertale. if you know, you know.\n9. max payne - the best third-person shooter in my absolutely objective opinion.\n10. grand theft auto series - i think it doesn't need any explanation. long-time fan, long-time modder, long-time taketwo opposition member`,
+              'favmovies.txt': `movies/tv shows/producers - my top10:\n1. guy ritchie - who doesn't like a light-hearted criminal comedy?\n2. vince gilligan - i skipped my exams for the release of el camino. i regret nothing.\n3. hayao miyazaki - every work of his is a masterpiece\n4. the wachowski brothers? sisters? - probably the reason i managed to reinstall windows 18 years ago, when my parents left me home alone. seriously, matrix might be the force that made me a programmer\n5. luke besson - won't get political here with the leon inspiration. multipass.\n6. balabanov - every film made to amass budget for his strange true ideas was peak of the russian media. turned out i know the ethiopian guy in person lmao.\n7. quentin jerome tarantino - probably must be higher. also i wish to place miller's sin city here.\n8. limitless (i don't know other burger's movies) - must watch if not feeling alright. makes you believe you can go on\n9. the coen brothers - i even got myself the rug\n10. suits tv show - made me a better person. mike ross is quite relatable (except for the genius part)`,
+              'favbooks.txt': `that would be a top5, i am not that memorable of the quotes:\n1. moby dick - "ignorance is the parent of fear"\n2. programming: principles and practice using c++ - "a computer is just a piece of hardware until someone — some programmer — writes code for it to do something useful"\n3. "when the power of imparting joy is equal to the will, the human soul requires no other heaven."\n4. alice's adventures in wonderland - "imagination is the only weapon in the war with reality"\n5. treasure island - "money can't buy happiness, but it can certainly buy a lot of other things"`,
+              'utils.txt': `writing software:\n1. notion\n2. google docs\n3. coda\n\ncoding preferences:\n1. c/c++ - vs code or notepad++ with gcc\n2. python - idle only\n3. any web stuff (not flask) - vs code\n4. c++ with complex projects - vs2022\n\nbalancing:\n1. google spreadsheets. nothing else.\n\nprototyping:\n1. figma\n2. miro\n3. mspaint\n\ndb preferences:\n1. postgre - covers most of the relational databases\n2. mongodb json - for configs\n3. redis - for cached data`,
             },
           },
           background: 'server3_bg.jpg',
@@ -104,15 +109,15 @@ class FileSystem {
           protected: false, // Public access
           root: {
             memes: {
-              'readme.txt': 'Welcome to my meme collection. Use at your own risk!',
-              'meme1.sh': 'image:meme1.jpg',
-              'meme2.sh': 'image:meme2.jpg',
-              'meme3.sh': 'image:meme3.jpg',
-              'meme4.sh': 'image:meme4.jpg',
-              'meme5.sh': 'image:meme5.jpg',
-              'meme6.sh': 'image:meme6.jpg',
-              'meme7.sh': 'image:meme7.jpg',
-              'cool-site.sh': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+              'therearenoeastereggs.txt': 'go away. or watch the memes i hold on this server',
+              'meme1.png': 'image:meme1.jpg',
+              'meme2.png': 'image:meme2.jpg',
+              'meme3.png': 'image:meme3.jpg',
+              'meme4.png': 'image:meme4.jpg',
+              'meme5.png': 'image:meme5.jpg',
+              'meme6.png': 'image:meme6.jpg',
+              'meme7.png': 'image:meme7.jpg',
+              'mozart.mp4': 'https://www.youtube.com/watch?v=3MU_6BPKmBg'
             },
           },
           background: 'server1_bg.jpg',
@@ -124,22 +129,21 @@ class FileSystem {
           protected: false, // Public access
           root: {
             void: {
-              'secret.txt': 'The password you seek is: root:BYTHEMYRIADTRUTHS\n\nBut where could it lead?',
-              'hint.sh': 'image:secret_hint.jpg',
+              'nothingimportant.txt': 'root:BYTHEMYRIADTRUTHS\n\nNo idea what these creds are for',
+              'hiddenimage.png': 'image:meme8.jpg',
             },
           },
           background: 'server2_bg.jpg',
         },
         '31.31.196.69': {
-          name: 'Absolute Top Secret Server Which No One Can Ever Access',
+          name: 'Absolute Top Secret Server',
           username: 'root',
           password: 'BYTHEMYRIADTRUTHS',
           protected: true, // Requires auth
           root: {
             secret: {
-              'congratulations.txt': 'You found the most secret server!\n\nThis demonstrates your persistence and problem-solving skills.\n\nThank you for exploring my interactive resume in such detail!',
-              'easter-egg.sh': 'image:easter_egg.jpg',
-              'secret-project.sh': 'https://github.com/username/secret-project',
+              'bruh.txt': `there're no cows here, just a fact - i own a child hospital in vorkuta. for meme purpose only\nor for my longwaited seat of the governor of vorkuta. alas, they found 6kg of drugs on him and gave him a pay raise, so i'm not going anywhere`,
+              'vorkuta.png': 'image:vorkuta.jpg'
             },
           },
           background: 'server1_bg.jpg',
