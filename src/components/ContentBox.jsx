@@ -49,8 +49,8 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
     </div>
   );
 
-  // Рендер контента в зависимости от активной вкладки
-  function renderContent() {
+   // Рендер контента в зависимости от активной вкладки
+   function renderContent() {
     // Если активная вкладка 0, показываем домашнюю (просмотр файлов)
     if (activeTab === 0) {
       return <FileBrowser 
@@ -65,6 +65,25 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
     // Иначе показываем содержимое вкладки
     const tab = tabs[activeTab - 1];
     if (!tab) return null;
+    
+    // Импортируем commandProcessor для разблокировки достижений
+    import('../utils/commandProcessor').then(module => {
+      const commandProcessor = module.default;
+      
+      // Разблокировка достижений в зависимости от типа файла
+      commandProcessor.unlockAchievement('any_file', tab.title);
+      
+      if (tab.type === 'image') {
+        commandProcessor.unlockAchievement('image_opened', tab.title);
+      } else if (tab.type === 'timeline') {
+        commandProcessor.unlockAchievement('timeline_opened', tab.title);
+      } else if (tab.type === 'url' || 
+          (tab.type === 'text' && 
+           (tab.content.trim().startsWith('http://') || 
+            tab.content.trim().startsWith('https://')))) {
+        commandProcessor.unlockAchievement('link_opened', tab.title);
+      }
+    });
     
     // Извлечение содержимого в зависимости от типа
     switch (tab.type) {

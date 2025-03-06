@@ -157,6 +157,12 @@ class FileSystem {
       
       // If the server is not protected or we're already authenticated, return it directly
       if (!this.root.servers[ip].protected || this.authenticatedServers[ip]) {
+        if (ip === '31.31.196.69') {
+          import('./commandProcessor').then(module => {
+            const commandProcessor = module.default;
+            commandProcessor.unlockAchievement('secret_server_access', ip);
+          });
+        }
         return {
           success: true,
           server: {

@@ -10,11 +10,9 @@ class CommandProcessor {
     this.achievements = [];
     this.achievementsUnlocked = false;
     this.availableAchievements = [
-      'server_connection',
-      'first_login',
+      'any_file',
       'logins_found',
       'secret_server_access',
-      'file_executed',
       'timeline_opened',
       'image_opened',
       'link_opened',
@@ -184,18 +182,12 @@ class CommandProcessor {
         
         if (authResult.success && callbacks.onAuthenticate) {
           callbacks.onAuthenticate(authResult.server);
-          // Unlock secret server achievement if this isn't the main server
-          if (ip !== '192.168.1.1') {
-            this.unlockAchievement('secret_server_access', ip);
-          }
         }
       }
 
       if (callbacks.onConnect) {
         callbacks.onConnect(result.server);
       }
-
-      this.unlockAchievement('server_connection', ip);
       
       return {
         success: true,
@@ -255,13 +247,9 @@ class CommandProcessor {
         callbacks.onAuthenticate(result.server);
       }
       
-      this.unlockAchievement('first_login', fileSystem.currentServer);
-      
-      // Unlock secret server achievement if this isn't the main server
-      if (fileSystem.currentServer !== '192.168.1.1') {
+      if (fileSystem.currentServer == '31.31.196.69') {
         this.unlockAchievement('secret_server_access', fileSystem.currentServer);
       }
-      
       return {
         success: true,
         message: this.translate('auth_success'),
@@ -370,17 +358,13 @@ class CommandProcessor {
     }
 
     const filePath = args[0];
-    const result = fileSystem.getFileContent(filePath);
-    console.log("Running file:", filePath);
-  console.log("File type:", result.type);
-  console.log("Content starts with:", result.content.substring(0, 50));
+    const result = fileSystem.getFileContent(filePath);  
     if (result.success) {
-      // Добавлен новый тип 'url'
+      this.unlockAchievement('any_file', filePath);
+      
       if (result.type === 'url') {
-        // Открываем ссылку в новой вкладке браузера
         window.open(result.content.trim(), '_blank');
-        
-        // Разблокируем достижение за открытие ссылки
+
         this.unlockAchievement('link_opened', filePath);
         
         // Показываем сообщение в терминале
@@ -430,15 +414,11 @@ class CommandProcessor {
         // Проверяем наличие учетных данных в тексте
         this.processLoginInfo(content);
         
-        this.unlockAchievement('file_executed', filePath);
-        
         return {
           success: true,
           message: `Running: ${filePath}\n\n${content}`,
         };
       }
-      
-      this.unlockAchievement('file_executed', filePath);
       
       return {
         success: true,
@@ -671,13 +651,13 @@ Available commands:
   // Unlock an achievement
   unlockAchievement(type, data) {
     // Check if we already have this achievement of this type
-    // For unique achievements like 'file_executed', 'image_opened', etc.
+    // For unique achievements like 'image_opened'.
     // We only want one achievement per type, regardless of the data (file name)
     const exists = this.achievements.some(a => a.type === type);
     
     // Only for server-specific achievements (like connecting or logging in),
     // check if we have this specific server already
-    const isServerSpecific = ['server_connection', 'first_login', 'secret_server_access'].includes(type);
+    const isServerSpecific = ['secret_server_access'].includes(type);
     const serverExists = isServerSpecific && 
       this.achievements.some(a => a.type === type && a.data === data);
       

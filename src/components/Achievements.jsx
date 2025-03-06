@@ -3,8 +3,108 @@ import commandProcessor from '../utils/commandProcessor';
 
 const Achievements = ({ language }) => {
   const achievements = commandProcessor.getAchievements();
-  const totalAchievements = commandProcessor.availableAchievements.length;
+  const totalAchievements = 8; // Теперь у нас 8 достижений
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
+  
+  // Определение всех возможных достижений
+  const allAchievements = [
+    {
+      type: 'any_file',
+      icon: '📄',
+      title: {
+        en: 'File Explorer',
+        ru: 'Исследователь файлов'
+      },
+      description: {
+        en: 'Opened any file',
+        ru: 'Открыл любой файл'
+      }
+    },
+    {
+      type: 'image_opened',
+      icon: '🖼️',
+      title: {
+        en: 'Image Viewer',
+        ru: 'Просмотр изображений'
+      },
+      description: {
+        en: 'Opened an image',
+        ru: 'Открыл изображение'
+      }
+    },
+    {
+      type: 'link_opened',
+      icon: '🌐',
+      title: {
+        en: 'Web Explorer',
+        ru: 'Веб-исследователь'
+      },
+      description: {
+        en: 'Opened a website',
+        ru: 'Открыл сайт'
+      }
+    },
+    {
+      type: 'timeline_opened',
+      icon: '📅',
+      title: {
+        en: 'Time Traveler',
+        ru: 'Путешественник во времени'
+      },
+      description: {
+        en: 'Opened a timeline',
+        ru: 'Открыл временную шкалу'
+      }
+    },
+    {
+      type: 'music_played',
+      icon: '🎵',
+      title: {
+        en: 'DJ Mode',
+        ru: 'Режим DJ'
+      },
+      description: {
+        en: 'Played background music',
+        ru: 'Включил фоновую музыку'
+      }
+    },
+    {
+      type: 'language_changed',
+      icon: '🌍',
+      title: {
+        en: 'Polyglot',
+        ru: 'Полиглот'
+      },
+      description: {
+        en: 'Changed interface language',
+        ru: 'Сменил язык интерфейса'
+      }
+    },
+    {
+      type: 'logins_found',
+      icon: '🔑',
+      title: {
+        en: 'Credentials Hunter',
+        ru: 'Охотник за учетками'
+      },
+      description: {
+        en: 'Found login:password',
+        ru: 'Нашел логин:пароль'
+      }
+    },
+    {
+      type: 'secret_server_access',
+      icon: '🕵️',
+      title: {
+        en: 'Secret Access',
+        ru: 'Секретный доступ'
+      },
+      description: {
+        en: 'Connected to server 31.31.196.69',
+        ru: 'Подключился к серверу 31.31.196.69'
+      }
+    }
+  ];
   
   // Check if achievements were just unlocked
   useEffect(() => {
@@ -23,141 +123,35 @@ const Achievements = ({ language }) => {
     }
   }, [achievements.length]);
   
-  // Define achievement details
-  const achievementDetails = {
-    server_connection: {
-      en: 'Connected to server',
-      ru: 'Подключение к серверу',
-      icon: '🖥️',
-      desc: {
-        en: 'Successfully connected to a server',
-        ru: 'Успешно подключен к серверу'
-      }
-    },
-    first_login: {
-      en: 'Authenticated to server',
-      ru: 'Аутентификация на сервере',
-      icon: '🔐',
-      desc: {
-        en: 'Successfully logged in to a server',
-        ru: 'Успешно выполнен вход на сервер'
-      }
-    },
-    logins_found: {
-      en: 'Found credentials',
-      ru: 'Найдены данные',
-      icon: '📜',
-      desc: {
-        en: 'Found login credentials in a file',
-        ru: 'Найдены учетные данные в файле'
-      }
-    },
-    secret_server_access: {
-      en: 'Secret server',
-      ru: 'Секретный сервер',
-      icon: '🔒',
-      desc: {
-        en: 'Accessed a protected server',
-        ru: 'Получен доступ к защищенному серверу'
-      }
-    },
-    file_executed: {
-      en: 'Executed file',
-      ru: 'Выполнен файл',
-      icon: '📂',
-      desc: {
-        en: 'Executed a file using run command',
-        ru: 'Выполнен файл с помощью команды run'
-      }
-    },
-    timeline_opened: {
-      en: 'Timeline',
-      ru: 'Таймлайн',
-      icon: '📅',
-      desc: {
-        en: 'Opened a timeline file',
-        ru: 'Открыт файл таймлайна'
-      }
-    },
-    image_opened: {
-      en: 'Image viewed',
-      ru: 'Просмотр изображения',
-      icon: '🖼️',
-      desc: {
-        en: 'Opened an image file',
-        ru: 'Открыт файл изображения'
-      }
-    },
-    link_opened: {
-      en: 'Link opened',
-      ru: 'Открыта ссылка',
-      icon: '🔗',
-      desc: {
-        en: 'Opened a web link',
-        ru: 'Открыта веб-ссылка'
-      }
-    },
-    language_changed: {
-      en: 'Language',
-      ru: 'Язык',
-      icon: '🌐',
-      desc: {
-        en: 'Changed the interface language',
-        ru: 'Изменен язык интерфейса'
-      }
-    },
-    music_played: {
-      en: 'Music',
-      ru: 'Музыка',
-      icon: '🎵',
-      desc: {
-        en: 'Played background music',
-        ru: 'Воспроизведена фоновая музыка'
-      }
-    },
-  };
-  
-  // Create a grid of achievements - filled and empty placeholders
+  // Рендер сетки достижений
   const renderAchievementGrid = () => {
-    const achievementTypes = commandProcessor.availableAchievements;
-    const rows = Math.ceil(achievementTypes.length / 5);
-    
-    const grid = [];
-    for (let i = 0; i < rows; i++) {
-      const rowItems = [];
-      for (let j = 0; j < 5; j++) {
-        const index = i * 5 + j;
-        if (index < achievementTypes.length) {
-          const type = achievementTypes[index];
-          const achieved = achievements.some(a => a.type === type);
-          const details = achievementDetails[type] || {
-            en: type,
-            ru: type,
-            icon: '🏆',
-            desc: {
-              en: 'Achievement unlocked',
-              ru: 'Достижение разблокировано'
-            }
-          };
+    return (
+      <div className="achievements-grid">
+        {allAchievements.map((achievement, index) => {
+          const achieved = achievements.some(a => a.type === achievement.type);
           
-          rowItems.push(
+          return (
             <div 
-              key={type} 
+              key={achievement.type} 
               className={`achievement-icon-container ${achieved ? 'achieved' : 'locked'}`}
             >
-              <div className="achievement-icon">{details.icon}</div>
-              <div className="achievement-tooltip">{details.desc[language] || details.desc.en}</div>
+              <div className="achievement-icon">{achievement.icon}</div>
+              <div className="achievement-tooltip">
+                <div className="achievement-tooltip-title">
+                  {achievement.title[language] || achievement.title.en}
+                </div>
+                <div className="achievement-tooltip-desc">
+                  {achievement.description[language] || achievement.description.en}
+                </div>
+              </div>
             </div>
           );
-        }
-      }
-      grid.push(<div key={`row-${i}`} className="achievement-row">{rowItems}</div>);
-    }
-    
-    return grid;
+        })}
+      </div>
+    );
   };
   
-  // If no achievements, show locked message
+  // Если нет достижений, показываем заблокированное сообщение
   if (achievements.length === 0) {
     return (
       <>
@@ -171,7 +165,7 @@ const Achievements = ({ language }) => {
     );
   }
   
-  // If showing unlock animation
+  // Если идет анимация разблокировки
   if (showUnlockAnimation) {
     return (
       <>
@@ -185,15 +179,13 @@ const Achievements = ({ language }) => {
     );
   }
   
-  // Normal view with achievements
+  // Нормальный вид с достижениями
   return (
     <>
       <div className="achievements-header-line">
         {language === 'ru' ? 'Достижения' : 'Achievements'}: {achievements.length}/{totalAchievements}
       </div>
-      <div className="achievements-grid">
-        {renderAchievementGrid()}
-      </div>
+      {renderAchievementGrid()}
     </>
   );
 };

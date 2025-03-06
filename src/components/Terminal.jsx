@@ -161,14 +161,6 @@ const Terminal = ({
         onAuthenticate(authResult.server);
       }
       
-      // Разблокировка достижения
-      commandProcessor.unlockAchievement('first_login', fileSystem.currentServer);
-      
-      // Если это не основной сервер, разблокировка достижения для секретного сервера
-      if (fileSystem.currentServer !== '192.168.1.1') {
-        commandProcessor.unlockAchievement('secret_server_access', fileSystem.currentServer);
-      }
-      
       // Добавление сообщения об успехе в вывод
       addToOutput(commandProcessor.translate('auth_success'));
     } else {
