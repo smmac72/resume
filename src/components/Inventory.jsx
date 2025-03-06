@@ -3,7 +3,6 @@ import commandProcessor from '../utils/commandProcessor';
 
 const Inventory = ({ language }) => {
   const knownLogins = commandProcessor.getKnownLogins();
-  
   return (
     <>
       {Object.keys(knownLogins).length === 0 ? (

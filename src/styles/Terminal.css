@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  margin-right: 10px;
 }
 
 .terminal-header {
@@ -29,6 +30,8 @@
   white-space: pre-wrap;
   overflow-x: hidden;
   max-height: 300px; /* Fixed height for terminal content */
+  scrollbar-color: var(--bg-secondary) var(--bg-terminal);
+  scrollbar-width: thin;
 }
 
 .terminal-line {

@@ -172,8 +172,8 @@ class CommandProcessor {
     }
 
     const ip = args[0];
+    console.log(ip);
     const result = fileSystem.connectToServer(ip);
-
     if (result.success) {
       // Check if we already know login and password for this server
       if (this.knownLogins[ip]) {
