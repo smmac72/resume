@@ -73,6 +73,8 @@ const MainInterface = ({
     if (onConnect) {
       onConnect(newServer);
     }
+    setCurrentPath('/');
+    
     setUpdateCounter(prev => prev + 1);
   };
   

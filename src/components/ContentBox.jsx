@@ -9,6 +9,9 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
   useEffect(() => {
     setLocalPath(currentPath);
   }, [currentPath]);
+  useEffect(() => {
+    setLocalPath('/');
+  }, [server?.ip]);
   
   return (
     <div className="content-box">
