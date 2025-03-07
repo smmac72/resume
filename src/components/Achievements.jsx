@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import commandProcessor from '../utils/commandProcessor';
 
 const Achievements = ({ language }) => {
-  const [achievements, setAchievements] = useState(commandProcessor.getAchievements());
+  const [achievements] = useState(commandProcessor.getAchievements());
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const tooltipTimeout = useRef(null);

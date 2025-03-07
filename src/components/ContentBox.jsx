@@ -14,10 +14,6 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
     setLocalPath('/');
   }, [server?.ip]);
   
-  const translate = (key) => {
-    return translations[language]?.[key] || translations.en[key] || key;
-  };
-  
   return (
     <div className="content-box">
       <div className="run-tabs">

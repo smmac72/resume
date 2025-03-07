@@ -173,7 +173,7 @@ const LoadingScreen = () => {
     };
     
     initialize();
-  }, [logs.length, bootComplete]);
+  }, [logs.length, bootComplete, amogusLogo, bootSequenceLogs]);
 
   return (
     <div className="loading-screen">

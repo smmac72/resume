@@ -200,7 +200,7 @@ class CommandProcessor {
         callbacks.onAuthenticate(result.server);
       }
       
-      if (fileSystem.currentServer == '31.31.201.69') {
+      if (fileSystem.currentServer === '31.31.201.69') {
         this.unlockAchievement('secret_server_access', fileSystem.currentServer);
       }
       return {
@@ -551,7 +551,7 @@ class CommandProcessor {
   // Process login information from text content
   processLoginInfo(content) {
     // Check for login:password@server format
-    const loginPassRegex = /(\w+):(\w+)@([\d\.]+)/g;
+    const loginPassRegex = /(\w+):(\w+)@([\d.]+)/g;
     let match;
     
     while ((match = loginPassRegex.exec(content)) !== null) {
@@ -570,7 +570,7 @@ class CommandProcessor {
     }
     
     // Check for "Login: user | Password: pass" format
-    const loginPassTextRegex = /Login:\s+(\w+)(?:@([\d\.]+))?\s+\|\s+Password:\s+(\w+)/gi;
+    const loginPassTextRegex = /Login:\s+(\w+)(?:@([\d.]+))?\s+\|\s+Password:\s+(\w+)/gi;
     while ((match = loginPassTextRegex.exec(content)) !== null) {
       const username = match[1];
       const server = match[2];
@@ -653,4 +653,5 @@ class CommandProcessor {
   }
 }
 
-export default new CommandProcessor();
+const commandProcessor = new CommandProcessor();
+export default commandProcessor;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import fileSystem from '../utils/fileSystem';
 import translations from '../utils/translations';
 import '../styles/InfoBox.css';
 

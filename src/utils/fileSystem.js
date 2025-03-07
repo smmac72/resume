@@ -599,4 +599,5 @@ class FileSystem {
   }
 }
 
-export default new FileSystem();
+const fileSystem = new FileSystem();
+export default fileSystem;

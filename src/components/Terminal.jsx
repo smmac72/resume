@@ -17,7 +17,7 @@ const Terminal = ({
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
   const [pendingAuthentication, setPendingAuthentication] = useState(false);
-  const [pendingAuthServer, setPendingAuthServer] = useState(null);
+  const [setPendingAuthServer] = useState(null);
   const [pendingUsername, setPendingUsername] = useState('');
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
@@ -44,7 +44,7 @@ const Terminal = ({
       }
       setOutput(initialMessages);
     }
-  }, []);
+  }, [output.length, server]);
 
   // scroll effect
   useEffect(() => {
