@@ -217,8 +217,11 @@ const Achievements = ({ language }) => {
         <div className="achievements-header-line">
           {language === 'ru' ? 'Достижения' : 'Achievements'}: 0/{totalAchievements}
         </div>
-        <div className="achievements-locked">
-          {language === 'ru' ? 'ДОСТИЖЕНИЯ ЗАБЛОКИРОВАНЫ' : 'ACHIEVEMENTS LOCKED'}
+        
+        <div className="achievements-items no-scroll">
+          <div className="achievements-locked">
+            {language === 'ru' ? 'ДОСТИЖЕНИЯ ЗАБЛОКИРОВАНЫ' : 'ACHIEVEMENTS LOCKED'}
+          </div>
         </div>
       </>
     );

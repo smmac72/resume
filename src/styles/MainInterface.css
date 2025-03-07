@@ -112,6 +112,10 @@
   color: var(--text-bright);
 }
 
+.achievements-items.no-scroll {
+  overflow-y: hidden;
+}
+
 .achievements-header-line {
   font-weight: bold;
   margin-bottom: 10px;
@@ -219,6 +223,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .achievements-unlocked-animation {
