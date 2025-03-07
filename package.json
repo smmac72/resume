@@ -1,7 +1,7 @@
 {
-  "name": "interactive-gamified-resume",
+  "name": "zeromac cv",
   "version": "1.0.0",
-  "description": "Interactive gamified resume with Linux-style terminal interface",
+  "description": "zeromac cv",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
