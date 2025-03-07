@@ -1,5 +1,6 @@
 // File System class to handle the virtual file structure
 import translations from './translations';
+import analytics from './analytics';
 
 class FileSystem {
   constructor() {
@@ -492,10 +493,15 @@ class FileSystem {
           content = this.translate(content);
         }
         
+        const fileType = this.getFileType(content);
+        
+        // analytics track
+        analytics.trackFileOpen(fileName, fileType, this.currentServer);
+        
         return {
           success: true,
           content: content,
-          type: this.getFileType(content),
+          type: fileType,
         };
       } else {
         return {

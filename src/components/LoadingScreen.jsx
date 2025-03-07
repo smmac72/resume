@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import analytics from '../utils/analytics';
 import '../styles/LoadingScreen.css';
 
 const LoadingScreen = () => {
@@ -135,6 +136,7 @@ const LoadingScreen = () => {
   ];
   
   useEffect(() => {
+    
     // check for doubles
     if (logs.length > 0 || bootComplete) return;
     setBootComplete(true);
@@ -143,10 +145,17 @@ const LoadingScreen = () => {
       await new Promise(resolve => setTimeout(resolve, 100));
       // instant amogus
       setLogs(amogusLogo);
+      
+      // analytics track
+      analytics.trackEvent('System', 'LogoShown');
+      
       await new Promise(resolve => setTimeout(resolve, 2000));
       // boot logs appear
       setShowingLogo(false);
       setLogs([]);
+      
+      // analytics track
+      analytics.trackEvent('System', 'BootSequenceStarted');
       
       // string offset from the top
       const numberOfLinesToFillScreen = Math.floor(window.innerHeight / 21);
@@ -170,6 +179,9 @@ const LoadingScreen = () => {
         
         await new Promise(resolve => setTimeout(resolve, bootSequenceLogs[i].delay));
       }
+      
+      // analytics track
+      analytics.trackEvent('System', 'BootSequenceCompleted');
     };
     
     initialize();

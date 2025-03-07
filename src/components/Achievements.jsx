@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import commandProcessor from '../utils/commandProcessor';
+import analytics from '../utils/analytics';
 
 const Achievements = ({ language }) => {
   const [achievements] = useState(commandProcessor.getAchievements());
@@ -8,6 +9,7 @@ const Achievements = ({ language }) => {
   const tooltipTimeout = useRef(null);
   const containerRefs = useRef({});
   const totalAchievements = 8;
+  const analyticsTrackedRef = useRef(false); // Для отслеживания, были ли уже отправлены события аналитики
 
   // defining achievements and their details
   const achievementDetails = {
@@ -74,6 +76,9 @@ const Achievements = ({ language }) => {
     if (commandProcessor.achievementsUnlocked && achievements.length > 0) {
       setShowUnlockAnimation(true);
       commandProcessor.achievementsUnlocked = false;
+      
+      analytics.trackEvent('Achievements', 'UnlockAnimation', '', achievements.length);
+      
       const timer = setTimeout(() => {
         setShowUnlockAnimation(false);
       }, 3000);
@@ -154,8 +159,7 @@ const Achievements = ({ language }) => {
       }
     }
   };
-
-  // handler for showing tooltip
+  
   const handleMouseEnter = (type) => {
     if (tooltipTimeout.current) {
       clearTimeout(tooltipTimeout.current);
@@ -163,6 +167,7 @@ const Achievements = ({ language }) => {
     }
     
     setActiveTooltip(type);
+    
     // start checking for hover status
     requestAnimationFrame(() => checkHover(type));
   };

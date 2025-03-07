@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Terminal from './Terminal';
 import ContentBox from './ContentBox';
 import InfoBoxes from './InfoBox';
@@ -6,6 +6,7 @@ import KeyboardComponent from './KeyboardComponent';
 import Inventory from './Inventory';
 import Achievements from './Achievements';
 import translations from '../utils/translations';
+import analytics from '../utils/analytics';
 import '../styles/MainInterface.css';
 
 const MainInterface = ({ 
@@ -22,7 +23,7 @@ const MainInterface = ({
   const [currentPath, setCurrentPath] = useState('/');
   const [updateCounter, setUpdateCounter] = useState(0);
   
-  // maximum tabs enabled at once
+  // максимум табов
   const MAX_TABS = 6;
   
   const translate = (key) => {
@@ -37,20 +38,38 @@ const MainInterface = ({
     return () => clearInterval(updateInterval);
   }, []);
   
+  // Для устранения частых вызовов событий, добавляем троттлинг для событий табов
+  const tabEventThrottleRef = useRef(false);
+  const setTabEventThrottle = () => {
+    tabEventThrottleRef.current = true;
+    setTimeout(() => {
+      tabEventThrottleRef.current = false;
+    }, 2000); // Не позволять отправлять события чаще, чем раз в 2 секунды
+  };
+  
   const handleRun = (file) => {
     // if tab exists
     const existingIndex = openTabs.findIndex(tab => tab.title === file.title);
     
     if (existingIndex >= 0) {
       setActiveTab(existingIndex + 1);
+      
+      if (!tabEventThrottleRef.current) {
+        analytics.trackEvent('Interface', 'TabSwitch', file.title);
+        setTabEventThrottle();
+      }
     } else {
       // otherwise create
       let newTabs = [...openTabs, file];
+      
+      analytics.trackEvent('Interface', 'TabOpen', `${file.title} (${file.type})`);
       
       // delete if tab amount exceeds max
       if (newTabs.length > MAX_TABS) {
         newTabs = newTabs.slice(1);
         setActiveTab(MAX_TABS);
+        
+        analytics.trackEvent('Interface', 'MaxTabsReached');
       } else {
         setActiveTab(openTabs.length + 1);
       }
@@ -62,6 +81,11 @@ const MainInterface = ({
   
   const handleTabClose = (index) => {
     const realIndex = index - 1;
+    const closedTab = openTabs[realIndex];
+    
+    if (closedTab) {
+      analytics.trackEvent('Interface', 'TabClose', `${closedTab.title} (${closedTab.type})`);
+    }
     
     const newTabs = [...openTabs];
     newTabs.splice(realIndex, 1);

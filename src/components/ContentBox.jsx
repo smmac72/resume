@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import fileSystem from '../utils/fileSystem';
 import translations from '../utils/translations';
+import analytics from '../utils/analytics';
 import '../styles/ContentBox.css';
 
 const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose, onExecute, currentPath, onPathChange }) => {
   const [localPath, setLocalPath] = useState(currentPath);
+  const tabTrackedRef = useRef({});
   
   // sync local path with overall path, include server changing
   useEffect(() => {
@@ -12,6 +14,8 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
   }, [currentPath]);
   useEffect(() => {
     setLocalPath('/');
+    // Сбрасываем отслеживание табов при смене сервера
+    tabTrackedRef.current = {};
   }, [server?.ip]);
   
   return (
@@ -67,6 +71,13 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
     
     const tab = tabs[activeTab - 1];
     if (!tab) return null;
+    
+    // Отслеживаем открытие вкладки только один раз для каждой вкладки
+    const tabKey = `${tab.title}-${tab.type}`;
+    if (!tabTrackedRef.current[tabKey]) {
+      analytics.trackEvent('Interface', 'TabOpen', `${tab.title} (${tab.type})`);
+      tabTrackedRef.current[tabKey] = true;
+    }
     
     // for achievement purposes
     import('../utils/commandProcessor').then(module => {
@@ -127,6 +138,7 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
 // fileview component
 const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange }) => {
   const [innerPath, setInnerPath] = useState(currentPath);
+  const fileEventThrottleRef = useRef({});
   
   useEffect(() => {
     setInnerPath(currentPath);
@@ -134,6 +146,23 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
   
   const translate = (key) => {
     return translations[language]?.[key] || translations.en[key] || key;
+  };
+  
+  // Функция для проверки и установки троттлинга для файлов
+  const checkAndTrackFile = (fileName, fileType, serverIp) => {
+    const fileKey = `${fileName}-${fileType}-${serverIp}`;
+    
+    // Если у нас нет записи об этом файле или прошло больше 5 минут с последнего события
+    const now = Date.now();
+    const lastTracked = fileEventThrottleRef.current[fileKey] || 0;
+    
+    if (now - lastTracked > 5 * 60 * 1000) { // 5 минут
+      analytics.trackFileOpen(fileName, fileType, serverIp);
+      fileEventThrottleRef.current[fileKey] = now;
+      return true;
+    }
+    
+    return false;
   };
   
   if (!server) {
@@ -169,6 +198,9 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
     const fileResult = fileSystem.getFileContent(filePath);
     
     if (fileResult.success) {
+      // Отслеживаем клик по файлу с троттлингом
+      checkAndTrackFile(file, fileResult.type, fileSystem.currentServer);
+      
       // url checking for opening _blank
       if (fileResult.type === 'url' || 
           (fileResult.type === 'text' && 

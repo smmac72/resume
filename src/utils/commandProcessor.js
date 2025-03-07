@@ -1,5 +1,6 @@
 import fileSystem from './fileSystem';
 import translations from './translations';
+import analytics from './analytics';
 
 class CommandProcessor {
   constructor() {
@@ -32,30 +33,31 @@ class CommandProcessor {
     this.currentLanguage = 'en';
   }
 
-  // Process a command
   processCommand(command, callbacks) {
     if (!command) return { success: false, message: '' };
 
-    // Add command to history
+    // add command to history
     this.commandHistory.push(command);
     this.historyIndex = this.commandHistory.length;
 
-    // Split command into command name and arguments
+    // split command - name, args
     const parts = command.trim().split(' ');
     const cmd = parts[0].toLowerCase();
     const args = parts.slice(1);
 
-    // Check if we're connected to a protected server and not authenticated
+    // analytics track
+    analytics.trackCommand(cmd, true, args.join(' '));
+
+    // if connected to non-authenticated server
     const currentServer = fileSystem.currentServer;
     const isProtectedServer = currentServer && 
                              fileSystem.root.servers[currentServer]?.protected;
     const isAuthenticated = currentServer && 
                            fileSystem.authenticatedServers[currentServer];
     
-    // List of always available commands
     const alwaysAvailableCommands = ['connect', 'disconnect', 'lang', 'playmusic', 'help', 'login'];
     
-    // If we're on a protected server and not authenticated, restrict commands
+    // restrict commands for non-authenticated servers
     if (isProtectedServer && !isAuthenticated && !alwaysAvailableCommands.includes(cmd)) {
       return {
         success: false,
@@ -63,7 +65,6 @@ class CommandProcessor {
       };
     }
 
-    // Execute the command
     let result;
     switch (cmd) {
       case 'connect':
@@ -106,7 +107,6 @@ class CommandProcessor {
         };
     }
 
-    // Add hint if applicable
     if (this.commandHints[cmd] && !result.success && !result.hint) {
       result.hint = this.translate(this.commandHints[cmd]);
     }
@@ -114,7 +114,6 @@ class CommandProcessor {
     return result;
   }
 
-  // Handle connect command
   handleConnect(args, callbacks) {
     if (args.length < 1) {
       return {
@@ -128,7 +127,7 @@ class CommandProcessor {
     console.log(ip);
     const result = fileSystem.connectToServer(ip);
     if (result.success) {
-      // Check if we already know login and password for this server
+      // check login:pass knowledge
       if (this.knownLogins[ip]) {
         const { username, password } = this.knownLogins[ip];
         const authResult = fileSystem.authenticate(username, password);
@@ -142,16 +141,21 @@ class CommandProcessor {
         callbacks.onConnect(result.server);
       }
       
+      // analytics track
+      analytics.trackServerConnection(ip, result.server.name);
+      
       return {
         success: true,
         message: `${this.translate('connect')} ${ip}`,
       };
     }
 
+    // analytics track
+    analytics.trackServerConnection(ip, 'Failed');
+    
     return result;
   }
 
-  // Handle disconnect command
   handleDisconnect(callbacks) {
     const result = fileSystem.disconnect();
     
@@ -165,7 +169,6 @@ class CommandProcessor {
     };
   }
 
-  // Handle login command
   handleLogin(args, callbacks) {
     if (args.length < 2) {
       return {
@@ -175,7 +178,7 @@ class CommandProcessor {
       };
     }
 
-    // Check if already authenticated
+    // check if already authenticated
     if (fileSystem.authenticatedServers[fileSystem.currentServer]) {
       return {
         success: false,
@@ -189,7 +192,6 @@ class CommandProcessor {
     const result = fileSystem.authenticate(username, password);
     
     if (result.success) {
-      // Save credentials
       this.knownLogins[fileSystem.currentServer] = { 
         username, 
         password,
@@ -200,6 +202,9 @@ class CommandProcessor {
         callbacks.onAuthenticate(result.server);
       }
       
+      // analytics track
+      analytics.trackAuthentication(fileSystem.currentServer, true);
+      
       if (fileSystem.currentServer === '31.31.201.69') {
         this.unlockAchievement('secret_server_access', fileSystem.currentServer);
       }
@@ -209,13 +214,15 @@ class CommandProcessor {
       };
     }
     
+    // analytics track
+    analytics.trackAuthentication(fileSystem.currentServer, false);
+    
     return {
       success: false,
       message: this.translate('auth_fail'),
     };
   }
 
-  // Handle ls command
   handleLs() {
     const result = fileSystem.getCurrentDirectoryContent();
     
@@ -242,7 +249,6 @@ class CommandProcessor {
     return result;
   }
 
-  // Handle cd command
   handleCd(args) {
     if (args.length < 1) {
       return {
@@ -255,6 +261,9 @@ class CommandProcessor {
     const result = fileSystem.changeDirectory(path);
     
     if (result.success) {
+      // analytics track
+      analytics.trackDirectoryChange(fileSystem.currentPath);
+      
       return {
         success: true,
         message: '',
@@ -264,7 +273,6 @@ class CommandProcessor {
     return result;
   }
 
-  // Handle cat command
   handleCat(args, callbacks) {
     if (args.length < 1) {
       return {
@@ -279,10 +287,10 @@ class CommandProcessor {
     
     if (result.success) {
       if (result.type === 'text') {
-        // Process file content
-        const content = result.content.replace(/\\n/g, '\r\n');
+        // analytics track
+        analytics.trackFileOpen(filePath, 'text', fileSystem.currentServer);
         
-        // Check for login credentials in text
+        const content = result.content.replace(/\\n/g, '\r\n');
         this.processLoginInfo(content);
         
         return {
@@ -300,7 +308,6 @@ class CommandProcessor {
     return result;
   }
 
-  // Handle run command
   handleRun(args, callbacks) {
     if (args.length < 1) {
       return {
@@ -315,36 +322,33 @@ class CommandProcessor {
     if (result.success) {
       this.unlockAchievement('any_file', filePath);
       
+      // analytics track
+      analytics.trackFileOpen(filePath, result.type, fileSystem.currentServer);
+      
       if (result.type === 'url') {
         window.open(result.content.trim(), '_blank');
-
         this.unlockAchievement('link_opened', filePath);
-        
-        // Показываем сообщение в терминале
         return {
           success: true,
           message: `Opening link: ${result.content}`,
         };
       }
       
-      // Для обратной совместимости - проверка на текстовые файлы с http
+      // http/https are acceptable
       if (result.type === 'text' && 
           (result.content.trim().startsWith('http://') || 
           result.content.trim().startsWith('https://'))) {
-        // Открываем ссылку в новой вкладке браузера
         window.open(result.content.trim(), '_blank');
         
-        // Разблокируем достижение за открытие ссылки
         this.unlockAchievement('link_opened', filePath);
         
-        // Показываем сообщение в терминале
         return {
           success: true,
           message: `Opening link: ${result.content}`,
         };
       }
       
-      // Для всех остальных типов файлов - открываем в ContentBox
+      // other types are opened in a contentbox
       if (callbacks.onRun) {
         callbacks.onRun({
           title: filePath,
@@ -353,18 +357,16 @@ class CommandProcessor {
         });
       }
 
-      // Разблокировка достижений в зависимости от типа файла
       if (result.type === 'image') {
         this.unlockAchievement('image_opened', filePath);
       } else if (result.type === 'timeline') {
         this.unlockAchievement('timeline_opened', filePath);
       }
       
-      // Для текстовых файлов также показываем содержимое в терминале
+      // cat txt files
       if (result.type === 'text') {
         const content = result.content.replace(/\\n/g, '\r\n');
         
-        // Проверяем наличие учетных данных в тексте
         this.processLoginInfo(content);
         
         return {
@@ -382,15 +384,12 @@ class CommandProcessor {
     return result;
   }
 
-  // Handle scan command
   handleScan() {
     const discoveredServers = [];
     
-    // Default basic servers
     if (fileSystem.currentServer === '31.31.201.1') {
       discoveredServers.push('31.31.201.2', '31.31.201.3', '31.31.201.4');
     }
-    // Easter egg path
     else if (fileSystem.currentServer === '31.31.201.4') {
       discoveredServers.push('31.31.201.10');
     }
@@ -401,13 +400,9 @@ class CommandProcessor {
       discoveredServers.push('31.31.201.69');
     }
     
-    // Generate server list output
     let output = this.translate('network_scan_complete') + '\n\n' + this.translate('available_servers') + ':\n';
-    
-    // Add current server first
     output += `${fileSystem.currentServer} - ${fileSystem.root.servers[fileSystem.currentServer].name} (${this.translate('current')})\n`;
     
-    // Add discovered servers
     discoveredServers.forEach(ip => {
       if (fileSystem.root.servers[ip]) {
         output += `${ip} - ${fileSystem.root.servers[ip].name}\n`;
@@ -420,7 +415,6 @@ class CommandProcessor {
     };
   }
 
-  // Handle language command
   handleLang(args, callbacks) {
     if (args.length < 1) {
       return {
@@ -446,6 +440,9 @@ class CommandProcessor {
       callbacks.onLanguageChange(lang);
     }
     
+    // analytics track
+    analytics.trackLanguageChange(lang);
+    
     this.unlockAchievement('language_changed', lang);
     
     return {
@@ -454,14 +451,12 @@ class CommandProcessor {
     };
   }
 
-  // Handle playmusic command
   handlePlayMusic(args) {
     if (!this.musicPlayer) {
       this.musicPlayer = new Audio('/audio/background-music.mp3');
       this.musicPlayer.loop = true;
     }
 
-    // Toggle music state
     if (this.musicPlaying) {
       this.musicPlayer.pause();
       this.musicPlaying = false;
@@ -480,7 +475,6 @@ class CommandProcessor {
     }
   }
 
-  // Handle help command
   handleHelp() {
     return {
       success: true,
@@ -488,7 +482,6 @@ class CommandProcessor {
     };
   }
 
-  // Get previous command from history
   getPreviousCommand() {
     if (this.historyIndex > 0) {
       this.historyIndex--;
@@ -497,7 +490,6 @@ class CommandProcessor {
     return null;
   }
 
-  // Get next command from history
   getNextCommand() {
     if (this.historyIndex < this.commandHistory.length - 1) {
       this.historyIndex++;
@@ -506,11 +498,10 @@ class CommandProcessor {
     return '';
   }
 
-  // Auto-complete command
   autoComplete(input) {
     const parts = input.trim().split(' ');
     
-    // If we only have the command, auto-complete the command itself
+    // auto-complete the command
     if (parts.length === 1) {
       const cmd = parts[0].toLowerCase();
       const commands = ['connect', 'disconnect', 'login', 'ls', 'cd', 'cat', 'run', 'scan', 'lang', 'playmusic', 'help'];
@@ -525,12 +516,11 @@ class CommandProcessor {
       }
     }
     
-    // If we have a command and an argument, auto-complete the argument
+    //  auto-complete the argument
     if (parts.length === 2) {
       const cmd = parts[0].toLowerCase();
       const arg = parts[1];
       
-      // Only auto-complete for cd, cat, and run commands
       if (['cd', 'cat', 'run'].includes(cmd)) {
         const result = fileSystem.autoComplete(cmd, arg);
         
@@ -548,9 +538,8 @@ class CommandProcessor {
     return input;
   }
 
-  // Process login information from text content
   processLoginInfo(content) {
-    // Check for login:password@server format
+    // login:password@server format
     const loginPassRegex = /(\w+):(\w+)@([\d.]+)/g;
     let match;
     
@@ -569,7 +558,7 @@ class CommandProcessor {
       }
     }
     
-    // Check for "Login: user | Password: pass" format
+    // "Login: user | Password: pass" format
     const loginPassTextRegex = /Login:\s+(\w+)(?:@([\d.]+))?\s+\|\s+Password:\s+(\w+)/gi;
     while ((match = loginPassTextRegex.exec(content)) !== null) {
       const username = match[1];
@@ -587,15 +576,8 @@ class CommandProcessor {
     }
   }
 
-  // Unlock an achievement
   unlockAchievement(type, data) {
-    // Check if we already have this achievement of this type
-    // For unique achievements like 'image_opened'.
-    // We only want one achievement per type, regardless of the data (file name)
     const exists = this.achievements.some(a => a.type === type);
-    
-    // Only for server-specific achievements (like connecting or logging in),
-    // check if we have this specific server already
     const isServerSpecific = ['secret_server_access'].includes(type);
     const serverExists = isServerSpecific && 
       this.achievements.some(a => a.type === type && a.data === data);
@@ -610,41 +592,33 @@ class CommandProcessor {
       this.achievements.push(achievement);
       console.log(`${this.translate('achievement_unlocked')}: ${type}`);
       
-      // Set achievementsUnlocked flag to true if this is our first achievement
+      analytics.trackAchievement(type, data);
+      
       this.achievementsUnlocked = true;
-      
-      // Play achievement sound
       this.playAchievementSound();
-      
-      // Return the achievement for potential display
       return achievement;
     }
     
     return null;
   }
 
-  // Play achievement sound
   playAchievementSound() {
     const sound = new Audio('/audio/achievement.mp3');
     sound.play().catch(e => console.error('Error playing achievement sound:', e));
   }
 
-  // Get all unlocked achievements
   getAchievements() {
     return this.achievements;
   }
 
-  // Get known logins
   getKnownLogins() {
     return this.knownLogins;
   }
 
-  // Translate a key based on the current language
   translate(key) {
     return translations[this.currentLanguage]?.[key] || translations.en[key] || key;
   }
 
-  // Set current language
   setLanguage(lang) {
     if (lang === 'en' || lang === 'ru') {
       this.currentLanguage = lang;

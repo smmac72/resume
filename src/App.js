@@ -4,6 +4,7 @@ import MainInterface from './components/MainInterface';
 import MobileWarning from './components/MobileWarning';
 import ConfirmDialog from './components/ConfirmDialog';
 import fileSystem from './utils/fileSystem';
+import analytics from './utils/analytics';
 import './styles/global.css';
 
 const App = () => {
@@ -15,13 +16,20 @@ const App = () => {
   const [confirmAction, setConfirmAction] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Проверка мобильного устройства
+
+  useEffect(() => {
+    analytics.trackEvent('System', 'AppReady');
+  }, []);
+
+  // if mobile -> block access
   useEffect(() => {
     const checkMobile = () => {
       const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       ) || window.innerWidth < 768;
       setIsMobile(isMobileDevice);
+      
+      analytics.trackEvent('System', 'DeviceType', isMobileDevice ? 'Mobile' : 'Desktop');
     };
 
     checkMobile();
@@ -32,19 +40,19 @@ const App = () => {
     };
   }, []);
 
-  // Подключение к серверу по умолчанию
   useEffect(() => {
     const connectToDefaultServer = async () => {
-      // Ожидание завершения анимации загрузки
       await new Promise(resolve => setTimeout(resolve, 5000));
+      analytics.trackEvent('System', 'LoadingComplete');
       
-      // Подключение к серверу по умолчанию
       const defaultIp = '31.31.201.1';
       const result = fileSystem.connectToServer(defaultIp);
       
       if (result.success) {
         setCurrentServer(result.server);
         setIsConnected(true);
+        
+        analytics.trackServerConnection(defaultIp, result.server.name);
       }
       
       setIsLoading(false);
@@ -53,7 +61,6 @@ const App = () => {
     connectToDefaultServer();
   }, []);
 
-  // Обработка предупреждения при закрытии окна
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
@@ -68,18 +75,15 @@ const App = () => {
     };
   }, []);
 
-  // Обработка смены языка
   const handleLanguageChange = (newLang) => {
     setLanguage(newLang);
   };
 
-  // Обработка подключения к серверу
   const handleConnect = (server) => {
     setCurrentServer(server);
     setIsConnected(true);
   };
 
-  // Обработка отключения от сервера
   const handleDisconnect = () => {
     setShowConfirmDialog(true);
     setConfirmAction(() => () => {
@@ -88,7 +92,6 @@ const App = () => {
     });
   };
   
-  // Обработка подтверждения действия
   const handleConfirm = () => {
     if (confirmAction) {
       confirmAction();
@@ -97,13 +100,11 @@ const App = () => {
     setConfirmAction(null);
   };
   
-  // Обработка отмены действия
   const handleCancel = () => {
     setShowConfirmDialog(false);
     setConfirmAction(null);
   };
 
-  // Если устройство мобильное, показываем предупреждение
   if (isMobile) {
     return <MobileWarning language={language} />;
   }
