@@ -200,7 +200,7 @@ class CommandProcessor {
         callbacks.onAuthenticate(result.server);
       }
       
-      if (fileSystem.currentServer == '31.31.196.69') {
+      if (fileSystem.currentServer == '31.31.201.69') {
         this.unlockAchievement('secret_server_access', fileSystem.currentServer);
       }
       return {
@@ -387,18 +387,18 @@ class CommandProcessor {
     const discoveredServers = [];
     
     // Default basic servers
-    if (fileSystem.currentServer === '31.31.196.1') {
-      discoveredServers.push('31.31.196.2', '31.31.196.3', '31.31.196.4');
+    if (fileSystem.currentServer === '31.31.201.1') {
+      discoveredServers.push('31.31.201.2', '31.31.201.3', '31.31.201.4');
     }
     // Easter egg path
-    else if (fileSystem.currentServer === '31.31.196.4') {
-      discoveredServers.push('31.31.196.10');
+    else if (fileSystem.currentServer === '31.31.201.4') {
+      discoveredServers.push('31.31.201.10');
     }
-    else if (fileSystem.currentServer === '31.31.196.10') {
-      discoveredServers.push('31.31.196.24');
+    else if (fileSystem.currentServer === '31.31.201.10') {
+      discoveredServers.push('31.31.201.24');
     }
-    else if (fileSystem.currentServer === '31.31.196.24') {
-      discoveredServers.push('31.31.196.69');
+    else if (fileSystem.currentServer === '31.31.201.24') {
+      discoveredServers.push('31.31.201.69');
     }
     
     // Generate server list output
