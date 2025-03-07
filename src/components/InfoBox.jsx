@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import fileSystem from '../utils/fileSystem';
+import translations from '../utils/translations';
 import '../styles/InfoBox.css';
 
-// TimeInfoBox component - shows time, uptime, system type
+// shows time, uptime, system type
 const TimeInfoBox = ({ language }) => {
   const [time, setTime] = useState(new Date());
   const [uptime, setUptime] = useState(0);
   
-  // Update time every second
+  const translate = (key) => {
+    return translations[language]?.[key] || translations.en[key] || key;
+  };
+  
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
@@ -17,7 +21,6 @@ const TimeInfoBox = ({ language }) => {
     return () => clearInterval(timer);
   }, []);
   
-  // Format time
   const formatTime = () => {
     return time.toLocaleTimeString(language === 'ru' ? 'ru-RU' : 'en-US', {
       hour: '2-digit',
@@ -26,13 +29,11 @@ const TimeInfoBox = ({ language }) => {
     });
   };
   
-  // Format date
   const formatDate = () => {
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return time.toLocaleDateString(language === 'ru' ? 'ru-RU' : 'en-US', options);
   };
   
-  // Format uptime
   const formatUptime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -49,7 +50,7 @@ const TimeInfoBox = ({ language }) => {
         <div className="info-item-value date-value">{formatDate()}</div>
       </div>
       <div className="info-item">
-        <div className="info-item-label">UPTIME</div>
+        <div className="info-item-label">{translate('uptime').toUpperCase()}</div>
         <div className="info-item-value uptime-value">{formatUptime(uptime)}</div>
       </div>
       <div className="info-item">
@@ -60,11 +61,15 @@ const TimeInfoBox = ({ language }) => {
   );
 };
 
-// NetworkInfoBox component - shows network status, server IP, ping and location
+// shows network status, server IP, ping and location
 const NetworkInfoBox = ({ language, server }) => {
   const [ping, setPing] = useState(Math.floor(Math.random() * 30) + 10);
   
-  // Update ping every 2-5 seconds
+  const translate = (key) => {
+    return translations[language]?.[key] || translations.en[key] || key;
+  };
+  
+  // update ping every 2-5 seconds
   useEffect(() => {
     const updatePing = () => {
       setPing(Math.floor(Math.random() * 30) + 10);
@@ -82,7 +87,7 @@ const NetworkInfoBox = ({ language, server }) => {
       <div className="status-container">
         <div className="status-item">
           <div className="status-label">STATE</div>
-          <div className="status-value online">{language === 'ru' ? 'ОНЛАЙН' : 'ONLINE'}</div>
+          <div className="status-value online">{translate('online').toUpperCase()}</div>
         </div>
         <div className="status-item">
           <div className="status-label">OWNER</div>
@@ -106,7 +111,7 @@ const NetworkInfoBox = ({ language, server }) => {
   );
 };
 
-// InfoBoxes component - container for both info boxes and planet gif
+// Icontainer for both info boxes and planet gif
 const InfoBoxes = ({ language, server }) => {
   return (
     <div className="info-boxes">

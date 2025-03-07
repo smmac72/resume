@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '../styles/LoadingScreen.css';
 
 const LoadingScreen = () => {
-  const [logs, setLogs] = useState([]); // Единый массив для всех логов
+  const [logs, setLogs] = useState([]);
   const [showingLogo, setShowingLogo] = useState(true);
   const [bootComplete, setBootComplete] = useState(false);
   
-  // ASCII Amogus logo
+  // ascii sussus amogus lmao
   const amogusLogo = [
     { text: "  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀", type: "normal", delay: 50 },
     { text: "  ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀", type: "normal", delay: 50 },
@@ -32,7 +32,7 @@ const LoadingScreen = () => {
     { text: "Initializing system...", type: "normal", delay: 1000 },
   ];
   
-  // Boot sequence logs с меньшими задержками для большей скорости
+  // some smart linux text
   const bootSequenceLogs = [
     { text: "[    0.000000] Linux version 5.15.0-amongos (root@build) (gcc version 11.2.0) #1 SMP PREEMPT", type: "info", delay: 10 },
     { text: "[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.15.0-amongos root=UUID=f8d4-65b3-82a6-a5c9", type: "normal", delay: 10 },
@@ -134,47 +134,33 @@ const LoadingScreen = () => {
     { text: "System ready.", type: "success", delay: 100 },
   ];
   
-  // Инициализация загрузки только один раз
   useEffect(() => {
-    // Проверка, чтобы избежать дублирования
+    // check for doubles
     if (logs.length > 0 || bootComplete) return;
+    setBootComplete(true);
     
-    setBootComplete(true); // Предотвращаем многократную инициализацию
-    
-    // Запускаем процесс логирования
     const initialize = async () => {
-      // Ожидаем немного перед началом
       await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Добавляем amogus logo сразу
+      // instant amogus
       setLogs(amogusLogo);
-      
-      // Ждем немного, чтобы пользователь мог увидеть лого
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Переключаемся на boot logs
+      // boot logs appear
       setShowingLogo(false);
+      setLogs([]);
       
-      // Очищаем лог и начинаем загрузку
-      setLogs([]); // Очищаем, чтобы начать заново
+      // string offset from the top
+      const numberOfLinesToFillScreen = Math.floor(window.innerHeight / 32);
       
-      // Количество строк, достаточное для заполнения экрана
-      // Это нужно чтобы логи начали отображаться снизу
-      const numberOfLinesToFillScreen = Math.floor(window.innerHeight / 24); // примерно высота строки
-      
-      // Создаем начальный массив с пустыми строками
       const emptyLines = Array(numberOfLinesToFillScreen).fill({ text: "", type: "normal", delay: 0 });
       setLogs(emptyLines);
       
-      // Задержка, чтобы установить пустые строки
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 50)); // kostyl
       
-      // Последовательно добавляем boot логи, удаляя старые только когда их слишком много
-      const maxLines = numberOfLinesToFillScreen + 5; // Чуть больше чем нужно для экрана
+      const maxLines = numberOfLinesToFillScreen + 5;
       
       for (let i = 0; i < bootSequenceLogs.length; i++) {
         setLogs(prevLogs => {
-          // Если логов становится слишком много, удаляем старые
+	  // delete old logs
           if (prevLogs.length >= maxLines) {
             return [...prevLogs.slice(1), bootSequenceLogs[i]];
           } else {
@@ -182,7 +168,6 @@ const LoadingScreen = () => {
           }
         });
         
-        // Ждем перед добавлением следующего лога
         await new Promise(resolve => setTimeout(resolve, bootSequenceLogs[i].delay));
       }
     };

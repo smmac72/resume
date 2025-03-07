@@ -5,6 +5,7 @@ import InfoBoxes from './InfoBox';
 import KeyboardComponent from './KeyboardComponent';
 import Inventory from './Inventory';
 import Achievements from './Achievements';
+import translations from '../utils/translations';
 import '../styles/MainInterface.css';
 
 const MainInterface = ({ 
@@ -21,7 +22,13 @@ const MainInterface = ({
   const [currentPath, setCurrentPath] = useState('/');
   const [updateCounter, setUpdateCounter] = useState(0);
   
-  // Эффект обновления интерфейса после каждого действия
+  // maximum tabs enabled at once
+  const MAX_TABS = 6;
+  
+  const translate = (key) => {
+    return translations[language]?.[key] || translations.en[key] || key;
+  };
+  
   useEffect(() => {
     const updateInterval = setInterval(() => {
       setUpdateCounter(prev => prev + 1);
@@ -30,44 +37,44 @@ const MainInterface = ({
     return () => clearInterval(updateInterval);
   }, []);
   
-  // Обработка выполнения файла (команда run)
   const handleRun = (file) => {
-    // Проверка существования вкладки с таким же заголовком
+    // if tab exists
     const existingIndex = openTabs.findIndex(tab => tab.title === file.title);
     
     if (existingIndex >= 0) {
-      // Если существует, просто активируем её
-      setActiveTab(existingIndex + 1); // +1 потому что home - 0
+      setActiveTab(existingIndex + 1);
     } else {
-      // Иначе добавляем новую вкладку
-      setOpenTabs([...openTabs, file]);
-      setActiveTab(openTabs.length + 1); // +1 потому что home - 0
-    }
-    
-    // Обновление интерфейса
+      // otherwise create
+      let newTabs = [...openTabs, file];
+      
+      // delete if tab amount exceeds max
+      if (newTabs.length > MAX_TABS) {
+        newTabs = newTabs.slice(1);
+        setActiveTab(MAX_TABS);
+      } else {
+        setActiveTab(openTabs.length + 1);
+      }
+      
+      setOpenTabs(newTabs);
+    } 
     setUpdateCounter(prev => prev + 1);
   };
   
-  // Обработка закрытия вкладки
   const handleTabClose = (index) => {
-    // Вычисление реального индекса
-    const realIndex = index - 1; // -1 потому что home - 0
+    const realIndex = index - 1;
     
-    // Обновление массива вкладок
     const newTabs = [...openTabs];
     newTabs.splice(realIndex, 1);
     setOpenTabs(newTabs);
     
-    // Если мы закрыли активную вкладку, активируем предыдущую
+    // activate previous tab
     if (activeTab === index) {
       setActiveTab(Math.max(0, index - 1));
     } else if (activeTab > index) {
-      // Если мы закрыли вкладку перед активной, корректируем индекс активной вкладки
       setActiveTab(activeTab - 1);
     }
   };
   
-  // Обработка подключения к серверу
   const handleConnect = (newServer) => {
     setAuthenticatedServer(newServer);
     if (onConnect) {
@@ -79,13 +86,11 @@ const MainInterface = ({
     setUpdateCounter(prev => prev + 1);
   };
   
-  // Обработка аутентификации сервера
   const handleAuthenticate = (authServer) => {
     setAuthenticatedServer(authServer);
     setUpdateCounter(prev => prev + 1);
   };
 
-  // Обработка изменения пути из терминала
   const handlePathChange = (newPath) => {
     setCurrentPath(newPath);
   };
@@ -110,7 +115,7 @@ const MainInterface = ({
           <div className="sidebar-top">
             <div className="inventory">
               <div className="inventory-header">
-                {language === 'ru' ? 'Инвентарь' : 'Inventory'}
+                {translate('inventory')}
               </div>
               <div className="inventory-items">
                 <Inventory 
@@ -122,7 +127,7 @@ const MainInterface = ({
             </div>
             <div className="achievements">
               <div className="achievements-header">
-                {language === 'ru' ? 'Достижения' : 'Achievements'}
+                {translate('achievements')}
               </div>
               <div className="achievements-items">
                 <Achievements language={language} key={`ach-${updateCounter}`} />

@@ -5,7 +5,7 @@ const KeyboardComponent = ({ onKeyPress }) => {
   const [activeKeys, setActiveKeys] = useState([]);
   const [heldKeys, setHeldKeys] = useState([]);
 
-  // Расположение клавиш
+  // keys
   const keyRows = [
     ['ESC', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'BACK'],
     ['TAB', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'],
@@ -14,13 +14,11 @@ const KeyboardComponent = ({ onKeyPress }) => {
     ['CTRL', 'ALT', '', 'ALT', 'CTRL'],
   ];
 
-  // Слушатель событий клавиатуры
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Используем code вместо key для поддержки разных раскладок
+      // code instead of key for any language layout on the keyboard
       const keyCode = e.code;
       
-      // Отображение специальных клавиш
       const keyMapping = {
         'Escape': 'ESC',
         'Backspace': 'BACK',
@@ -34,17 +32,17 @@ const KeyboardComponent = ({ onKeyPress }) => {
         'AltRight': 'ALT',
         'Space': '',
         'Enter': 'ENTER',
-        // Буквы англ. раскладки
+
         'KeyQ': 'Q', 'KeyW': 'W', 'KeyE': 'E', 'KeyR': 'R', 'KeyT': 'T',
         'KeyY': 'Y', 'KeyU': 'U', 'KeyI': 'I', 'KeyO': 'O', 'KeyP': 'P',
         'KeyA': 'A', 'KeyS': 'S', 'KeyD': 'D', 'KeyF': 'F', 'KeyG': 'G',
         'KeyH': 'H', 'KeyJ': 'J', 'KeyK': 'K', 'KeyL': 'L',
         'KeyZ': 'Z', 'KeyX': 'X', 'KeyC': 'C', 'KeyV': 'V', 'KeyB': 'B',
         'KeyN': 'N', 'KeyM': 'M',
-        // Цифры
+
         'Digit1': '1', 'Digit2': '2', 'Digit3': '3', 'Digit4': '4', 'Digit5': '5',
         'Digit6': '6', 'Digit7': '7', 'Digit8': '8', 'Digit9': '9', 'Digit0': '0',
-        // Знаки
+
         'Minus': '-', 'Equal': '=', 'BracketLeft': '[', 'BracketRight': ']',
         'Backslash': '\\', 'Semicolon': ';', 'Quote': '\'', 'Comma': ',',
         'Period': '.', 'Slash': '/'
@@ -55,7 +53,6 @@ const KeyboardComponent = ({ onKeyPress }) => {
       setActiveKeys(prev => [...prev, displayKey]);
       setHeldKeys(prev => [...prev, displayKey]);
       
-      // Вызов onKeyPress если предоставлен
       if (onKeyPress) {
         onKeyPress(e);
       }
@@ -77,17 +74,17 @@ const KeyboardComponent = ({ onKeyPress }) => {
         'AltRight': 'ALT',
         'Space': '',
         'Enter': 'ENTER',
-        // Буквы англ. раскладки
+
         'KeyQ': 'Q', 'KeyW': 'W', 'KeyE': 'E', 'KeyR': 'R', 'KeyT': 'T',
         'KeyY': 'Y', 'KeyU': 'U', 'KeyI': 'I', 'KeyO': 'O', 'KeyP': 'P',
         'KeyA': 'A', 'KeyS': 'S', 'KeyD': 'D', 'KeyF': 'F', 'KeyG': 'G',
         'KeyH': 'H', 'KeyJ': 'J', 'KeyK': 'K', 'KeyL': 'L',
         'KeyZ': 'Z', 'KeyX': 'X', 'KeyC': 'C', 'KeyV': 'V', 'KeyB': 'B',
         'KeyN': 'N', 'KeyM': 'M',
-        // Цифры
+
         'Digit1': '1', 'Digit2': '2', 'Digit3': '3', 'Digit4': '4', 'Digit5': '5',
         'Digit6': '6', 'Digit7': '7', 'Digit8': '8', 'Digit9': '9', 'Digit0': '0',
-        // Знаки
+
         'Minus': '-', 'Equal': '=', 'BracketLeft': '[', 'BracketRight': ']',
         'Backslash': '\\', 'Semicolon': ';', 'Quote': '\'', 'Comma': ',',
         'Period': '.', 'Slash': '/'
@@ -95,10 +92,7 @@ const KeyboardComponent = ({ onKeyPress }) => {
       
       const displayKey = keyMapping[keyCode] || e.key.toUpperCase();
       
-      // Удаление клавиши из активных
       setActiveKeys(prev => prev.filter(k => k !== displayKey));
-      
-      // Удаление клавиши из удерживаемых
       setHeldKeys(prev => prev.filter(k => k !== displayKey));
     };
     
@@ -111,7 +105,7 @@ const KeyboardComponent = ({ onKeyPress }) => {
     };
   }, [onKeyPress]);
 
-  // Effect to flash key visual feedback
+  // effect to flash key for the visual feedback
   useEffect(() => {
     const timers = activeKeys.map(key => {
       return setTimeout(() => {
@@ -124,9 +118,8 @@ const KeyboardComponent = ({ onKeyPress }) => {
     };
   }, [activeKeys]);
 
-  // Обработка клика по клавише
   const handleKeyClick = (key) => {
-    if (key === '') return; // Пустая клавиша для пробела
+    if (key === '') return;
     
     let event;
     
@@ -148,7 +141,6 @@ const KeyboardComponent = ({ onKeyPress }) => {
       case 'SHIFT':
       case 'CTRL':
       case 'ALT':
-        // Модификаторы, просто показываем их как активные
         setActiveKeys(prev => [...prev, key]);
         setTimeout(() => {
           setActiveKeys(prev => prev.filter(k => k !== key));
@@ -158,16 +150,13 @@ const KeyboardComponent = ({ onKeyPress }) => {
         event = new KeyboardEvent('keydown', { key: key.toLowerCase() });
     }
     
-    // Вызов onKeyPress если предоставлен
     if (onKeyPress) {
       onKeyPress(event);
     }
-    
-    // Показываем клавишу как активную
     setActiveKeys(prev => [...prev, key]);
   };
 
-  // Определение класса клавиши (размер и состояние активности)
+  // mapping keys to different style classes
   const getKeyClass = (key) => {
     let className = 'keyboard-key';
     
@@ -177,7 +166,6 @@ const KeyboardComponent = ({ onKeyPress }) => {
       className += ' held';
     }
     
-    // Добавление классов размера в зависимости от типа клавиши
     switch (key) {
       case 'BACK':
         className += ' key-2x';

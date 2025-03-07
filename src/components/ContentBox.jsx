@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import fileSystem from '../utils/fileSystem';
+import translations from '../utils/translations';
 import '../styles/ContentBox.css';
 
 const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose, onExecute, currentPath, onPathChange }) => {
@@ -12,6 +13,10 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
   useEffect(() => {
     setLocalPath('/');
   }, [server?.ip]);
+  
+  const translate = (key) => {
+    return translations[language]?.[key] || translations.en[key] || key;
+  };
   
   return (
     <div className="content-box">
@@ -44,7 +49,9 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
       </div>
       
       <div className="content-container">
-        {renderContent()}
+        <div className="content-wrapper">
+          {renderContent()}
+        </div>
       </div>
     </div>
   );
@@ -101,7 +108,9 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
         const imageUrl = tab.content.substring(6);
         return (
           <div className="content-image">
-            <img src={`/images/${imageUrl}`} alt={tab.title} />
+            <div className="image-container">
+              <img src={`/images/${imageUrl}`} alt={tab.title} />
+            </div>
           </div>
         );
       case 'timeline':
@@ -109,8 +118,10 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
         return <TimelineViewer id={timelineId} language={language} />;
       default:
         return (
-          <div className="content-text">
-            <pre>{tab.content}</pre>
+          <div className="content-text-wrapper">
+            <div className="content-text">
+              <pre>{tab.content}</pre>
+            </div>
           </div>
         );
     }
@@ -125,11 +136,15 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
     setInnerPath(currentPath);
   }, [currentPath]);
   
+  const translate = (key) => {
+    return translations[language]?.[key] || translations.en[key] || key;
+  };
+  
   if (!server) {
     return (
       <div className="no-server">
-        <h2>{language === 'ru' ? 'Не подключен к серверу' : 'Not connected to any server'}</h2>
-        <p>{language === 'ru' ? 'Используйте команду "connect" для подключения' : 'Use the "connect" command to connect to a server'}</p>
+        <h2>{translate('not_connected')}</h2>
+        <p>{translate('use_connect')}</p>
       </div>
     );
   }
@@ -218,7 +233,7 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
               onClick={handleGoUp}
             >
               <span className="directory-item-icon">⬆️</span>
-              <span>..</span>
+              <span className="directory-item-name">..</span>
             </li>
           )}
           
@@ -229,7 +244,7 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
               onClick={() => handleDirectoryClick(dir)}
             >
               <span className="directory-item-icon">📁</span>
-              <span>{dir}</span>
+              <span className="directory-item-name">{dir}</span>
             </li>
           ))}
           
@@ -240,13 +255,13 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
               onClick={() => handleFileClick(file)}
             >
               <span className="directory-item-icon">📄</span>
-              <span>{file}</span>
+              <span className="directory-item-name">{file}</span>
             </li>
           ))}
           
           {directories.length === 0 && files.length === 0 && (
             <li className="directory-item-empty">
-              {language === 'ru' ? 'Пустая директория' : 'Empty directory'}
+              {translate('empty_directory')}
             </li>
           )}
         </ul>
@@ -269,7 +284,7 @@ const TimelineViewer = ({ id, language }) => {
         { year: 2023, month: 9, title: '', description: 'Started working on the clan mechanics. Rebalanced one of the main core mechanics - Ship deliveries.' },
         { year: 2023, month: 10, title: '', description: 'Completed the Ship deliveries A/B tests. Designed the Halloween event with the competition mechanic.' },
         { year: 2023, month: 11, title: '', description: 'Rebalanced the Kraken attack meta event. Worked on the Black Friday event.' },
-        { year: 2023, month: 12, title: '', description: 'Merry Christmas. Reskins, thematical project. Designed a large Motorcade project.' },
+        { year: 2023, month: 12, title: '', description: 'Merry Christmas! Reskins, thematical project. Designed a large Motorcade project.' },
         { year: 2024, month: 1, title: '', description: 'Upgraded the Battlepass mechanic. Created thematic reskins for the Happy Valentines day.' },
         { year: 2024, month: 2, title: '', description: 'Designed the Battlepass competition mechanic. Another new schedule for the new players.' },
         { year: 2024, month: 3, title: '', description: 'Designed my most favorite Cargo Delivery mechanic, which led to my first bonus payment!' },
@@ -287,12 +302,31 @@ const TimelineViewer = ({ id, language }) => {
         { year: 2025, month: 3, title: '', description: 'Currently automating the GD processes - no more need to do mundane jobs, do the creative ones instead!' },
       ],
       ru: [
-        { year: 2018, month: 1, title: 'Начало карьеры', description: 'Первая работа в качестве младшего разработчика' },
-        { year: 2019, month: 6, title: 'Повышение', description: 'Повышен до разработчика среднего уровня' },
-        { year: 2020, month: 3, title: 'Новый проект', description: 'Начал работать над крупным проектом' },
-        { year: 2021, month: 9, title: 'Старшая должность', description: 'Повышен до старшего разработчика' },
-        { year: 2022, month: 5, title: 'Руководство', description: 'Стал руководителем команды' },
-        { year: 2023, month: 2, title: 'Архитектура', description: 'Перешел на роль архитектора решений' },
+        { year: 2023, month: 3, title: '', description: 'Начал работу в RedBrixWall как геймдизайнер мобильного ситибилдера. Начал с разработки боевых пропусков. Ребалансировал мета-ивент Шахта' },
+        { year: 2023, month: 4, title: '', description: 'Создал офферы расширения территории и склада. Перебалансил существующий оффер Алмазный фонд.' },
+        { year: 2023, month: 5, title: '', description: 'Перебалансил мета-ивент Колесо фортуны и оффер Бесконечное сокровище.' },
+        { year: 2023, month: 6, title: '', description: 'Убрал лимит игровых уровней. Улучшил ранее созданные офферы расширения для китов.' },
+        { year: 2023, month: 7, title: '', description: 'Разработал проект Авиабаза с созданием техники для военной механики.' },
+        { year: 2023, month: 8, title: '', description: 'Разработал механику соревнований для проекта Авиабаза. Ввел новое оперирование для новичков.' },
+        { year: 2023, month: 9, title: '', description: 'Начал работу над клановыми механиками. Перебалансил награды одной из основных механик - отправки кораблей.' },
+        { year: 2023, month: 10, title: '', description: 'Завершил A/B-тесты отправок кораблей. Разработал событие Хэллоуин с механикой соревнований.' },
+        { year: 2023, month: 11, title: '', description: 'Перебалансил мета-ивент Кракен. Работал над событием Чёрная пятница для платящих игроков.' },
+        { year: 2023, month: 12, title: '', description: 'С Рождеством! Рескины, тематический проект. Разработал проект Автострада.' },
+        { year: 2024, month: 1, title: '', description: 'Улучшил механику боевого пропуска. Создал тематические рескины к Дню Святого Валентина.' },
+        { year: 2024, month: 2, title: '', description: 'Разработал механику соревнований для боевого пропуска. Ещё одно оперирование для новичков.' },
+        { year: 2024, month: 3, title: '', description: 'Разработал мою самую любимую механику Логистический центр, которая привела к моей первой премии!' },
+        { year: 2024, month: 4, title: '', description: 'Создал одну из самых сложных игровых механик - Клановые соревнования с сезонами.' },
+        { year: 2024, month: 5, title: '', description: 'Провёл эксперименты с VIP-подпиской. Начал новый проект Газовая Платформа.' },
+        { year: 2024, month: 6, title: '', description: 'Задизайнил режим редактирования города. Переработал документацию боевого пропуска для быстрой разработки.' },
+        { year: 2024, month: 7, title: '', description: 'Начал проект Космодром с механикой космических миссий. Разработал оффер пропуска рекламы.' },
+        { year: 2024, month: 8, title: '', description: 'Добавил механику соревнований к моему Логистическому центру.' },
+        { year: 2024, month: 9, title: '', description: 'Добавил механику соревнований к проекту Космодром. Разработал событие на Хэллоуин (снова) с механикой соревнований.' },
+        { year: 2024, month: 10, title: '', description: 'Разработан второй проект Космодром. Новые дополнения к существующей механике.' },
+        { year: 2024, month: 11, title: '', description: 'Предложение Супер VIP - без временных ограничений, всё бесплатно, творческий режим в нашей F2P игре.' },
+        { year: 2024, month: 12, title: '', description: 'Проект Горнолыжный курорт - первая неивентовая механика, визуально меняющая часть мира в нашей игре.' },
+        { year: 2025, month: 1, title: '', description: 'Активные рескины текущих событий - Китайский новый год, Суперкубок (хаха Large Bowl), День Святого Валентина.' },
+        { year: 2025, month: 2, title: '', description: 'Дополнение проекта Горнолыжный курорт. Еще одна часть проекта Газовая платформа.' },
+        { year: 2025, month: 3, title: '', description: 'В настоящее время автоматизирую процессы геймдизайна - больше не нужно выполнять рутинные задания, будем делать только творческие!' },
       ],
     },
     nextrp: {
@@ -303,11 +337,10 @@ const TimelineViewer = ({ id, language }) => {
         { year: 2022, month: 3, title: '', description: 'Rebalanced Battlepass rewards. Did not like the non-socializing playerbase, left the team.' }
       ],
       ru: [
-        { year: 2018, month: 3, title: 'Веб-разработка', description: 'Сертификат по основам веб-разработки' },
-        { year: 2019, month: 1, title: 'JavaScript', description: 'Продвинутое программирование на JavaScript' },
-        { year: 2020, month: 8, title: 'React', description: 'Сертификация по React и Redux' },
-        { year: 2021, month: 5, title: 'Облако', description: 'AWS Certified Solutions Architect' },
-        { year: 2022, month: 11, title: 'DevOps', description: 'Сертификат инженера DevOps' },
+        { year: 2021, month: 12, title: '', description: 'Присоединился к команде NEXT-RP в качестве геймдизайнера. Начал работу с балансом игры.' },
+        { year: 2022, month: 1, title: '', description: 'Переработал фракцию "ФСИН", чтобы было меньше пребывания на одном месте и больше социализации.' },
+        { year: 2022, month: 2, title: '', description: 'Создал и сбалансировал механику улучшения оружия с бесконечной глубиной.' },
+        { year: 2022, month: 3, title: '', description: 'Ребалансировал награды боевого пропуска. Не понравилась несоциализирующаяся ментальность игроков, покинул команду.' }
       ],
     },
     samprp: {
@@ -345,19 +378,45 @@ const TimelineViewer = ({ id, language }) => {
         { year: 2024, month: 6, title: '', description: 'Grand release of the launcher. Left the team after that.' },
       ],
       ru: [
-        { year: 2018, month: 3, title: 'Веб-разработка', description: 'Сертификат по основам веб-разработки' },
-        { year: 2019, month: 1, title: 'JavaScript', description: 'Продвинутое программирование на JavaScript' },
-        { year: 2020, month: 8, title: 'React', description: 'Сертификация по React и Redux' },
-        { year: 2021, month: 5, title: 'Облако', description: 'AWS Certified Solutions Architect' },
-        { year: 2022, month: 11, title: 'DevOps', description: 'Сертификат инженера DevOps' },
+        { year: 2019, month: 3, title: '', description: 'Частично присоединился к команде Samp-Rp в качестве модератора форума идей.' },
+        { year: 2019, month: 4, title: '', description: 'Начал создавать собственные идеи для улучшения игры. Первая принятая - дизайн интерьера дома.' },
+        { year: 2020, month: 5, title: '', description: 'Присоединился к команде Samp-Rp в качестве стажёра-геймдизайнера. Научился всему здесь.' },
+        { year: 2020, month: 8, title: '', description: 'Моя первая выпущенная механика - улучшения для VIP-системы. Разработал новую систему квестов - задержалась на год.' },
+        { year: 2020, month: 10, title: '', description: 'Разработал новый основной геймплей для фракции ФБР - переход от контроля фракций к работе под прикрытием.' },
+        { year: 2020, month: 12, title: '', description: 'Начал разрабатывать механики для фракции Полиции - новую систему обыска игроков.' },
+        { year: 2021, month: 3, title: '', description: 'Работал над клановой механикой с централизованной точкой возрождения - офисами.' },
+        { year: 2021, month: 7, title: '', description: 'Разработал новую механику вызова служб для фракций полиции/медиков и работ такси/механиков.' },
+        { year: 2021, month: 10, title: '', description: 'Разработал функцию Пригласи вернувшегося друга - социальные игроки возвращают своих друзей в игру за вознаграждение.' },
+        { year: 2022, month: 1, title: '', description: 'Переработал форум идей. Начал его модерировать.' },
+        { year: 2022, month: 3, title: '', description: 'Разработал механику ежедневных заданий с глубиной наград в 84 дня.' },
+        { year: 2022, month: 7, title: '', description: 'Участвовал в процессе разработки новой фракции Суд и её дальнейшем тестировании.' },
+        { year: 2022, month: 9, title: '', description: 'Переделал работу Водитель автобуса - сделал её более сбалансированной и удобной, добавил первое взаимодействие фракции и работы.' },
+        { year: 2022, month: 11, title: '', description: 'Масштабная переработка существующих фракций Полиции и Мэрии - первая попала в производство полгода спустя.' },
+        { year: 2022, month: 12, title: '', description: 'Начал планирование нового воркфлоу геймдизайна.' },
+        { year: 2023, month: 1, title: '', description: 'Повышен до лида. Наконец реализовал свой воркфлоу!' },
+        { year: 2023, month: 2, title: '', description: 'Начал разрабатывать новую систему домов - делая её более значимой, чем просто точка спавна.' },
+        { year: 2023, month: 3, title: '', description: 'Разработал Центр развлечений - объединение всеъ системных механик развлечений в одном месте.' },
+        { year: 2023, month: 4, title: '', description: 'Подготовка к открытию нового сервера Samp-Rp Underground. Балансировка старых механик.' },
+        { year: 2023, month: 5, title: '', description: 'Мерж двух закрывающихся серверов - ребаланс, подготовка игроков к переходу в новую экосистему.' },
+        { year: 2023, month: 6, title: '', description: 'Торжественное открытие! Начал модерировать новый сервер.' },
+        { year: 2023, month: 8, title: '', description: 'Разработал VIP-подписку с несколькими уровнями монетизации.' },
+        { year: 2023, month: 9, title: '', description: 'Создал механику бустеров, экспериментируя с заменой текущей монетизации.' },
+        { year: 2023, month: 10, title: '', description: 'Разработал систему достижений фракций со специальными пассивными бонусами для активных игроков.' },
+        { year: 2023, month: 11, title: '', description: 'Переработал мою первую крупную механику ежедневных заданий для лучшего игрового опыта.' },
+        { year: 2023, month: 12, title: '', description: 'Начал работу с концепциями клиентского лаунчера.' },
+        { year: 2024, month: 2, title: '', description: 'Дизайн ремейка системы бизнеса - попытались превратить бизнесы в небольшие социальные хабы' },
+        { year: 2024, month: 3, title: '', description: 'Дизайн ремейка системы транспортных средств - полная настройка, ценя социальную часть истории сервера.' },
+        { year: 2024, month: 4, title: '', description: 'Активная работа с лаунчером - проектирование UI, адаптация системных механик, поиск кастомного контента.' },
+        { year: 2024, month: 5, title: '', description: 'Бета-тестирование лаунчера. тбх было ужасно.' },
+        { year: 2024, month: 6, title: '', description: 'Грандиозный выпуск лаунчера. После этого покинул команду.' },
       ],
     },
   };
 
-  // Получение данных временной шкалы для указанного ID и языка
+  // get localized timeline
   const data = timelineData[id] ? timelineData[id][language] || timelineData[id].en : [];
   
-  // Группировка по годам
+  // sort by years
   const yearGroups = data.reduce((groups, item) => {
     const year = item.year;
     if (!groups[year]) {
@@ -367,21 +426,33 @@ const TimelineViewer = ({ id, language }) => {
     return groups;
   }, {});
 
-  // Состояние для выбранного года
-  const [selectedYear, setSelectedYear] = useState(data.length > 0 ? data[0].year : null);
+  // get years from the current timeline
+  const availableYears = Object.keys(yearGroups).map(year => parseInt(year));
+  // first year - default
+  const defaultYear = availableYears.length > 0 ? availableYears[0] : null;
+  const [selectedYear, setSelectedYear] = useState(null);
+  
+  React.useEffect(() => {
+    setSelectedYear(defaultYear);
+  }, [id, defaultYear]);
+  
+  React.useEffect(() => {
+    if (selectedYear !== null && !availableYears.includes(selectedYear)) {
+      setSelectedYear(defaultYear);
+    }
+  }, [selectedYear, availableYears, defaultYear]);
 
-  // Обработка клика по году
   const handleYearClick = (year) => {
     setSelectedYear(selectedYear === year ? null : year);
   };
   
-  // Получение имени месяца в правильном регистре
+  // month to name
   const getMonthName = (month, lang) => {
     const date = new Date(2000, month - 1, 1);
     const monthName = date.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', {
       month: 'long',
     });
-    return monthName.toUpperCase();
+    return monthName.charAt(0).toUpperCase() + monthName.slice(1);
   };
 
   return (
@@ -400,7 +471,6 @@ const TimelineViewer = ({ id, language }) => {
       
       {selectedYear && (
         <div className="timeline-details">
-          <h2>{selectedYear}</h2>
           <div className="timeline-months">
             {yearGroups[selectedYear].map((item, index) => (
               <div key={index} className="timeline-event">
@@ -408,7 +478,7 @@ const TimelineViewer = ({ id, language }) => {
                   {getMonthName(item.month, language)}
                 </div>
                 <div className="timeline-event-content">
-                  <h3>{item.title}</h3>
+                  {item.title && <h3>{item.title}</h3>}
                   <p>{item.description}</p>
                 </div>
               </div>
@@ -419,5 +489,4 @@ const TimelineViewer = ({ id, language }) => {
     </div>
   );
 };
-
 export default ContentBox;

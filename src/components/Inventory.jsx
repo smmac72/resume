@@ -1,19 +1,22 @@
 import React from 'react';
 import commandProcessor from '../utils/commandProcessor';
+import translations from '../utils/translations';
 
 const Inventory = ({ language, onConnect }) => {
   const knownLogins = commandProcessor.getKnownLogins();
   
-  // Function to handle clicking on an inventory item
+  const translate = (key) => {
+    return translations[language]?.[key] || translations.en[key] || key;
+  };
+  
   const handleInventoryClick = (ip, username, password) => {
-    // First connect to the server
     const connectResult = commandProcessor.processCommand(`connect ${ip}`, { onConnect });
     
     if (connectResult.success) {
-      // Then authenticate with stored credentials
+      // authenticate with stored credentials
       setTimeout(() => {
         commandProcessor.processCommand(`login ${username} ${password}`, { onConnect });
-      }, 100); // Small delay to ensure connect finishes
+      }, 100); // small delay to ensure the connect finishes
     }
   };
 
@@ -21,7 +24,7 @@ const Inventory = ({ language, onConnect }) => {
     <>
       {Object.keys(knownLogins).length === 0 ? (
         <div className="inventory-empty">
-          {language === 'ru' ? 'Пусто' : 'Empty'}
+          {translate('inventory_empty')}
         </div>
       ) : (
         Object.entries(knownLogins).map(([ip, { username, password, formatted }]) => (

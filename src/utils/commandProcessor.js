@@ -1,4 +1,5 @@
 import fileSystem from './fileSystem';
+import translations from './translations';
 
 class CommandProcessor {
   constructor() {
@@ -28,54 +29,6 @@ class CommandProcessor {
       lang: 'lang_usage'
     };
     
-    this.translations = {
-      en: {
-        connect: 'Connected to',
-        disconnect: 'Disconnected from',
-        auth_success: 'Authenticated successfully',
-        auth_fail: 'Authentication failed',
-        auth_required: 'Authentication required. Use login <username> <password>',
-        already_authenticated: 'Already authenticated to this server',
-        file_not_found: 'File not found',
-        dir_not_found: 'Directory not found',
-        command_not_found: 'Command not found',
-        invalid_args: 'Invalid arguments',
-        playmusic_start: 'Playing music - NieR Automata: Amusement Park Chiptune Cover by Retro TV',
-        playmusic_stop: 'Music stopped',
-        achievement_unlocked: 'Achievement unlocked',
-        language_changed: 'Language changed to',
-        connect_usage: 'Usage: connect <ip>',
-        login_usage: 'Usage: login <username> <password>',
-        run_usage: 'Usage: run <filename>',
-        cat_usage: 'Usage: cat <filename>',
-        lang_usage: 'Usage: lang <en|ru>',
-        welcome_message: 'Welcome to Among OS Terminal. Type "help" for available commands.',
-        connected_to: 'Connected to server',
-      },
-      ru: {
-        connect: 'Подключено к',
-        disconnect: 'Отключено от',
-        auth_success: 'Аутентификация успешна',
-        auth_fail: 'Ошибка аутентификации',
-        auth_required: 'Требуется аутентификация. Используйте login <имя_пользователя> <пароль>',
-        already_authenticated: 'Уже аутентифицирован на этом сервере',
-        file_not_found: 'Файл не найден',
-        dir_not_found: 'Директория не найдена',
-        command_not_found: 'Команда не найдена',
-        invalid_args: 'Неверные аргументы',
-        playmusic_start: 'Аудиотрек - NieR Automata: Amusement Park Chiptune Cover в исполнении Retro TV',
-        playmusic_stop: 'Музыка остановлена',
-        achievement_unlocked: 'Достижение разблокировано',
-        language_changed: 'Язык изменен на',
-        connect_usage: 'Использование: connect <ip>',
-        login_usage: 'Использование: login <имя_пользователя> <пароль>',
-        run_usage: 'Использование: run <имя_файла>',
-        cat_usage: 'Использование: cat <имя_файла>',
-        lang_usage: 'Использование: lang <en|ru>',
-        welcome_message: 'Добро пожаловать в терминал Among OS. Введите "help" для просмотра доступных команд.',
-        connected_to: 'Подключен к серверу',
-      },
-    };
     this.currentLanguage = 'en';
   }
 
@@ -281,7 +234,7 @@ class CommandProcessor {
       
       return {
         success: true,
-        message: output || 'Empty directory',
+        message: output || this.translate('empty_directory'),
         html: true,
       };
     }
@@ -339,7 +292,7 @@ class CommandProcessor {
       } else {
         return {
           success: false,
-          message: `File is not a text file: ${filePath}`,
+          message: `${this.translate('not_a_file')}: ${filePath}`,
         };
       }
     }
@@ -416,13 +369,13 @@ class CommandProcessor {
         
         return {
           success: true,
-          message: `Running: ${filePath}\n\n${content}`,
+          message: `${this.translate('running')}: ${filePath}\n\n${content}`,
         };
       }
       
       return {
         success: true,
-        message: `Running: ${filePath}`,
+        message: `${this.translate('running')}: ${filePath}`,
       };
     }
 
@@ -449,10 +402,10 @@ class CommandProcessor {
     }
     
     // Generate server list output
-    let output = 'Network scan complete.\n\nAvailable servers:\n';
+    let output = this.translate('network_scan_complete') + '\n\n' + this.translate('available_servers') + ':\n';
     
     // Add current server first
-    output += `${fileSystem.currentServer} - ${fileSystem.root.servers[fileSystem.currentServer].name} (current)\n`;
+    output += `${fileSystem.currentServer} - ${fileSystem.root.servers[fileSystem.currentServer].name} (${this.translate('current')})\n`;
     
     // Add discovered servers
     discoveredServers.forEach(ip => {
@@ -482,11 +435,12 @@ class CommandProcessor {
     if (lang !== 'en' && lang !== 'ru') {
       return {
         success: false,
-        message: 'Invalid language. Available languages: en, ru',
+        message: this.translate('invalid_language'),
       };
     }
     
     this.currentLanguage = lang;
+    fileSystem.setLanguage(lang);
     
     if (callbacks.onLanguageChange) {
       callbacks.onLanguageChange(lang);
@@ -528,24 +482,9 @@ class CommandProcessor {
 
   // Handle help command
   handleHelp() {
-    const helpText = `
-Available commands:
-  connect <ip>           - Connect to a server
-  disconnect             - Disconnect from the current server
-  login <username> <password> - Authenticate to a server
-  ls                     - List files and directories
-  cd <directory>         - Change directory
-  cat <file>             - Display file content
-  run <file>             - Execute file and open in ContentBox
-  scan                   - Scan for available servers
-  lang <language>        - Change language (en, ru)
-  playmusic              - Toggle background music
-  help                   - Display this help
-    `;
-    
     return {
       success: true,
-      message: helpText,
+      message: this.translate('help_text'),
     };
   }
 
@@ -672,9 +611,7 @@ Available commands:
       console.log(`${this.translate('achievement_unlocked')}: ${type}`);
       
       // Set achievementsUnlocked flag to true if this is our first achievement
-      if (this.achievements.length === 1) {
-        this.achievementsUnlocked = true;
-      }
+      this.achievementsUnlocked = true;
       
       // Play achievement sound
       this.playAchievementSound();
@@ -704,13 +641,14 @@ Available commands:
 
   // Translate a key based on the current language
   translate(key) {
-    return this.translations[this.currentLanguage][key] || key;
+    return translations[this.currentLanguage]?.[key] || translations.en[key] || key;
   }
 
   // Set current language
   setLanguage(lang) {
-    if (this.translations[lang]) {
+    if (lang === 'en' || lang === 'ru') {
       this.currentLanguage = lang;
+      fileSystem.setLanguage(lang);
     }
   }
 }
