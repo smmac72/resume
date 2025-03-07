@@ -64,7 +64,7 @@ class FileSystem {
               'globalcity.sh': 'timeline:globalcity',
               'nextrp.sh': 'timeline:nextrp',
               'samprp.sh': 'timeline:samprp',
-              'readme.txt': 'readme_projects',
+              'workreadme.txt': 'readme_projects',
             },
           },
           background: 'server2_bg.jpg',
@@ -77,11 +77,11 @@ class FileSystem {
           root: {
             renderer: {
               'github.sh': 'https://github.com/smmac72/zeroRender',
-              'readme.txt': 'readme_renderer',
+              'readme_render.txt': 'readme_renderer',
             },
             chernograd: {
               'steam.sh': 'https://store.steampowered.com/app/3047300/CHERNOGRAD/',
-              'readme.txt': 'readme_chernograd',
+              'readme_chernograd.txt': 'readme_chernograd',
               'demomemory.png': 'image:demomemory.jpg',
               'firststreamer.png': 'image:firststreamer.jpg',
               'deck.png': 'image:deck.jpg',
@@ -91,7 +91,7 @@ class FileSystem {
               'localization.png': 'image:localization.jpg',
             },
             tabletop: {
-              'readme.txt': 'readme_tabletop',
+              'readme_tabletop.txt': 'readme_tabletop',
               'pitch.pptx': 'https://docs.google.com/presentation/d/1J4tuk1PBqaa_iccFenoiTlEkYEqwNX_MLkmcNfFSGdY/edit#slide=id.g2a8926ffb75_0_180',
               'rules.docx': 'https://docs.google.com/document/d/19DbA54xCZQKHBdRlbtjiAGJOyVrb8hMoPSZ3KZ85fto/edit?tab=t.0',
               'pnp.pdf': 'https://docs.google.com/presentation/d/19v1cJ2s1ihUtJwkHXWO1YGk-gcp6o7jutL2dYMVd7Z8/edit#slide=id.g28e64aa2097_0_206',
@@ -100,12 +100,12 @@ class FileSystem {
             web: {
               'github.sh': 'https://github.com/smmac72/resume',
               'sluchka.sh': 'https://sluchka.market',
-              'readme.txt': 'readme_web',
+              'readme_web.txt': 'readme_web',
               'oldsite.sh': 'image:old_site.jpg',
             },
             gtao: {
               'balancedoc.xlsx': 'https://docs.google.com/spreadsheets/d/1oeNenv0Jt3pAe_Esq6SDZbESOZO94cTeWWO31des5Dw/edit?usp=sharing',
-              'readme.txt': 'readme_gtao',
+              'readme_gta.txt': 'readme_gtao',
             },
           },
           background: 'server3_bg.jpg',
@@ -117,7 +117,7 @@ class FileSystem {
           protected: true, // This server requires authentication
           root: {
             personal: {
-              'readme.txt': 'readme_personal',
+              'readme_my.txt': 'readme_personal',
               'favgames.txt': 'favgames_txt',
               'favmovies.txt': 'favmovies_txt',
               'favbooks.txt': 'favbooks_txt',

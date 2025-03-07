@@ -46,7 +46,7 @@ const TimeInfoBox = ({ language }) => {
     <div className="info-box time-info-box">
       <div className="info-box-time">{formatTime()}</div>
       <div className="info-item">
-        <div className="info-item-label">DATE</div>
+        <div className="info-item-label">{translate('date').toUpperCase()}</div>
         <div className="info-item-value date-value">{formatDate()}</div>
       </div>
       <div className="info-item">
@@ -54,7 +54,7 @@ const TimeInfoBox = ({ language }) => {
         <div className="info-item-value uptime-value">{formatUptime(uptime)}</div>
       </div>
       <div className="info-item">
-        <div className="info-item-label">TYPE</div>
+        <div className="info-item-label">{translate('system').toUpperCase()}</div>
         <div className="info-item-value type-value">AMONG OS</div>
       </div>
     </div>
@@ -83,25 +83,25 @@ const NetworkInfoBox = ({ language, server }) => {
   
   return (
     <div className="info-box network-info-box">
-      <div className="info-box-title">NETWORK STATUS</div>
+      <div className="info-box-title">{translate('netstatus').toUpperCase()}</div>
       <div className="status-container">
         <div className="status-item">
-          <div className="status-label">STATE</div>
+          <div className="status-label">{translate('state').toUpperCase()}</div>
           <div className="status-value online">{translate('online').toUpperCase()}</div>
         </div>
         <div className="status-item">
-          <div className="status-label">OWNER</div>
+          <div className="status-label">{translate('owner').toUpperCase()}</div>
           <div className="status-value">zeromac</div>
         </div>
         <div className="status-item">
-          <div className="status-label">PING</div>
+          <div className="status-label">{translate('ping').toUpperCase()}</div>
           <div className="status-value">{ping} ms</div>
         </div>
       </div>
       <div className="info-item location-item">
-        <div className="info-item-label">LATITUDE/LONGITUDE</div>
+        <div className="info-item-label">{translate('coord').toUpperCase()}</div>
         <div className="info-item-value">59.9375° N / 30.3086° E</div>
-        <div className="info-item-value">SAINT PETERSBURG, RUSSIA</div>
+        <div className="info-item-value">{translate('location').toUpperCase()}</div>
       </div>
       <div className="info-item ipv4-item">
         <div className="info-item-label">IPv4</div>

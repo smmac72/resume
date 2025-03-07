@@ -131,7 +131,7 @@ const LoadingScreen = () => {
     { text: "Connection established.", type: "success", delay: 150 },
     { text: "Loading user interface...............", type: "normal", delay: 150 },
     { text: "Starting AmongOS Terminal Interface", type: "info", delay: 100 },
-    { text: "System ready.", type: "success", delay: 100 },
+    { text: "System ready.", type: "success", delay: 1500 },
   ];
   
   useEffect(() => {
@@ -149,7 +149,7 @@ const LoadingScreen = () => {
       setLogs([]);
       
       // string offset from the top
-      const numberOfLinesToFillScreen = Math.floor(window.innerHeight / 32);
+      const numberOfLinesToFillScreen = Math.floor(window.innerHeight / 21);
       
       const emptyLines = Array(numberOfLinesToFillScreen).fill({ text: "", type: "normal", delay: 0 });
       setLogs(emptyLines);

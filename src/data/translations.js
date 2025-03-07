@@ -40,7 +40,6 @@ const translations = {
     not_connected_filesystem: 'Not connected to any server',
     
     // Achievements
-    achievements: 'Achievements',
     achievement_unlocked: 'Achievement unlocked',
     no_achievements: 'No achievements yet',
     achievements_locked: 'ACHIEVEMENTS LOCKED',
@@ -162,7 +161,6 @@ Available commands:
     not_connected_filesystem: 'Нет подключения к серверу',
     
     // Achievements
-    achievements: 'Достижения',
     achievement_unlocked: 'Достижение разблокировано',
     no_achievements: 'Пока нет достижений',
     achievements_locked: 'ДОСТИЖЕНИЯ ЗАБЛОКИРОВАНЫ',
