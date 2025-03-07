@@ -39,7 +39,7 @@ const App = () => {
       await new Promise(resolve => setTimeout(resolve, 5000));
       
       // Подключение к серверу по умолчанию
-      const defaultIp = '31.31.196.1';
+      const defaultIp = '31.31.201.1';
       const result = fileSystem.connectToServer(defaultIp);
       
       if (result.success) {

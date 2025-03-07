@@ -82,12 +82,10 @@ class FileSystem {
             chernograd: {
               'steam.sh': 'https://store.steampowered.com/app/3047300/CHERNOGRAD/',
               'readme_chernograd.txt': 'readme_chernograd',
-              'demomemory.png': 'image:demomemory.jpg',
               'firststreamer.png': 'image:firststreamer.jpg',
               'deck.png': 'image:deck.jpg',
               'rei.png': 'image:rei.jpg',
-              'release.png': 'image:release.jpg',
-              'techdocs.png': 'image:techdocs.jpg',
+              'demorelease.png': 'image:release.jpg',
               'localization.png': 'image:localization.jpg',
             },
             tabletop: {

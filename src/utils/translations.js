@@ -23,13 +23,18 @@ const translations = {
     connect: 'Connected to',
     disconnect: 'Disconnected from',
     invalid_args: 'Invalid arguments',
-    file_not_found: 'File not found',
+    file_not_found: 'Not found',
     dir_not_found: 'Directory not found',
-    connect_usage: 'Usage: connect <ip>',
-    login_usage: 'Usage: login <username> <password>',
-    run_usage: 'Usage: run <filename>',
-    cat_usage: 'Usage: cat <filename>',
-    lang_usage: 'Usage: lang <en|ru>',
+    connect_usage: 'Usage: connect [ip]',
+    login_usage: 'Usage: login [user] [pass]',
+    run_usage: 'Usage: run [file]',
+    cat_usage: 'Usage: cat [file]',
+    lang_usage: 'Usage: lang [ru/en]',
+    network_scan_complete: 'Network scan completed',
+    available_servers: 'Found servers:',
+    playmusic_start: 'Music playing - NieR Automata Chiptune Cover by Retro TV',
+    playmusic_stop: 'Music stopped',
+
     
     // File system
     empty_directory: 'Empty directory',
@@ -88,8 +93,8 @@ const translations = {
     
     // File Content Translations
     readme_backup: 'note to the future me - if you don\'t know what this server is, amnesia came. check the logins.txt if you\'re still making games. read my old dev notes and make me proud mate!\notherwise, if you aren\'t me but interested in my personal data, use the \'help\' command - there\'s a custom terminal here. gl mate!\n\n- me',
-    logins_txt: 'zeromac:naughtshad@31.31.196.2\nzeromac:allsspent@31.31.196.3\nzeromac:whereourdesire@31.31.196.4',
-    servers_conf: 'Available servers on network:\n31.31.196.2 - Work Server\n31.31.196.3 - Pet Projects\n31.31.196.4 - Personal Server',
+    logins_txt: 'zeromac:naughtshad@31.31.201.2\nzeromac:allsspent@31.31.201.3\nzeromac:whereourdesire@31.31.201.4',
+    servers_conf: 'Available servers on network:\n31.31.201.2 - Work Server\n31.31.201.3 - Pet Projects\n31.31.201.4 - Personal Server',
     readme_projects: 'a small compilation of my workplaces. timeline files contain the most important events and achievements. due to a little funny document, i won\'t be storing any sensitive documents here\nbut if you want to know what i did - you\'re welcome',
     readme_renderer: 'note to self - making game content is cool, but you know what is cooler? low-level programming. god i miss my risc-v days...\nanyways, a cool thing i did on my redbull-driven three-night bonanza. code is acceptable by my standards',
     readme_chernograd: 'a small piece of our kgb-simulator indie game. pretty hard to finish rn, but i had finally returned to the developer me, not gamedesigner me\nit is broken, but i will get to chernograd when my happiness is back',
@@ -108,15 +113,15 @@ const translations = {
     // Help command
     help_text: `
 Available commands:
-  connect <ip>           - Connect to a server
+  connect [ip]           - Connect to a server
   disconnect             - Disconnect from the current server
-  login <username> <password> - Authenticate to a server
+  login [user] [pass]    - Authenticate to a server
   ls                     - List files and directories
-  cd <directory>         - Change directory
-  cat <file>             - Display file content
-  run <file>             - Execute file and open in ContentBox
+  cd [dir]               - Change directory
+  cat [file]             - Display file content
+  run [file]             - Execute file and open in ContentBox
   scan                   - Scan for available servers
-  lang <language>        - Change language (en, ru)
+  lang [ru/en]           - Change language
   playmusic              - Toggle background music
   help                   - Display this help
     `,
@@ -145,13 +150,17 @@ Available commands:
     connect: 'Подключено к',
     disconnect: 'Отключено от',
     invalid_args: 'Неверные аргументы',
-    file_not_found: 'Файл не найден',
+    file_not_found: 'Не существует',
     dir_not_found: 'Директория не найдена',
-    connect_usage: 'Использование: connect <ip>',
-    login_usage: 'Использование: login <имя_пользователя> <пароль>',
-    run_usage: 'Использование: run <имя_файла>',
-    cat_usage: 'Использование: cat <имя_файла>',
-    lang_usage: 'Использование: lang <en|ru>',
+    connect_usage: 'Использование: connect [ip]',
+    login_usage: 'Использование: login [user] [pass',
+    run_usage: 'Использование: run [file]',
+    cat_usage: 'Использование: cat [file]',
+    lang_usage: 'Использование: lang [ru/en]',
+    network_scan_complete: 'Сканирование сети завершено',
+    available_servers: 'Найденные сервера:',
+    playmusic_start: 'Музыка - NieR Automata Chiptune Cover by Retro TV',
+    playmusic_stop: 'Музыка остановлена',
     
     // File system
     empty_directory: 'Пустая директория',
@@ -230,15 +239,15 @@ Available commands:
     // Help command
     help_text: `
 Доступные команды:
-  connect <ip>           - Подключиться к серверу
+  connect [ip]           - Подключиться к серверу
   disconnect             - Отключиться от текущего сервера
-  login <username> <password> - Аутентификация на сервере
+  login [user] [pass]    - Аутентификация на сервере
   ls                     - Список файлов и директорий
-  cd <directory>         - Сменить директорию
-  cat <file>             - Показать содержимое файла
-  run <file>             - Запустить файл и открыть в ContentBox
+  cd [dir]               - Сменить директорию
+  cat [file]             - Показать содержимое файла
+  run [file]             - Запустить файл и открыть в ContentBox
   scan                   - Поиск доступных серверов
-  lang <language>        - Изменить язык (en, ru)
+  lang [ru/en]           - Изменить язык
   playmusic              - Включить/выключить фоновую музыку
   help                   - Показать эту справку
     `,
