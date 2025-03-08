@@ -38,7 +38,7 @@ class Analytics {
       console.error('[Analytics] Initialization error:', error);
     }
   }
-
+}
   trackEvent(category, action, label = null, value = null) {
     if (!this.initialized) {
       if (this.debugMode) {
@@ -82,7 +82,7 @@ class Analytics {
         `${success ? 'Success' : 'Failed'}${args ? ': ' + args : ''}`
       );
     }
-  
+  }
     trackServerConnection(serverIp, serverName) {
       this.trackEvent('Server', 'Connect', `${serverIp} (${serverName})`);
     }
