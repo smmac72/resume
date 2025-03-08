@@ -1,48 +1,21 @@
-// for yandex metrika
+// for Google Analytics
 class Analytics {
   constructor() {
     this.initialized = false;
-    this.counterId = null;
+    this.measurementId = null;
     this.debugMode = process.env.NODE_ENV === 'development';
   }
   
   /**
-   * Инициализация Яндекс Метрики
-   * @param {string} counterId ID счетчика Яндекс Метрики
-   * @param {boolean} initCounter Whether to initialize the counter (default: true)
+   * Initialize Google Analytics
+   * @param {string} measurementId GA4 Measurement ID
    */
-  init(counterId, initCounter = true) {
-    this.counterId = counterId;
-    
-    // Only initialize if requested
-    if (initCounter) {
-      try {
-        window.ym(counterId, 'init', {
-          clickmap: true,
-          trackLinks: true,
-          accurateTrackBounce: true,
-          webvisor: true,
-          trackHash: true,
-          ut: 'noindex',
-          params: {
-            UserAgent: navigator.userAgent
-          },
-          // Privacy settings
-          accurateTopicsInference: false,
-          disableTopics: true,
-          cookieFlags: 'domain=auto;secure;samesite=none',
-          defer: true
-        });
-      } catch (error) {
-        console.error('[Analytics] Initialization error:', error);
-        return;
-      }
-    }
-    
+  init(measurementId) {
+    this.measurementId = measurementId;
     this.initialized = true;
     
     if (this.debugMode) {
-      console.log(`[Analytics] Initialized with counter ID: ${counterId}`);
+      console.log(`[Analytics] Initialized with GA4 Measurement ID: ${measurementId}`);
     }
   }
 
@@ -55,20 +28,29 @@ class Analytics {
     }
 
     try {
+      if (!window.gtag) {
+        if (this.debugMode) {
+          console.warn('[Analytics] Google Analytics not available');
+        }
+        return;
+      }
+      
+      // Build event parameters
       const eventParams = {
-        category,
-        action
+        event_category: category,
+        event_action: action
       };
 
       if (label !== null) {
-        eventParams.label = label;
+        eventParams.event_label = label;
       }
 
-      if (value !== null) {
+      if (value !== null && !isNaN(value)) {
         eventParams.value = value;
       }
 
-      window.ym(this.counterId, 'reachGoal', action, eventParams);
+      // Send the event to GA4
+      window.gtag('event', action, eventParams);
 
       if (this.debugMode) {
         console.log(`[Analytics] Event tracked: ${category} / ${action} / ${label} / ${value}`);
@@ -80,6 +62,7 @@ class Analytics {
     }
   }
 
+  // All these methods stay the same, just the implementation of trackEvent above changes
   trackCommand(command, success, args = '') {
     this.trackEvent(
       'Command', 
