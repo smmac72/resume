@@ -6,10 +6,6 @@ class Analytics {
     this.debugMode = process.env.NODE_ENV === 'development';
   }
   
-  /**
-   * Initialize Google Analytics
-   * @param {string} measurementId GA4 Measurement ID
-   */
   init(measurementId) {
     this.measurementId = measurementId;
     this.initialized = true;
@@ -35,7 +31,6 @@ class Analytics {
         return;
       }
       
-      // Build event parameters
       const eventParams = {
         event_category: category,
         event_action: action
@@ -49,7 +44,6 @@ class Analytics {
         eventParams.value = value;
       }
 
-      // Send the event to GA4
       window.gtag('event', action, eventParams);
 
       if (this.debugMode) {
@@ -62,7 +56,6 @@ class Analytics {
     }
   }
 
-  // All these methods stay the same, just the implementation of trackEvent above changes
   trackCommand(command, success, args = '') {
     this.trackEvent(
       'Command', 
