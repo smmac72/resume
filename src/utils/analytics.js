@@ -6,42 +6,35 @@ class Analytics {
     this.debugMode = process.env.NODE_ENV === 'development';
   }
   
-  /**
-   * Инициализация Яндекс Метрики
-   * @param {string} counterId ID счетчика Яндекс Метрики
-   */
   init(counterId) {
-    this.counterId = counterId;
+  this.counterId = counterId;
+  
+  try {
+    window.ym(counterId, 'init', {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true,
+      trackHash: true,
+      ut: 'noindex',
+      params: {
+        UserAgent: navigator.userAgent
+      },
+      accurateTopicsInference: false, // disable topics api
+      disableTopics: true, // a failsafe
+      cookieFlags: 'domain=auto;secure;samesite=none',
+      defer: true
+    });
     
-    // remove third-party cookies restrictions
-    window.ym = window.ym || [];
+    this.initialized = true;
     
-    try {
-      window.ym(counterId, 'init', {
-        clickmap: true,
-        trackLinks: true,
-        accurateTrackBounce: true,
-        webvisor: true,
-        
-        trackHash: true,
-        ut: 'noindex', // do not track personal data
-        params: {
-          UserAgent: navigator.userAgent
-        },
-        cookieFlags: 'domain:auto;',
-        crossDomainTracking: true,
-        defer: true
-      });
-      
-      this.initialized = true;
-      
-      if (this.debugMode) {
-        console.log(`[Analytics] Initialized with counter ID: ${counterId}`);
-      }
-    } catch (error) {
-      console.error('[Analytics] Initialization error:', error);
+    if (this.debugMode) {
+      console.log(`[Analytics] Initialized with counter ID: ${counterId}`);
     }
+  } catch (error) {
+    console.error('[Analytics] Initialization error:', error);
   }
+}
 
   trackEvent(category, action, label = null, value = null) {
     if (!this.initialized) {
