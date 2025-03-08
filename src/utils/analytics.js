@@ -1,58 +1,76 @@
 // for yandex metrika
 class Analytics {
-    constructor() {
-      this.initialized = false;
-      this.counterId = null;
-      this.debugMode = process.env.NODE_ENV === 'development';
-    }
+  constructor() {
+    this.initialized = false;
+    this.counterId = null;
+    this.debugMode = process.env.NODE_ENV === 'development';
+  }
   
-    /**
-     * Инициализация Яндекс Метрики
-     * @param {string} counterId ID счетчика Яндекс Метрики
-     */
-    init(counterId) {
-      this.counterId = counterId;
+  init(counterId) {
+    this.counterId = counterId;
+    
+    // remove third-party cookies restrictions
+    window.ym = window.ym || [];
+    
+    try {
+      window.ym(counterId, 'init', {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+        
+        trackHash: true,
+        ut: 'noindex', // do not track personal data
+        params: {
+          UserAgent: navigator.userAgent
+        },
+        cookieFlags: 'domain:auto;',
+        crossDomainTracking: true,
+        defer: true
+      });
+      
       this.initialized = true;
       
       if (this.debugMode) {
         console.log(`[Analytics] Initialized with counter ID: ${counterId}`);
       }
+    } catch (error) {
+      console.error('[Analytics] Initialization error:', error);
     }
-  
-    trackEvent(category, action, label = null, value = null) {
-      if (!this.initialized) {
-        if (this.debugMode) {
-          console.warn('[Analytics] Not initialized. Call init() first.');
-        }
-        return;
+  }
+
+  trackEvent(category, action, label = null, value = null) {
+    if (!this.initialized) {
+      if (this.debugMode) {
+        console.warn('[Analytics] Not initialized. Call init() first.');
       }
+      return;
+    }
+
+    try {
+      const eventParams = {
+        category,
+        action
+      };
+
+      if (label !== null) {
+        eventParams.label = label;
+      }
+
+      if (value !== null) {
+        eventParams.value = value;
+      }
+
+      window.ym(this.counterId, 'reachGoal', action, eventParams);
   
-      if (typeof window !== 'undefined' && window.ym) {
-        try {
-          const eventParams = {
-            category,
-            action
-          };
-  
-          if (label !== null) {
-            eventParams.label = label;
-          }
-  
-          if (value !== null) {
-            eventParams.value = value;
-          }
-  
-          window.ym(this.counterId, 'reachGoal', action, eventParams);
-  
-          if (this.debugMode) {
-            console.log(`[Analytics] Event tracked: ${category} / ${action} / ${label} / ${value}`);
-          }
-        } catch (error) {
-          if (this.debugMode) {
-            console.error('[Analytics] Error tracking event:', error);
-          }
-        }
-      } else if (this.debugMode) {
+      if (this.debugMode) {
+        console.log(`[Analytics] Event tracked: ${category} / ${action} / ${label} / ${value}`);
+      }
+    } catch (error) {
+      if (this.debugMode) {
+        console.error('[Analytics] Error tracking event:', error);
+      }
+      else if (this.debugMode) {
         console.warn('[Analytics] Yandex Metrika is not available');
       }
     }
