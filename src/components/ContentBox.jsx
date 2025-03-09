@@ -72,14 +72,12 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
     const tab = tabs[activeTab - 1];
     if (!tab) return null;
     
-    // Отслеживаем открытие вкладки только один раз для каждой вкладки
     const tabKey = `${tab.title}-${tab.type}`;
     if (!tabTrackedRef.current[tabKey]) {
       analytics.trackEvent('Interface', 'TabOpen', `${tab.title} (${tab.type})`);
       tabTrackedRef.current[tabKey] = true;
     }
     
-    // for achievement purposes
     import('../utils/commandProcessor').then(module => {
       const commandProcessor = module.default;
       
@@ -97,12 +95,11 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
       }
     });
     
-    // get file based on its type
     switch (tab.type) {
       case 'pdf':
         const pdfUrl = tab.content.substring(4);
         return (
-          <div className="content-pdf">
+          <div className="content-pdf" key={`pdf-${activeTab}`}>
             <iframe
               src={`/pdfs/${pdfUrl}`}
               title={tab.title}
@@ -114,18 +111,26 @@ const ContentBox = ({ language, server, tabs, activeTab, onTabChange, onTabClose
       case 'image':
         const imageUrl = tab.content.substring(6);
         return (
-          <div className="content-image">
+          <div className="content-image" key={`image-${activeTab}`}>
             <div className="image-container">
               <img src={`/images/${imageUrl}`} alt={tab.title} />
             </div>
           </div>
         );
       case 'timeline':
-        const timelineId = tab.content.substring(9);
-        return <TimelineViewer id={timelineId} language={language} />;
+        const timelineContent = tab.content || '';
+        const timelineId = timelineContent.startsWith('timeline:') ? 
+          timelineContent.substring(9) : 
+          timelineContent;
+        
+        return <TimelineViewer 
+          key={`timeline-${timelineId}-${activeTab}`} 
+          id={timelineId} 
+          language={language} 
+        />;
       default:
         return (
-          <div className="content-text-wrapper">
+          <div className="content-text-wrapper" key={`text-${activeTab}`}>
             <div className="content-text">
               <pre>{tab.content}</pre>
             </div>
@@ -441,10 +446,14 @@ const TimelineViewer = ({ id, language }) => {
     },
   };
 
-  // get localized timeline
-  const data = timelineData[id] ? timelineData[id][language] || timelineData[id].en : [];
+  const timelineInfo = timelineData[id] || {};
+  const data = timelineInfo[language] || timelineInfo.en || [];
   
-  // sort by years
+  // debug missing timeline data
+  if (!timelineData[id]) {
+    console.warn(`Timeline data not found for ID: ${id}`);
+  }
+  
   const yearGroups = data.reduce((groups, item) => {
     const year = item.year;
     if (!groups[year]) {
@@ -454,16 +463,16 @@ const TimelineViewer = ({ id, language }) => {
     return groups;
   }, {});
 
-  // get years from the current timeline
   const availableYears = Object.keys(yearGroups).map(year => parseInt(year));
-  // first year - default
   const defaultYear = availableYears.length > 0 ? availableYears[0] : null;
   const [selectedYear, setSelectedYear] = useState(null);
   
+  // reset selected year when timeline changes
   React.useEffect(() => {
     setSelectedYear(defaultYear);
   }, [id, defaultYear]);
   
+  // validate selected year is available
   React.useEffect(() => {
     if (selectedYear !== null && !availableYears.includes(selectedYear)) {
       setSelectedYear(defaultYear);
@@ -474,7 +483,6 @@ const TimelineViewer = ({ id, language }) => {
     setSelectedYear(selectedYear === year ? null : year);
   };
   
-  // month to name
   const getMonthName = (month, lang) => {
     const date = new Date(2000, month - 1, 1);
     const monthName = date.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', {
@@ -483,12 +491,22 @@ const TimelineViewer = ({ id, language }) => {
     return monthName.charAt(0).toUpperCase() + monthName.slice(1);
   };
 
+  if (availableYears.length === 0) {
+    return (
+      <div className="timeline-viewer">
+        <div className="timeline-error">
+          Timeline data not available
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="timeline-viewer">
       <div className="timeline">
         {Object.keys(yearGroups).map(year => (
           <div
-            key={year}
+            key={`year-${year}`}
             className={`timeline-year ${selectedYear === parseInt(year) ? 'active' : ''}`}
             onClick={() => handleYearClick(parseInt(year))}
           >
@@ -501,7 +519,7 @@ const TimelineViewer = ({ id, language }) => {
         <div className="timeline-details">
           <div className="timeline-months">
             {yearGroups[selectedYear].map((item, index) => (
-              <div key={index} className="timeline-event">
+              <div key={`event-${selectedYear}-${index}`} className="timeline-event">
                 <div className="timeline-event-date">
                   {getMonthName(item.month, language)}
                 </div>

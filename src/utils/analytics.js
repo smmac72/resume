@@ -74,6 +74,7 @@ class Analytics {
         console.warn('[Analytics] Yandex Metrika is not available');
       }
     }
+  }
   
     trackCommand(command, success, args = '') {
       this.trackEvent(
