@@ -41,7 +41,7 @@ const Achievements = ({ language }) => {
       descriptionRu: 'Просмотрите хронологию'
     },
     music_played: {
-      icon: '🎵',
+      icon: '🎺',
       nameEn: 'DJ Eban',
       nameRu: 'DJ-профессионал',
       descriptionEn: 'Play some music',
