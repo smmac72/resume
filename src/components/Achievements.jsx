@@ -6,10 +6,9 @@ const Achievements = ({ language }) => {
   const [achievements] = useState(commandProcessor.getAchievements());
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
-  const tooltipTimeout = useRef(null);
+  const [tooltipTimeout, setTooltipTimeout] = useState(null);
   const containerRefs = useRef({});
   const totalAchievements = 8;
-  const analyticsTrackedRef = useRef(false); // Для отслеживания, были ли уже отправлены события аналитики
 
   // defining achievements and their details
   const achievementDetails = {
@@ -71,33 +70,6 @@ const Achievements = ({ language }) => {
     },
   };
 
-  // unlocking animation
-  useEffect(() => {
-    if (commandProcessor.achievementsUnlocked && achievements.length > 0) {
-      setShowUnlockAnimation(true);
-      commandProcessor.achievementsUnlocked = false;
-      
-      analytics.trackEvent('Achievements', 'UnlockAnimation', '', achievements.length);
-      
-      const timer = setTimeout(() => {
-        setShowUnlockAnimation(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [achievements.length]);
-
-  // clean up any timers when component unmounts
-  useEffect(() => {
-    return () => {
-      if (tooltipTimeout.current) {
-        clearTimeout(tooltipTimeout.current);
-      }
-    };
-  }, []);
-
-  // get all achievement types
-  const allAchievementTypes = Object.keys(achievementDetails);
-  
   // get tooltip position class based on the icon's position in the grid
   const getTooltipPositionClass = (index) => {
     const row = Math.floor(index / 4); // only four icons per row
@@ -124,52 +96,48 @@ const Achievements = ({ language }) => {
     return positionClass;
   };
 
-  // check if mouse is over container
-  const checkHover = (type) => {
-    const container = containerRefs.current[type];
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
-    
-    if (
-      rect &&
-      window.event && 
-      window.event.clientX >= rect.left &&
-      window.event.clientX <= rect.right &&
-      window.event.clientY >= rect.top &&
-      window.event.clientY <= rect.bottom
-    ) {
-      // keep tooltip open
-      if (tooltipTimeout.current) {
-        clearTimeout(tooltipTimeout.current);
-        tooltipTimeout.current = null;
-      }
+  // unlocking animation
+  useEffect(() => {
+    if (commandProcessor.achievementsUnlocked && achievements.length > 0) {
+      setShowUnlockAnimation(true);
+      commandProcessor.achievementsUnlocked = false;
       
-      if (activeTooltip !== type) {
-        setActiveTooltip(type);
-      }
+      analytics.trackEvent('Achievements', 'UnlockAnimation', '', achievements.length);
       
-      requestAnimationFrame(() => checkHover(type));
-    } else {
-      // schedule tooltip to hide
-      if (!tooltipTimeout.current) {
-        tooltipTimeout.current = setTimeout(() => {
-          setActiveTooltip(null);
-          tooltipTimeout.current = null;
-        }, 500);
-      }
+      const timer = setTimeout(() => {
+        setShowUnlockAnimation(false);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  };
-  
+  }, [achievements.length]);
+
+  // clean up tooltip timeout when component unmounts
+  useEffect(() => {
+    return () => {
+      if (tooltipTimeout) {
+        clearTimeout(tooltipTimeout);
+      }
+    };
+  }, [tooltipTimeout]);
+
+  // get all achievement types
+  const allAchievementTypes = Object.keys(achievementDetails);
+
+  // handle mouse events for tooltip
   const handleMouseEnter = (type) => {
-    if (tooltipTimeout.current) {
-      clearTimeout(tooltipTimeout.current);
-      tooltipTimeout.current = null;
+    if (tooltipTimeout) {
+      clearTimeout(tooltipTimeout);
     }
     
+    // Set active tooltip
     setActiveTooltip(type);
-    
-    // start checking for hover status
-    requestAnimationFrame(() => checkHover(type));
+  };
+  const handleMouseLeave = (type) => {
+    const timeoutId = setTimeout(() => {
+      setActiveTooltip(null);
+      setTooltipTimeout(null);
+    }, 300);
+    setTooltipTimeout(timeoutId);
   };
 
   // render tooltip for an achievement
@@ -204,7 +172,12 @@ const Achievements = ({ language }) => {
               key={type}
               className={`achievement-icon-container ${achieved ? 'achieved' : 'locked'}`}
               onMouseEnter={() => handleMouseEnter(type)}
-              ref={el => containerRefs.current[type] = el}
+              onMouseLeave={() => handleMouseLeave(type)}
+              ref={el => {
+                if (el) {
+                  containerRefs.current[type] = el;
+                }
+              }}
             >
               <div className="achievement-icon">{details.icon}</div>
               {activeTooltip === type && renderTooltip(type, index)}
