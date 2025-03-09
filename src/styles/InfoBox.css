@@ -26,7 +26,7 @@
 }
 
 .info-box-time {
-  font-size: 1.3em;
+  font-size: 1.3rem;
   text-align: center;
   color: var(--text-bright);
   font-weight: bold;
@@ -42,7 +42,7 @@
   padding-bottom: 2%;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-bright);
-  font-size: 1em;
+  font-size: 1rem;
 }
 
 .info-item {
@@ -58,7 +58,7 @@
 }
 
 .info-item-label {
-  font-size: 0.7em;
+  font-size: 0.7rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   margin-bottom: 1%;
@@ -67,13 +67,13 @@
 }
 
 .info-item-value {
-  font-size: 0.9em; /* Slightly larger */
+  font-size: 0.9rem; /* Slightly larger */
   color: var(--text-bright);
   text-align: center;
 }
 
 .date-value, .uptime-value, .type-value {
-  font-size: 1em;
+  font-size: 1rem;
 }
 
 .network-info-box {
@@ -101,7 +101,7 @@
 
 .status-label {
   color: var(--text-secondary);
-  font-size: 0.7em;
+  font-size: 0.7rem;
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 2%;
@@ -109,7 +109,7 @@
 
 .status-value {
   color: var(--text-bright);
-  font-size: 0.9em; /* Slightly larger */
+  font-size: 0.9rem; /* Slightly larger */
   white-space: nowrap; /* Prevent line breaks */
 }
 
@@ -122,7 +122,7 @@
 }
 
 .location-item .info-item-value {
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
 .ipv4-item {
@@ -130,7 +130,7 @@
 }
 
 .ipv4-item .info-item-value {
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
 .owner-item {
@@ -138,7 +138,7 @@
 }
 
 .owner-item .info-item-value {
-  font-size: 1em;
+  font-size: 1rem;
   font-weight: bold;
 }
 
@@ -175,37 +175,37 @@
 /* Media queries for different screen sizes */
 @media (max-width: 1600px) {
   .info-box-time {
-    font-size: 1.2em;
+    font-size: 1.2rem;
   }
   
   .date-value, .uptime-value, .type-value {
-    font-size: 0.95em;
+    font-size: 0.95rem;
   }
   
   .status-value {
-    font-size: 0.85em;
+    font-size: 0.85rem;
   }
 }
 
 @media (max-width: 1366px) {
   .info-box-time {
-    font-size: 1.1em;
+    font-size: 1.1rem;
   }
   
   .info-box-title {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
   
   .date-value, .uptime-value, .type-value {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
   
   .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
   
   .info-item-label, .status-label {
-    font-size: 0.65em;
+    font-size: 0.65rem;
   }
 }
 
@@ -222,84 +222,84 @@
 /* Low zoom levels (25-50%) */
 @media (max-resolution: 72dpi) {
   .info-box-time {
-    font-size: 1.5em;
+    font-size: 1.5rem;
   }
   
   .date-value, .uptime-value, .type-value {
-    font-size: 1.3em;
+    font-size: 1.3rem;
   }
   
   .status-value, .info-item-value {
-    font-size: 1.2em;
+    font-size: 1.2rem;
   }
   
   .info-item-label, .status-label {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
 }
 
 /* Medium zoom (80%, 125%) */
 @media (min-resolution: 77dpi) and (max-resolution: 110dpi) {
   .info-box-time {
-    font-size: 1.3em;
+    font-size: 1.3rem;
   }
   
   .date-value, .uptime-value, .type-value {
-    font-size: 1.1em;
+    font-size: 1.1rem;
   }
   
   .status-value, .info-item-value {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .info-item-label, .status-label {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
 }
 
 /* High resolution display support */
 @media (min-width: 2560px) {
   .info-box-time {
-    font-size: 1.2em;
+    font-size: 1.2rem;
   }
   
   .info-box-title {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .date-value, .uptime-value, .type-value {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
   
   .info-item-label, .status-label {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
 }
 
 /* Additional fixes for zoom levels */
 @media (min-resolution: 120dpi) and (max-resolution: 160dpi) {
   .info-box-time {
-    font-size: 1.1em;
+    font-size: 1.1rem;
   }
   
   .info-box-title {
-    font-size: 0.95em;
+    font-size: 0.95rem;
   }
   
   .date-value, .uptime-value, .type-value {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
   
   .info-item-label, .status-label {
-    font-size: 0.75em;
+    font-size: 0.75rem;
   }
   
   .info-item {
@@ -310,26 +310,26 @@
 /* Fix for extremely high zoom levels (175%+) */
 @media (min-resolution: 168dpi) {
   .info-box-time {
-    font-size: 0.85em;
+    font-size: 0.85rem;
     margin-bottom: 2%;
     padding-bottom: 1%;
   }
   
   .info-box-title {
-    font-size: 0.75em;
+    font-size: 0.75rem;
     margin-bottom: 2%;
     padding-bottom: 1%;
   }
   
   .date-value, .uptime-value, .type-value {
-    font-size: 0.75em;
+    font-size: 0.75rem;
   }
   
   .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
-    font-size: 0.7em;
+    font-size: 0.7rem;
   }
   
   .info-item-label, .status-label {
-    font-size: 0.6em;
+    font-size: 0.6rem;
   }
 }

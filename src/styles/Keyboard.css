@@ -31,7 +31,7 @@
   user-select: none;
   transition: background-color 0.1s ease;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 1rem;
   text-align: center;
   padding: 0;
 }
@@ -89,20 +89,20 @@
 /* Low zoom levels (25-50%) */
 @media (max-resolution: 72dpi) {
   .keyboard-key {
-    font-size: 1.3em;
+    font-size: 1.3rem;
   }
 }
 
 /* Media queries for smaller screens */
 @media (max-width: 1600px) {
   .keyboard-key {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 1366px) {
   .keyboard-key {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
 }
 
@@ -120,21 +120,21 @@
 /* High resolution display support */
 @media (min-width: 2560px) {
   .keyboard-key {
-    font-size: 1.1em;
+    font-size: 1.1rem;
   }
 }
 
 /* Additional fixes for zoom levels */
 @media (min-resolution: 120dpi) and (max-resolution: 191dpi) {
   .keyboard-key {
-    font-size: 0.7em;
+    font-size: 0.7rem;
   }
 }
 
 /* Fix for extremely high zoom levels */
 @media (min-resolution: 192dpi) {
   .keyboard-key {
-    font-size: 0.6em;
+    font-size: 0.6rem;
   }
   
   .keyboard {

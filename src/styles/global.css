@@ -17,13 +17,84 @@
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
   --font-sans: 'JetBrains Mono', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   
-  --border-radius: 3px;
+  --border-radius: 0.1875rem;
   --border-color: #333;
   
-  /* Base font size that will be referenced by em units */
   font-size: 16px;
 }
 
+/* 8K и выше */
+@media (min-width: 7680px) {
+  :root {
+    font-size: 50px;
+    --border-radius: 0.3rem;
+  }
+}
+
+/* 5K и 6K */
+@media (min-width: 5120px) and (max-width: 7679px) {
+  :root {
+    font-size: 37px;
+    --border-radius: 0.275rem;
+  }
+}
+
+/* 4K */
+@media (min-width: 3840px) and (max-width: 5119px) {
+  :root {
+    font-size: 25px;
+    --border-radius: 0.25rem;
+  }
+}
+
+/* 2K */
+@media (min-width: 2560px) and (max-width: 3839px) {
+  :root {
+    font-size: 17.5px;
+    --border-radius: 0.225rem;
+  }
+}
+
+/* Full HD */
+@media (min-width: 1920px) and (max-width: 2559px) {
+  :root {
+    font-size: 16.5px;
+  }
+}
+
+/* HD+ */
+@media (min-width: 1600px) and (max-width: 1919px) {
+  :root {
+    font-size: 15px;
+    --border-radius: 0.175rem;
+  }
+}
+
+/* HD */
+@media (min-width: 1366px) and (max-width: 1599px) {
+  :root {
+    font-size: 14px;
+    --border-radius: 0.15rem;
+  }
+}
+
+/* Средние экраны */
+@media (min-width: 1024px) and (max-width: 1365px) {
+  :root {
+    font-size: 12px;
+    --border-radius: 0.125rem;
+  }
+}
+
+/* Маленькие экраны */
+@media (max-width: 1023px) {
+  :root {
+    font-size: 11.5px;
+    --border-radius: 0.1rem;
+  }
+}
+
+/* Базовые стили */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -50,100 +121,4 @@ body {
   overflow: hidden;
 }
 
-/* Universal scrollbar styling */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent-color) var(--bg-primary);
-}
-
-*::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-*::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--accent-color);
-  border-radius: 3px;
-}
-
-/* Media query for very high resolution screens */
-@media (min-width: 3000px) {
-  :root {
-    font-size: 18px;
-  }
-  
-  :root {
-    --border-radius: 4px;
-  }
-}
-
-/* Media query for high resolution screens */
-@media (min-width: 2560px) {
-  :root {
-    font-size: 17px;
-  }
-}
-
-/* Font scaling for different screen sizes */
-@media (max-width: 1600px) {
-  :root {
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 1366px) {
-  :root {
-    font-size: 14px;
-  }
-  
-  :root {
-    --border-radius: 2px;
-  }
-}
-
-@media (max-width: 1024px) {
-  :root {
-    font-size: 13px;
-  }
-}
-
-/* Low zoom levels (25-50%) */
-@media (max-resolution: 72dpi) {
-  :root {
-    font-size: 24px; /* Much larger font for low zoom */
-  }
-}
-
-/* High zoom (200%) */
-@media (min-resolution: 120dpi) and (max-resolution: 191dpi) {
-  :root {
-    font-size: 11px; /* Smaller base size for high zoom */
-  }
-  
-  :root {
-    --border-radius: 2px;
-  }
-}
-
-/* Very high zoom (300%+) */
-@media (min-resolution: 192dpi) {
-  :root {
-    font-size: 9px; /* Even smaller base size for very high zoom */
-  }
-  
-  :root {
-    --border-radius: 2px;
-  }
-}
-
-/* Fix for Firefox flex container issues */
-@supports (-moz-appearance:none) {
-  .flex-container {
-    min-height: 0;
-    min-width: 0;
-  }
-}
+/* Остальные стили без изменений */

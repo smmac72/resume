@@ -21,7 +21,7 @@
 }
 
 .run-tabs::-webkit-scrollbar {
-  height: 4px;
+  height: 0.25rem;
 }
 
 .run-tabs::-webkit-scrollbar-track {
@@ -30,17 +30,17 @@
 
 .run-tabs::-webkit-scrollbar-thumb {
   background-color: var(--accent-color);
-  border-radius: 3px;
+  border-radius: 0.1875rem;
 }
 
 .run-tab {
-  padding: 5px 12px;
+  padding: 0.3125rem 0.75rem;
   border-right: 1px solid var(--border-color);
   cursor: pointer;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  font-size: 0.95em;
+  font-size: 0.95rem;
 }
 
 .run-tab.active {
@@ -49,13 +49,13 @@
 }
 
 .tab-title {
-  margin-right: 5px;
+  margin-right: 0.3125rem;
 }
 
 .tab-close {
-  font-size: 16px;
-  width: 18px;
-  height: 18px;
+  font-size: 1rem;
+  width: 1.125rem;
+  height: 1.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +112,7 @@
   position: relative;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.7);
-  padding: 20px;
+  padding: 1.25rem;
   border-radius: var(--border-radius);
   max-width: 80%;
 }
@@ -130,7 +130,7 @@
   overflow-y: auto;
   overflow-x: auto;
   height: 100%;
-  font-size: 1.05em;
+  font-size: 1.05rem;
   line-height: 1.5;
   word-wrap: break-word;
   word-break: break-word;
@@ -201,10 +201,10 @@
 .timeline {
   display: flex;
   justify-content: space-around;
-  padding: 8px 0;
+  padding: 0.5rem 0;
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
-  margin-bottom: 6px;
+  margin-bottom: 0.375rem;
   flex-shrink: 0;
   overflow-x: auto;
   width: 100%;
@@ -213,7 +213,7 @@
 }
 
 .timeline::-webkit-scrollbar {
-  height: 4px;
+  height: 0.25rem;
 }
 
 .timeline::-webkit-scrollbar-track {
@@ -222,7 +222,7 @@
 
 .timeline::-webkit-scrollbar-thumb {
   background-color: var(--accent-color);
-  border-radius: 3px;
+  border-radius: 0.1875rem;
 }
 
 .timeline-years-container {
@@ -230,16 +230,16 @@
   overflow-x: auto;
   width: 100%;
   justify-content: flex-start;
-  padding: 0 5px;
+  padding: 0 0.3125rem;
 }
 
 .timeline-year {
-  padding: 5px 8px;
+  padding: 0.3125rem 0.5rem;
   cursor: pointer;
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease;
-  margin: 0 2px;
-  font-size: 0.95em;
+  margin: 0 0.125rem;
+  font-size: 0.95rem;
   flex-shrink: 0;
 }
 
@@ -266,10 +266,10 @@
 .timeline-months {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0.3125rem;
   width: 100%;
   box-sizing: border-box;
-  padding: 0 2px;
+  padding: 0 0.125rem;
 }
 
 .timeline-event {
@@ -277,31 +277,31 @@
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
   overflow: hidden;
-  font-size: 0.95em;
+  font-size: 0.95rem;
   width: 100%;
   box-sizing: border-box;
 }
 
 .timeline-event-date {
-  padding: 6px;
-  min-width: 90px;
-  width: 90px;
+  padding: 0.375rem;
+  min-width: 5.625rem;
+  width: 5.625rem;
   flex-shrink: 0;
   background-color: var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
 .timeline-event-content {
-  padding: 6px 8px;
+  padding: 0.375rem 0.5rem;
   flex: 1;
   overflow: hidden;
   min-width: 0;
   box-sizing: border-box;
-  max-width: calc(100% - 90px);
+  max-width: calc(100% - 5.625rem);
 }
 
 .timeline-description-wrapper {
@@ -311,8 +311,8 @@
 
 .timeline-event-content h3 {
   margin-top: 0;
-  margin-bottom: 3px;
-  font-size: 1em;
+  margin-bottom: 0.1875rem;
+  font-size: 1rem;
 }
 
 .timeline-event-content p {
@@ -347,14 +347,14 @@
 }
 
 .directory-item {
-  padding: 6px 10px;
+  padding: 0.375rem 0.625rem;
   cursor: pointer;
   border-radius: var(--border-radius);
-  margin-bottom: 2px;
+  margin-bottom: 0.125rem;
   display: flex;
   align-items: center;
   overflow: hidden;
-  font-size: 0.95em;  /* Slightly reduced */
+  font-size: 0.95rem;  /* Slightly reduced */
 }
 
 .directory-item:hover {
@@ -370,7 +370,7 @@
 }
 
 .directory-item-icon {
-  margin-right: 8px;
+  margin-right: 0.5rem;
   flex-shrink: 0;
 }
 
@@ -381,8 +381,8 @@
 }
 
 .directory-path {
-  padding: 6px 10px;
-  margin-bottom: 8px;
+  padding: 0.375rem 0.625rem;
+  margin-bottom: 0.5rem;
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
   font-family: var(--font-mono);
@@ -391,13 +391,13 @@
   flex-shrink: 0;
   width: 100%;
   box-sizing: border-box;
-  font-size: 0.95em;  /* Slightly reduced */
+  font-size: 0.95rem;  /* Slightly reduced */
   scrollbar-width: thin;
   scrollbar-color: var(--accent-color) var(--bg-secondary);
 }
 
 .directory-path::-webkit-scrollbar {
-  height: 4px;
+  height: 0.25rem;
 }
 
 .directory-path::-webkit-scrollbar-track {
@@ -406,11 +406,11 @@
 
 .directory-path::-webkit-scrollbar-thumb {
   background-color: var(--accent-color);
-  border-radius: 3px;
+  border-radius: 0.1875rem;
 }
 
 .directory-item-empty {
-  padding: 6px 10px;
+  padding: 0.375rem 0.625rem;
   color: var(--text-secondary);
   font-style: italic;
 }
@@ -420,8 +420,8 @@
 .directory-list-container::-webkit-scrollbar,
 .timeline-details::-webkit-scrollbar,
 .content-image::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 0.375rem;
+  height: 0.375rem;
 }
 
 .content-text::-webkit-scrollbar-track,
@@ -436,32 +436,32 @@
 .timeline-details::-webkit-scrollbar-thumb,
 .content-image::-webkit-scrollbar-thumb {
   background-color: var(--accent-color);
-  border-radius: 3px;
+  border-radius: 0.1875rem;
 }
 
 /* Low zoom levels (25-50%) */
 @media (max-resolution: 72dpi) {
   .content-text {
-    font-size: 1.3em;
+    font-size: 1.3rem;
   }
   
   .directory-item, .directory-path {
-    font-size: 1.3em;
-    padding: 8px 12px;
+    font-size: 1.3rem;
+    padding: 0.5rem 0.75rem;
   }
   
   .timeline-event {
-    font-size: 1.2em;
+    font-size: 1.2rem;
   }
   
   .run-tab {
-    font-size: 1.2em;
-    padding: 6px 14px;
+    font-size: 1.2rem;
+    padding: 0.375rem 0.875rem;
   }
   
   .timeline-year {
-    font-size: 1.2em;
-    padding: 6px 10px;
+    font-size: 1.2rem;
+    padding: 0.375rem 0.625rem;
   }
   
   .content-image img {
@@ -473,107 +473,107 @@
 /* Media queries for smaller screens */
 @media (max-width: 1366px) {
   .run-tab {
-    font-size: 0.9em;
-    padding: 4px 10px;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.625rem;
   }
   
   .content-text {
-    font-size: 0.95em;
+    font-size: 0.95rem;
   }
   
   .directory-item, .directory-path {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
   
   .timeline-event {
-    font-size: 0.9em;
+    font-size: 0.9rem;
   }
 }
 
 /* High resolution display support */
 @media (min-width: 2560px) {
   .content-text {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .directory-item, .directory-path {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .timeline-event {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .run-tab {
-    font-size: 1em;
+    font-size: 1rem;
   }
   
   .timeline-year {
-    font-size: 1em;
+    font-size: 1rem;
   }
 }
 
 /* Additional fixes for zoom levels (150-250%) */
 @media (min-resolution: 120dpi) and (max-resolution: 191dpi) {
   .directory-item, .directory-path {
-    font-size: 0.75em;
-    padding: 4px 8px;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
   }
   
   .directory-item-icon {
-    margin-right: 5px;
+    margin-right: 0.3125rem;
   }
   
   .content-text {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
   
   .timeline-event {
-    font-size: 0.75em;
+    font-size: 0.75rem;
   }
   
   .timeline-event-date {
-    min-width: 70px;
-    width: 70px;
+    min-width: 4.375rem;
+    width: 4.375rem;
   }
   
   .timeline-event-content {
-    max-width: calc(100% - 70px);
+    max-width: calc(100% - 4.375rem);
   }
 }
 
 /* Fix for extremely high zoom levels */
 @media (min-resolution: 192dpi) {
   .directory-item, .directory-path {
-    font-size: 0.65em;
-    padding: 3px 6px;
+    font-size: 0.65rem;
+    padding: 0.1875rem 0.375rem;
   }
   
   .directory-item-icon {
-    margin-right: 4px;
+    margin-right: 0.25rem;
   }
   
   .content-text {
-    font-size: 0.7em;
+    font-size: 0.7rem;
   }
   
   .timeline-event {
-    font-size: 0.65em;
+    font-size: 0.65rem;
   }
   
   .timeline-event-date {
-    min-width: 60px;
-    width: 60px;
-    padding: 4px;
+    min-width: 3.75rem;
+    width: 3.75rem;
+    padding: 0.25rem;
   }
   
   .timeline-event-content {
-    padding: 4px 6px;
-    max-width: calc(100% - 60px);
+    padding: 0.25rem 0.375rem;
+    max-width: calc(100% - 3.75rem);
   }
   
   .run-tab {
-    font-size: 0.7em;
-    padding: 3px 8px;
+    font-size: 0.7rem;
+    padding: 0.1875rem 0.5rem;
   }
 }
