@@ -8,48 +8,57 @@
 .upper-section {
   flex: 7;
   display: flex;
+  min-height: 0; /* Important for Firefox flex container */
 }
 
 .content-section {
   flex: 3;
-  padding: 10px;
+  padding: 0.25%;
+  min-width: 0; /* Prevent overflow in flex container */
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .sidebar-section {
   width: 40%;
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  margin-right: 10px;
+  padding: 0.25%;
+  margin-right: 0.25%;
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .sidebar-top {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  height: 220px; /* Fixed height for top section */
+  gap: 0.25%;
+  margin-bottom: 0.25%;
+  height: 35%; /* Percentage of parent height instead of fixed */
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .sidebar-bottom {
   flex: 1;
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .lower-section {
   flex: 3;
   display: flex;
-  padding: 10px;
-  gap: 10px;
+  padding: 0.25%;
+  gap: 0.25%;
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .info-panels {
   width: 45%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.25%;
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .keyboard-section {
   width: 55%;
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .inventory, .achievements {
@@ -59,46 +68,68 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0; /* Prevent overflow in flex container */
 }
 
 .achievements {
-  margin-right: 10px;
+  margin-right: 0.25%;
 }
 
 .inventory-header, .achievements-header {
   background-color: var(--bg-terminal);
   color: var(--text-terminal);
-  padding: 8px 15px;
+  padding: 6px 10px;
   font-weight: bold;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .inventory-items, .achievements-items {
   flex: 1;
   overflow-y: auto;
-  padding: 5px;
+  padding: 4px;
+  min-height: 0; /* Important for Firefox flex child */
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-secondary) var(--bg-terminal);
+}
+
+.inventory-items::-webkit-scrollbar,
+.achievements-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inventory-items::-webkit-scrollbar-track,
+.achievements-items::-webkit-scrollbar-track {
+  background: var(--bg-terminal);
+}
+
+.inventory-items::-webkit-scrollbar-thumb,
+.achievements-items::-webkit-scrollbar-thumb {
+  background-color: var(--bg-secondary);
+  border-radius: 3px;
 }
 
 .inventory-empty, .achievements-empty {
   color: var(--text-secondary);
   font-style: italic;
   text-align: center;
-  padding: 20px;
+  padding: 10%;
 }
 
 .inventory-item {
-  background-color: rgba(0, 0, 0, 0.2);
   border-radius: var(--border-radius);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 38px; /* Increased height */
+  min-height: 0;
+  max-width: 100%;
 }
 
 .inventory-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .inventory-item:active {
@@ -107,9 +138,17 @@
 
 .inventory-item-header {
   background-color: var(--accent-color);
-  padding: 5px 10px;
+  padding: 2px 6px;
   font-weight: bold;
   color: var(--text-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.95em;
+  height: 100%; /* Make the header take the full item height */
+  display: flex;
+  align-items: center; /* Center text vertically */
+  max-width: 100%;
 }
 
 .achievements-items.no-scroll {
@@ -118,44 +157,48 @@
 
 .achievements-header-line {
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   color: var(--text-bright);
   text-align: center;
-  padding-bottom: 5px;
+  padding-bottom: 3px;
   border-bottom: 1px solid var(--border-color);
+  font-size: 0.9em;
 }
 
 .achievements-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 5px;
-  height: 75%;
+  gap: 0px; /* No gap */
+  height: calc(100% - 25px); /* Adjust for header */
+  width: 100%;
+  padding: 0; /* No padding */
 }
 
 .achievement-row {
   display: flex;
   justify-content: space-between;
-  gap: 5px;
+  gap: 0px; /* No gap */
 }
 
 .achievement-icon-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: transparent; /* Remove background */
   border-radius: var(--border-radius);
   cursor: help;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: transform 0.2s ease;
   position: relative;
-  z-index: 10;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  /* Universal size reduction for all zoom levels to match 150% zoom */
+  transform: scale(0.65);
 }
 
 .achievement-icon-container:hover {
-  transform: translateY(-2px);
-  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(0.65) translateY(-2px);
 }
 
 .achievement-icon-container.locked {
@@ -167,11 +210,13 @@
 }
 
 .achievement-icon {
-  font-size: 24px;
+  font-size: 2.5em; /* Much larger to compensate for scale */
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  width: 100%;
+  height: 100%;
 }
 
 .achievement-tooltip {
@@ -179,17 +224,20 @@
   background-color: rgba(0, 0, 0, 0.9);
   border: 1px solid var(--accent-color);
   color: var(--text-bright);
-  padding: 8px 12px;
+  padding: 6px 8px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 0.7em;
   white-space: normal;
   pointer-events: none;
   z-index: 100;
-  min-width: 120px;
+  min-width: 110px;
   width: auto;
-  max-width: 180px;
+  max-width: 160px;
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  /* Adjust tooltip position for scaled container */
+  transform: scale(1.5);
+  transform-origin: center center;
 }
 
 .achievement-tooltip::after {
@@ -205,12 +253,13 @@
 
 .tooltip-title {
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   color: var(--info-color);
+  font-size: 0.8em;
 }
 
 .tooltip-description {
-  font-size: 11px;
+  font-size: 0.7em;
   opacity: 0.9;
 }
 
@@ -218,7 +267,7 @@
   color: var(--error-color);
   font-weight: bold;
   text-align: center;
-  font-size: 16px;
+  font-size: 1em;
   height: 100%;
   display: flex;
   align-items: center;
@@ -230,34 +279,41 @@
   color: var(--success-color);
   font-weight: bold;
   text-align: center;
-  font-size: 16px;
+  font-size: 1em; /* Same size as locked message */
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* Match the locked style */
   animation: blink 0.5s infinite alternate;
 }
 
 .achievement-tooltip.tooltip-top {
-  bottom: calc(0%); /* Increased even more for top row */
+  bottom: calc(100% + 20px); /* Position above with enough space for scaled tooltip */
+  z-index: 110;
 }
 
 .achievement-tooltip.tooltip-bottom {
-  top: calc(-100%); /* Keep the same for bottom row */
+  top: calc(100% + 20px); /* Position below with enough space for scaled tooltip */
+  z-index: 110;
 }
 
 /* Positioning classes - horizontal */
 .achievement-tooltip.tooltip-center {
   left: 50%;
-  transform: translateX(-50%);
+  transform: scale(1.5) translateX(-33%); /* Adjusted for scale */
 }
 
 .achievement-tooltip.tooltip-left {
-  left: 10px; /* Moved slightly right for leftmost icons */
+  left: 0;
+  transform: scale(1.5);
+  transform-origin: left center;
 }
 
 .achievement-tooltip.tooltip-right {
-  right: 10px; /* Moved slightly left for rightmost icons */
+  right: 0;
+  transform: scale(1.5);
+  transform-origin: right center;
 }
 
 /* Arrow for tooltip pointing up (bottom tooltip) */
@@ -287,25 +343,126 @@
 }
 
 .achievement-tooltip.tooltip-left::after {
-  left: 20px; /* Adjusted to match new tooltip position */
+  left: 20px;
 }
 
 .achievement-tooltip.tooltip-right::after {
-  right: 20px; /* Adjusted to match new tooltip position */
-}
-
-.tooltip-title {
-  font-weight: bold;
-  margin-bottom: 4px;
-  color: var(--info-color);
-}
-
-.tooltip-description {
-  font-size: 11px;
-  opacity: 0.9;
+  right: 20px;
 }
 
 @keyframes blink {
   from { opacity: 0.6; }
   to { opacity: 1; }
+}
+
+/* Media queries for different screen sizes */
+@media (max-width: 1600px) {
+  .sidebar-top {
+    height: 30%;
+  }
+  
+  .inventory-item {
+    height: 36px;
+  }
+}
+
+@media (max-width: 1366px) {
+  .sidebar-top {
+    height: 25%;
+  }
+  
+  .inventory-item-header {
+    font-size: 0.9em;
+  }
+  
+  .inventory-item {
+    height: 34px;
+  }
+}
+
+@media (max-height: 768px) {
+  .sidebar-top {
+    height: 38%;
+  }
+}
+
+/* 80% zoom */
+@media (max-resolution: 77dpi) {
+  .inventory-item-header {
+    font-size: 1.3em;
+  }
+  
+  .achievement-icon {
+    font-size: 2.8em;
+  }
+  
+  .achievements-header-line,
+  .achievements-locked,
+  .achievements-unlocked-animation {
+    font-size: 1.3em;
+  }
+  
+  .inventory-item {
+    height: 48px;
+  }
+}
+
+/* 125% zoom */
+@media (min-resolution: 120dpi) and (max-resolution: 144dpi) {
+  .inventory-item-header {
+    font-size: 0.9em;
+  }
+  
+  .inventory-item {
+    height: 32px;
+    max-width: 95%; /* Limit width at higher zoom */
+  }
+}
+
+/* 150% zoom - This is our reference size that looked good */
+@media (min-resolution: 144dpi) and (max-resolution: 168dpi) {
+  .inventory-item-header {
+    font-size: 0.85em;
+  }
+  
+  .inventory-item {
+    height: 30px;
+    max-width: 90%;
+  }
+}
+
+/* 175-200% zoom */
+@media (min-resolution: 168dpi) and (max-resolution: 192dpi) {
+  .inventory-item-header {
+    font-size: 0.8em;
+  }
+  
+  .inventory-item {
+    height: 28px;
+    max-width: 85%; /* Significantly limit width */
+  }
+}
+
+/* Very high zoom (200%+) */
+@media (min-resolution: 192dpi) {
+  .inventory-item-header {
+    font-size: 0.7em;
+    padding: 1px 5px;
+  }
+  
+  .achievements-header-line {
+    font-size: 0.7em;
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+  }
+  
+  .achievements-locked,
+  .achievements-unlocked-animation {
+    font-size: 0.7em;
+  }
+  
+  .inventory-item {
+    height: 26px;
+    max-width: 80%; /* Most restricted width */
+  }
 }

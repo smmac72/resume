@@ -1,22 +1,24 @@
 .info-boxes {
   display: flex;
-  gap: 10px;
+  gap: 0.25%;
   height: 100%;
+  min-height: 0; /* Important for Firefox flex child */
 }
 
 .info-box {
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
-  padding: 15px;
+  padding: 2%;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  overflow: hidden; /* Prevent content from spilling out */
 }
 
 .time-info-box {
   width: auto;
-  min-width: 200px;
+  min-width: 27%; /* Much wider */
   flex-grow: 0;
   display: flex;
   flex-direction: column;
@@ -24,30 +26,30 @@
 }
 
 .info-box-time {
-  font-size: 32px;
+  font-size: 1.3em;
   text-align: center;
   color: var(--text-bright);
   font-weight: bold;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
+  margin-bottom: 3%;
+  padding-bottom: 2%;
   border-bottom: 1px solid var(--border-color);
 }
 
 .info-box-title {
   font-weight: bold;
   text-align: center;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
+  margin-bottom: 3%;
+  padding-bottom: 2%;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-bright);
-  font-size: 18px;
+  font-size: 1em;
 }
 
 .info-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 4%;
   width: 100%;
 }
 
@@ -56,56 +58,59 @@
 }
 
 .info-item-label {
-  font-size: 12px;
+  font-size: 0.7em;
   color: var(--text-secondary);
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 1%;
   font-weight: bold;
   text-align: center;
 }
 
 .info-item-value {
-  font-size: 16px;
+  font-size: 0.9em; /* Slightly larger */
   color: var(--text-bright);
   text-align: center;
 }
 
 .date-value, .uptime-value, .type-value {
-  font-size: 22px;
+  font-size: 1em;
 }
 
 .network-info-box {
   width: auto;
-  min-width: 250px;
+  min-width: 36%; /* Slightly narrower */
   flex-grow: 0;
 }
 
 .status-container {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  gap: 10px;
+  justify-content: space-around;  /* Changed to space-around instead of space-between */
+  margin-bottom: 3%;
+  gap: 0; /* Removed gap in favor of space-around */
+  width: 100%;
 }
 
 .status-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30%;
-  padding: 0 5px;
+  width: 20%; /* Narrower columns */
+  padding: 0;
+  max-width: 20%; /* Added max-width */
 }
 
 .status-label {
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 0.7em;
   font-weight: bold;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 2%;
 }
 
 .status-value {
   color: var(--text-bright);
-  font-size: 18px;
+  font-size: 0.9em; /* Slightly larger */
+  white-space: nowrap; /* Prevent line breaks */
 }
 
 .location-item {
@@ -117,7 +122,7 @@
 }
 
 .location-item .info-item-value {
-  font-size: 18px;
+  font-size: 0.9em;
 }
 
 .ipv4-item {
@@ -125,7 +130,7 @@
 }
 
 .ipv4-item .info-item-value {
-  font-size: 18px;
+  font-size: 0.9em;
 }
 
 .owner-item {
@@ -133,7 +138,7 @@
 }
 
 .owner-item .info-item-value {
-  font-size: 20px;
+  font-size: 1em;
   font-weight: bold;
 }
 
@@ -147,16 +152,184 @@
 
 .planet-gif {
   flex: 1;
-  background-color: var(--bg-planet);
+  background-color: transparent; /* Removed background */
   border-radius: var(--border-radius);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 37%; /* Reduced width */
+  max-width: 37%; /* Added max-width */
+  min-height: 0;
 }
 
 .planet-gif img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  margin-left: -15%; /* Crops left side of the gif */
+  margin-right: -15%; /* Crops right side of the gif */
+  width: 130%; /* Makes the image wider to compensate for cropping */
+}
+
+/* Media queries for different screen sizes */
+@media (max-width: 1600px) {
+  .info-box-time {
+    font-size: 1.2em;
+  }
+  
+  .date-value, .uptime-value, .type-value {
+    font-size: 0.95em;
+  }
+  
+  .status-value {
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 1366px) {
+  .info-box-time {
+    font-size: 1.1em;
+  }
+  
+  .info-box-title {
+    font-size: 0.9em;
+  }
+  
+  .date-value, .uptime-value, .type-value {
+    font-size: 0.9em;
+  }
+  
+  .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
+    font-size: 0.8em;
+  }
+  
+  .info-item-label, .status-label {
+    font-size: 0.65em;
+  }
+}
+
+@media (max-height: 768px) {
+  .info-boxes {
+    gap: 0.25%;
+  }
+  
+  .info-box {
+    padding: 1.5%;
+  }
+}
+
+/* Low zoom levels (25-50%) */
+@media (max-resolution: 72dpi) {
+  .info-box-time {
+    font-size: 1.5em;
+  }
+  
+  .date-value, .uptime-value, .type-value {
+    font-size: 1.3em;
+  }
+  
+  .status-value, .info-item-value {
+    font-size: 1.2em;
+  }
+  
+  .info-item-label, .status-label {
+    font-size: 0.9em;
+  }
+}
+
+/* Medium zoom (80%, 125%) */
+@media (min-resolution: 77dpi) and (max-resolution: 110dpi) {
+  .info-box-time {
+    font-size: 1.3em;
+  }
+  
+  .date-value, .uptime-value, .type-value {
+    font-size: 1.1em;
+  }
+  
+  .status-value, .info-item-value {
+    font-size: 1em;
+  }
+  
+  .info-item-label, .status-label {
+    font-size: 0.8em;
+  }
+}
+
+/* High resolution display support */
+@media (min-width: 2560px) {
+  .info-box-time {
+    font-size: 1.2em;
+  }
+  
+  .info-box-title {
+    font-size: 1em;
+  }
+  
+  .date-value, .uptime-value, .type-value {
+    font-size: 1em;
+  }
+  
+  .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
+    font-size: 0.9em;
+  }
+  
+  .info-item-label, .status-label {
+    font-size: 0.8em;
+  }
+}
+
+/* Additional fixes for zoom levels */
+@media (min-resolution: 120dpi) and (max-resolution: 160dpi) {
+  .info-box-time {
+    font-size: 1.1em;
+  }
+  
+  .info-box-title {
+    font-size: 0.95em;
+  }
+  
+  .date-value, .uptime-value, .type-value {
+    font-size: 1em;
+  }
+  
+  .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
+    font-size: 0.9em;
+  }
+  
+  .info-item-label, .status-label {
+    font-size: 0.75em;
+  }
+  
+  .info-item {
+    margin-bottom: 2%;
+  }
+}
+
+/* Fix for extremely high zoom levels (175%+) */
+@media (min-resolution: 168dpi) {
+  .info-box-time {
+    font-size: 0.85em;
+    margin-bottom: 2%;
+    padding-bottom: 1%;
+  }
+  
+  .info-box-title {
+    font-size: 0.75em;
+    margin-bottom: 2%;
+    padding-bottom: 1%;
+  }
+  
+  .date-value, .uptime-value, .type-value {
+    font-size: 0.75em;
+  }
+  
+  .status-value, .location-item .info-item-value, .ipv4-item .info-item-value {
+    font-size: 0.7em;
+  }
+  
+  .info-item-label, .status-label {
+    font-size: 0.6em;
+  }
 }

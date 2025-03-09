@@ -7,7 +7,9 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  margin-right: 10px;
+  margin-right: 0.25%;
+  min-height: 0; /* Prevent flex item from exceeding container */
+  max-height: 100%; /* Ensure it doesn't grow beyond container */
 }
 
 .terminal-header {
@@ -15,7 +17,8 @@
   justify-content: space-between;
   align-items: center;
   background-color: var(--bg-secondary);
-  padding: 5px 10px;
+  padding: 6px 10px;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .terminal-title {
@@ -29,22 +32,27 @@
   overflow-y: auto;
   white-space: pre-wrap;
   overflow-x: hidden;
-  max-height: 300px; /* Fixed height for terminal content */
+  max-height: calc(100% - 35px); /* Set maximum height to prevent stretching */
+  min-height: 0; /* Important for Firefox */
   scrollbar-color: var(--bg-secondary) var(--bg-terminal);
   scrollbar-width: thin;
 }
 
 .terminal-line {
   margin-bottom: 5px;
+  font-size: 0.95em;
+  line-height: 1.4;
 }
 
 .terminal-input-line {
   display: flex;
   margin-top: 10px;
+  font-size: 0.95em;
 }
 
 .terminal-prompt {
   margin-right: 5px;
+  white-space: nowrap;
 }
 
 .terminal-user {
@@ -80,6 +88,7 @@
   font-family: inherit;
   font-size: inherit;
   outline: none;
+  min-width: 0; /* Allows input to shrink */
 }
 
 .directory {
@@ -89,4 +98,82 @@
 
 .file {
   color: var(--text-bright);
+}
+
+/* Add scrollbar styling */
+.terminal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminal-content::-webkit-scrollbar-track {
+  background: var(--bg-terminal);
+}
+
+.terminal-content::-webkit-scrollbar-thumb {
+  background-color: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+/* Low zoom levels (25-50%) */
+@media (max-resolution: 72dpi) {
+  .terminal-line, .terminal-input-line {
+    font-size: 1.2em;
+  }
+  
+  .terminal-content {
+    padding: 15px;
+  }
+  
+  .terminal-header {
+    padding: 8px 12px;
+  }
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 1366px) {
+  .terminal-line, .terminal-input-line {
+    font-size: 0.85em;
+  }
+}
+
+/* High resolution display support */
+@media (min-width: 2560px) {
+  .terminal-line, .terminal-input-line {
+    font-size: 1.1em;
+  }
+  
+  .terminal-content {
+    padding: 15px;
+  }
+  
+  .terminal-header {
+    padding: 8px 12px;
+  }
+}
+
+/* Additional fixes for zoom levels */
+@media (min-resolution: 120dpi) and (max-resolution: 191dpi) {
+  .terminal-line, .terminal-input-line {
+    font-size: 0.85em;
+  }
+  
+  .terminal-content {
+    max-height: calc(100% - 30px); /* Adjust for zoomed view */
+  }
+}
+
+/* Fix for extremely high zoom levels */
+@media (min-resolution: 192dpi) {
+  .terminal-line, .terminal-input-line {
+    font-size: 0.75em;
+  }
+  
+  .terminal-content {
+    padding: 8px;
+    max-height: calc(100% - 28px);
+  }
+  
+  .terminal-header {
+    padding: 4px 8px;
+  }
 }

@@ -45,8 +45,8 @@ class FileSystem {
           root: {
             home: {
               'readme.txt': 'readme_backup',
-              'linkedin.sh': 'https://www.linkedin.com/in/oleg-bogomolov-035713335/',
-              'hh.sh': 'https://hh.ru/resume/aede5f73ff0b7f9f570039ed1f6d6a6736696c'
+              'linkedin.html': 'https://www.linkedin.com/in/oleg-bogomolov-035713335/',
+              'hh.html': 'https://hh.ru/resume/aede5f73ff0b7f9f570039ed1f6d6a6736696c'
             },
             etc: {
               'logins.txt': 'logins_txt',
@@ -77,11 +77,11 @@ class FileSystem {
           protected: true, // This server requires authentication
           root: {
             renderer: {
-              'github.sh': 'https://github.com/smmac72/zeroRender',
+              'github.html': 'https://github.com/smmac72/zeroRender',
               'readme_render.txt': 'readme_renderer',
             },
             chernograd: {
-              'steam.sh': 'https://store.steampowered.com/app/3047300/CHERNOGRAD/',
+              'steam.html': 'https://store.steampowered.com/app/3047300/CHERNOGRAD/',
               'readme_chernograd.txt': 'readme_chernograd',
               'firststreamer.png': 'image:firststreamer.jpg',
               'deck.png': 'image:deck.jpg',
@@ -97,10 +97,10 @@ class FileSystem {
               'printedgame.png': 'image:tabletop.jpg',
             },
             web: {
-              'github.sh': 'https://github.com/smmac72/resume',
-              'sluchka.sh': 'https://sluchka.market',
+              'github.html': 'https://github.com/smmac72/resume',
+              'sluchka.html': 'http://sluchka.market',
               'readme_web.txt': 'readme_web',
-              'oldsite.sh': 'image:old_site.jpg',
+              'oldsite.png': 'image:old_site.jpg',
             },
             gtao: {
               'balancedoc.xlsx': 'https://docs.google.com/spreadsheets/d/1oeNenv0Jt3pAe_Esq6SDZbESOZO94cTeWWO31des5Dw/edit?usp=sharing',
