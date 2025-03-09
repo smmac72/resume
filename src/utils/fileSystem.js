@@ -39,8 +39,8 @@ class FileSystem {
       servers: {
         '31.31.201.1': {
           name: 'Backup Server',
-          username: 'zeromac',
-          password: 'zeromac',
+          username: 'guest',
+          password: 'nopass',
           protected: false, // This server is accessible without auth
           root: {
             home: {
