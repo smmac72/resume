@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import usePersistentState from '../utils/usePersistentState';
 import commandProcessor from '../utils/commandProcessor';
 import analytics from '../utils/analytics';
 
 const Achievements = ({ language }) => {
-  const [achievements] = useState(commandProcessor.getAchievements());
+  // Используем персистентное состояние для достижений
+  const [achievements, setAchievements] = usePersistentState('achievements', []);
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [tooltipTimeout, setTooltipTimeout] = useState(null);
@@ -41,9 +43,9 @@ const Achievements = ({ language }) => {
       descriptionRu: 'Просмотрите хронологию'
     },
     music_played: {
-      icon: '🎺',
-      nameEn: 'DJ Eban',
-      nameRu: 'DJ-профессионал',
+      icon: '🔊',
+      nameEn: 'Music Box',
+      nameRu: 'Музыкальная шкатулка',
       descriptionEn: 'Play some music',
       descriptionRu: 'Включите музыку'
     },
@@ -68,6 +70,19 @@ const Achievements = ({ language }) => {
       descriptionEn: 'Moo Moo Server',
       descriptionRu: 'Moo Moo Server'
     },
+  };
+
+  const addAchievement = (newAchievement) => {
+    setAchievements(prev => {
+      if (!prev.some(a => a.type === newAchievement.type)) {
+        return [...prev, newAchievement];
+      }
+      return prev;
+    });
+  };
+
+  const resetAchievements = () => {
+    setAchievements([]);
   };
 
   // get tooltip position class based on the icon's position in the grid
@@ -123,8 +138,9 @@ const Achievements = ({ language }) => {
   // get all achievement types
   const allAchievementTypes = Object.keys(achievementDetails);
 
-  // handle mouse events for tooltip
+  // Handle mouse enter for tooltip
   const handleMouseEnter = (type) => {
+    // Clear any existing timeout
     if (tooltipTimeout) {
       clearTimeout(tooltipTimeout);
     }
@@ -132,11 +148,17 @@ const Achievements = ({ language }) => {
     // Set active tooltip
     setActiveTooltip(type);
   };
+
+  // Handle mouse leave for tooltip
   const handleMouseLeave = (type) => {
+    // Set a timeout to close the tooltip
     const timeoutId = setTimeout(() => {
+      // Only close if the current active tooltip is the one we're leaving
       setActiveTooltip(null);
       setTooltipTimeout(null);
-    }, 300);
+    }, 300); // Small delay for smooth interaction
+
+    // Save the timeout ID
     setTooltipTimeout(timeoutId);
   };
 

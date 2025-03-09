@@ -8,7 +8,7 @@ class CommandProcessor {
     this.historyIndex = -1;
     this.musicPlayer = null;
     this.musicPlaying = false;
-    this.knownLogins = {};
+    this.knownLogins = this.getKnownLogins();
     this.achievements = [];
     this.achievementsUnlocked = false;
     this.availableAchievements = [
@@ -538,8 +538,8 @@ class CommandProcessor {
     return input;
   }
 
+  // login:password@server format
   processLoginInfo(content) {
-    // login:password@server format
     const loginPassRegex = /(\w+):(\w+)@([\d.]+)/g;
     let match;
     
@@ -549,11 +549,14 @@ class CommandProcessor {
       const server = match[3];
       
       if (server) {
-        this.knownLogins[server] = { 
+        const loginEntry = { 
           username, 
           password,
           formatted: `${username}:${password}@${server}`
         };
+        this.knownLogins[server] = loginEntry;
+        localStorage.setItem('knownLogins', JSON.stringify(this.knownLogins));
+        
         this.unlockAchievement('logins_found', server);
       }
     }
@@ -566,21 +569,32 @@ class CommandProcessor {
       const password = match[3];
       
       if (server) {
-        this.knownLogins[server] = { 
+        const loginEntry = { 
           username, 
           password,
           formatted: `${username}:${password}@${server}` 
         };
+        this.knownLogins[server] = loginEntry;
+        localStorage.setItem('knownLogins', JSON.stringify(this.knownLogins));
+        
         this.unlockAchievement('logins_found', server);
       }
     }
   }
 
+  clearKnownLogins() {
+    this.knownLogins = {};
+    localStorage.removeItem('knownLogins');
+  }
+
   unlockAchievement(type, data) {
-    const exists = this.achievements.some(a => a.type === type);
+    // Загрузка текущих достижений из localStorage
+    const savedAchievements = JSON.parse(localStorage.getItem('achievements') || '[]');
+    
+    const exists = savedAchievements.some(a => a.type === type);
     const isServerSpecific = ['secret_server_access'].includes(type);
     const serverExists = isServerSpecific && 
-      this.achievements.some(a => a.type === type && a.data === data);
+      savedAchievements.some(a => a.type === type && a.data === data);
       
     if (isServerSpecific ? !serverExists : !exists) {
       const achievement = {
@@ -589,7 +603,11 @@ class CommandProcessor {
         timestamp: new Date().toISOString(),
       };
       
-      this.achievements.push(achievement);
+      const updatedAchievements = [...savedAchievements, achievement];
+      
+      // saving to local storage
+      localStorage.setItem('achievements', JSON.stringify(updatedAchievements));
+      
       console.log(`${this.translate('achievement_unlocked')}: ${type}`);
       
       analytics.trackAchievement(type, data);
@@ -608,11 +626,14 @@ class CommandProcessor {
   }
 
   getAchievements() {
-    return this.achievements;
+    return JSON.parse(localStorage.getItem('achievements') || '[]');
+    //return this.achievements;
   }
 
   getKnownLogins() {
-    return this.knownLogins;
+    const savedLogins = localStorage.getItem('knownLogins');
+    return savedLogins ? JSON.parse(savedLogins) : {};
+    //return this.knownLogins;
   }
 
   translate(key) {

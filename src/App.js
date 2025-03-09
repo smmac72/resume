@@ -96,6 +96,8 @@ const App = () => {
     if (confirmAction) {
       confirmAction();
     }
+    localStorage.removeItem('knownLogins');
+    localStorage.removeItem('achievements');
     setShowConfirmDialog(false);
     setConfirmAction(null);
   };
