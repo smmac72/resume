@@ -220,7 +220,7 @@
   background-color: rgba(0, 0, 0, 0.9);
   border: 1px solid var(--accent-color);
   color: var(--text-bright);
-  padding: 0.375rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 0.25rem;
   font-size: 0.7rem;
   white-space: normal;
@@ -290,7 +290,7 @@
 }
 
 .achievement-tooltip.tooltip-bottom {
-  top: calc(100% -2.5rem); /* Position below with enough space for scaled tooltip */
+  top: calc(100% - 6.5rem); /* Position below with enough space for scaled tooltip */
   z-index: 110;
 }
 

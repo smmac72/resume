@@ -439,7 +439,7 @@
   border-radius: 0.1875rem;
 }
 
-/* Low zoom levels (25-50%) */
+/* 2K+ */
 @media (max-resolution: 72dpi) {
   .content-text {
     font-size: 1.3rem;
@@ -465,12 +465,12 @@
   }
   
   .content-image img {
-    min-height: 80%; /* Ensure images are visible in low zoom */
+    min-height: 80%;
     min-width: 80%;
   }
 }
 
-/* Media queries for smaller screens */
+/* HD */
 @media (max-width: 1366px) {
   .run-tab {
     font-size: 0.9rem;
@@ -490,7 +490,7 @@
   }
 }
 
-/* High resolution display support */
+/* 2K */
 @media (min-width: 2560px) {
   .content-text {
     font-size: 1rem;
@@ -513,7 +513,7 @@
   }
 }
 
-/* Additional fixes for zoom levels (150-250%) */
+/* half-HD */
 @media (min-resolution: 120dpi) and (max-resolution: 191dpi) {
   .directory-item, .directory-path {
     font-size: 0.75rem;
@@ -534,7 +534,7 @@
   
   .timeline-event-date {
     min-width: 4.375rem;
-    width: 4.375rem;
+    width: 5.5rem;
   }
   
   .timeline-event-content {
@@ -542,7 +542,7 @@
   }
 }
 
-/* Fix for extremely high zoom levels */
+/* way too low for us */
 @media (min-resolution: 192dpi) {
   .directory-item, .directory-path {
     font-size: 0.65rem;
@@ -562,8 +562,8 @@
   }
   
   .timeline-event-date {
-    min-width: 3.75rem;
-    width: 3.75rem;
+    min-width: 6rem;
+    width: 6rem;
     padding: 0.25rem;
   }
   
