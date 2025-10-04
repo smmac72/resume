@@ -39,6 +39,16 @@ const Terminal = ({
   }, []);
 
   useEffect(() => {
+    const onVirtualKey = (e) => {
+      const vkey = e?.detail?.key;
+      if (!vkey) return;
+      handleVirtualKey(vkey);
+    };
+    window.addEventListener('virtual-key', onVirtualKey);
+    return () => window.removeEventListener('virtual-key', onVirtualKey);
+  }, [input]);
+
+  useEffect(() => {
     if (currentPath !== fileSystem.currentPath) {
       fileSystem.changeDirectory(currentPath);
     }
@@ -194,6 +204,26 @@ const Terminal = ({
       }
     }
   };
+
+    const handleVirtualKey = (key) => {
+      if (key === 'Enter') {
+        handleSubmit();
+        return;
+      }
+      if (key === 'Tab') {
+        const completed = commandProcessor.autoComplete(input);
+        if (completed !== input) setInput(completed);
+        return;
+      }
+      if (key === 'Backspace') {
+        setInput((prev) => prev.slice(0, -1));
+        return;
+      }
+      if (key.length === 1) {
+        setInput((prev) => prev + key);
+        return;
+      }
+    };
 
   const handleInputChange = (e) => {
     setInput(e.target.value);

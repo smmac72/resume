@@ -5,6 +5,10 @@ const KeyboardComponent = ({ onKeyPress }) => {
   const [activeKeys, setActiveKeys] = useState([]);
   const [heldKeys, setHeldKeys] = useState([]);
 
+  const sendVirtualKey = (key) => {
+    window.dispatchEvent(new CustomEvent('virtual-key', { detail: { key } }));
+  };
+
   // keys
   const keyRows = [
     ['ESC', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'BACK'],
@@ -125,16 +129,16 @@ const KeyboardComponent = ({ onKeyPress }) => {
     
     switch (key) {
       case '':
-        event = new KeyboardEvent('keydown', { key: ' ' });
+        sendVirtualKey(' ');
         break;
       case 'BACK':
-        event = new KeyboardEvent('keydown', { key: 'Backspace' });
+        sendVirtualKey('Backspace');
         break;
       case 'ENTER':
-        event = new KeyboardEvent('keydown', { key: 'Enter' });
+        sendVirtualKey('Enter');
         break;
       case 'TAB':
-        event = new KeyboardEvent('keydown', { key: 'Tab' });
+        sendVirtualKey('Tab');
         break;
       case 'ESC':
       case 'CAPS':
@@ -142,17 +146,12 @@ const KeyboardComponent = ({ onKeyPress }) => {
       case 'CTRL':
       case 'ALT':
         setActiveKeys(prev => [...prev, key]);
-        setTimeout(() => {
-          setActiveKeys(prev => prev.filter(k => k !== key));
-        }, 200);
-        return;
+        setTimeout(() => setActiveKeys(prev => prev.filter(k => k !== key)), 200);
+        break;
       default:
-        event = new KeyboardEvent('keydown', { key: key.toLowerCase() });
+        sendVirtualKey(key.length === 1 ? key.toLowerCase() : key);
     }
     
-    if (onKeyPress) {
-      onKeyPress(event);
-    }
     setActiveKeys(prev => [...prev, key]);
   };
 
