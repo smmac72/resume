@@ -107,6 +107,14 @@ class FileSystem {
               'balancedoc.xlsx': 'https://docs.google.com/spreadsheets/d/1oeNenv0Jt3pAe_Esq6SDZbESOZO94cTeWWO31des5Dw/edit?usp=sharing',
               'readme_gta.txt': 'readme_gtao',
             },
+            telegrambots: {
+              'github.html': 'https://github.com/smmac72/birthdaybot',
+              'readme_birthday.txt': 'readme_birthday',
+            },
+            anticheat: {
+              'github.html': 'https://github.com/smmac72/inputFilter',
+              'readme_anticheat.txt': 'readme_anticheat',
+            },
           },
           background: 'server3_bg.jpg',
         },
