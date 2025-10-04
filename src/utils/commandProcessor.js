@@ -179,7 +179,6 @@ class CommandProcessor {
       };
     }
 
-    // check if already authenticated
     if (fileSystem.authenticatedServers[fileSystem.currentServer]) {
       return {
         success: false,
@@ -189,23 +188,23 @@ class CommandProcessor {
 
     const username = args[0];
     const password = args[1];
-    
+
     const result = fileSystem.authenticate(username, password);
-    
+
     if (result.success) {
-      this.knownLogins[fileSystem.currentServer] = { 
-        username, 
+      this.knownLogins[fileSystem.currentServer] = {
+        username,
         password,
         formatted: `${username}:${password}@${fileSystem.currentServer}`
       };
-      
-      if (callbacks.onAuthenticate) {
-        callbacks.onAuthenticate(result.server);
-      }
-      
-      // analytics track
+      localStorage.setItem('knownLogins', JSON.stringify(this.knownLogins));
+
+      try { window.dispatchEvent(new CustomEvent('inventory:updated')); } catch {}
+
+      if (callbacks.onAuthenticate) callbacks.onAuthenticate(result.server);
+
       analytics.trackAuthentication(fileSystem.currentServer, true);
-      
+
       if (fileSystem.currentServer === '31.31.201.69') {
         this.unlockAchievement('secret_server_access', fileSystem.currentServer);
       }
@@ -214,10 +213,9 @@ class CommandProcessor {
         message: this.translate('auth_success'),
       };
     }
-    
-    // analytics track
+
     analytics.trackAuthentication(fileSystem.currentServer, false);
-    
+
     return {
       success: false,
       message: this.translate('auth_fail'),
@@ -526,53 +524,71 @@ class CommandProcessor {
     return input;
   }
 
-  // login:password@server format
+  // login:password@server
   processLoginInfo(content) {
     const loginPassRegex = /(\w+):(\w+)@([\d.]+)/g;
     let match;
-    
+    let changed = false;
+
     while ((match = loginPassRegex.exec(content)) !== null) {
       const username = match[1];
       const password = match[2];
       const server = match[3];
-      
+
       if (server) {
-        const loginEntry = { 
-          username, 
+        const loginEntry = {
+          username,
           password,
-          formatted: `${username}:${password}@${server}`
+          formatted: `${username}:${password}@${server}`,
         };
-        this.knownLogins[server] = loginEntry;
-        localStorage.setItem('knownLogins', JSON.stringify(this.knownLogins));
-        
-        this.unlockAchievement('logins_found', server);
+        const known = this.getKnownLogins();
+        if (!known[server] ||
+            known[server].username !== username ||
+            known[server].password !== password) {
+          known[server] = loginEntry;
+          localStorage.setItem('knownLogins', JSON.stringify(known));
+          changed = true;
+          this.unlockAchievement('logins_found', server);
+        }
       }
     }
-    
-    // "Login: user | Password: pass" format
+
+    // Login: user | Password: pass
     const loginPassTextRegex = /Login:\s+(\w+)(?:@([\d.]+))?\s+\|\s+Password:\s+(\w+)/gi;
     while ((match = loginPassTextRegex.exec(content)) !== null) {
       const username = match[1];
       const server = match[2];
       const password = match[3];
-      
+
       if (server) {
-        const loginEntry = { 
-          username, 
+        const loginEntry = {
+          username,
           password,
-          formatted: `${username}:${password}@${server}` 
+          formatted: `${username}:${password}@${server}`,
         };
-        this.knownLogins[server] = loginEntry;
-        localStorage.setItem('knownLogins', JSON.stringify(this.knownLogins));
-        
-        this.unlockAchievement('logins_found', server);
+        const known = this.getKnownLogins();
+        if (!known[server] ||
+            known[server].username !== username ||
+            known[server].password !== password) {
+          known[server] = loginEntry;
+          localStorage.setItem('knownLogins', JSON.stringify(known));
+          changed = true;
+          this.unlockAchievement('logins_found', server);
+        }
       }
+    }
+
+    if (changed) {
+      try {
+        window.dispatchEvent(new CustomEvent('inventory:updated'));
+      } catch {}
     }
   }
 
   clearKnownLogins() {
     this.knownLogins = {};
     localStorage.removeItem('knownLogins');
+    try { window.dispatchEvent(new CustomEvent('inventory:updated')); } catch {}
   }
 
   unlockAchievement(type, data) {

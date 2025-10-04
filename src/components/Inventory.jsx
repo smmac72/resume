@@ -21,6 +21,13 @@ const Inventory = ({ language, onConnect, onAuthenticate }) => {
       window.removeEventListener('storage', updateLogins);
     };
   }, []);
+
+  useEffect(() => {
+    const handler = () => setKnownLogins(commandProcessor.getKnownLogins());
+    window.addEventListener('inventory:updated', handler);
+    return () => window.removeEventListener('inventory:updated', handler);
+  }, []);
+
   
   const translate = (key) => {
     return translations[language]?.[key] || translations.en[key] || key;
