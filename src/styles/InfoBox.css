@@ -72,6 +72,43 @@
   text-align: center;
 }
 
+.info-triple-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 0.6rem;
+  gap: 0.5rem;
+}
+
+.info-triple-col {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.info-triple-label {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-mono);
+}
+
+.info-triple-value {
+  color: var(--text-bright);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  word-break: break-all;
+}
+
+
 .date-value, .uptime-value, .type-value {
   font-size: 1rem;
 }
@@ -171,6 +208,7 @@
   margin-right: -15%; /* Crops right side of the gif */
   width: 130%; /* Makes the image wider to compensate for cropping */
 }
+
 
 /* Media queries for different screen sizes */
 @media (max-width: 1600px) {

@@ -81,6 +81,9 @@ const translations = {
     ping: 'Ping',
     coord: 'LATITUDE/LONGITUDE',
     location: 'SAINT PETERSBURG, RUSSIA',
+    ipv4: 'IPv4',
+    user: 'USER',
+    auth: 'AUTH',
     
     // Dialog
     confirm_disconnect: 'Are you sure you want to disconnect from the server?',
@@ -207,6 +210,9 @@ Available commands:
     ping: 'ПИНГ',
     coord: 'ШИРОТА/ДОЛГОТА',
     location: 'САНКТ-ПЕТЕРБУРГ, РОССИЯ',
+    ipv4: 'IPv4',
+    user: 'ПОЛЬЗОВАТЕЛЬ',
+    auth: 'АВТОРИЗОВАН',
     
     // Dialog
     confirm_disconnect: 'Вы уверены, что хотите отключиться от сервера?',

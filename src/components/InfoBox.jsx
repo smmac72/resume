@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import translations from '../utils/translations';
+import fileSystem from '../utils/fileSystem'
 import '../styles/InfoBox.css';
 
 // shows time, uptime, system type
@@ -60,33 +61,37 @@ const TimeInfoBox = ({ language }) => {
   );
 };
 
-// shows network status, server IP, ping and location
+// shows network status, server IP, ping and location + auth state
 const NetworkInfoBox = ({ language, server }) => {
   const [ping, setPing] = useState(Math.floor(Math.random() * 30) + 10);
-  
-  const translate = (key) => {
-    return translations[language]?.[key] || translations.en[key] || key;
-  };
-  
-  // update ping every 2-5 seconds
+  const translate = (key) => translations[language]?.[key] || translations.en[key] || key;
+
   useEffect(() => {
     const updatePing = () => {
       setPing(Math.floor(Math.random() * 30) + 10);
       setTimeout(updatePing, Math.random() * 3000 + 2000);
     };
-    
     const timer = setTimeout(updatePing, Math.random() * 3000 + 2000);
-    
     return () => clearTimeout(timer);
   }, []);
-  
+
+  const connected = !!server?.ip;
+  const ip = connected ? server.ip : 'N/A';
+  const user = connected ? (server.username || 'guest') : 'guest';
+  const authed = connected && !!fileSystem.authenticatedServers[server.ip];
+
   return (
     <div className="info-box network-info-box">
-      <div className="info-box-title">{translate('netstatus').toUpperCase()}</div>
+      <div className="info-box-title">
+        {translate('netstatus').toUpperCase()}
+      </div>
+
       <div className="status-container">
         <div className="status-item">
           <div className="status-label">{translate('state').toUpperCase()}</div>
-          <div className="status-value online">{translate('online').toUpperCase()}</div>
+          <div className={`status-value ${connected ? 'online' : 'offline'}`}>
+            {(connected ? translate('online') : 'OFFLINE').toUpperCase()}
+          </div>
         </div>
         <div className="status-item">
           <div className="status-label">{translate('owner').toUpperCase()}</div>
@@ -97,18 +102,38 @@ const NetworkInfoBox = ({ language, server }) => {
           <div className="status-value">{ping} ms</div>
         </div>
       </div>
+
       <div className="info-item location-item">
         <div className="info-item-label">{translate('coord').toUpperCase()}</div>
         <div className="info-item-value">59.9375° N / 30.3086° E</div>
         <div className="info-item-value">{translate('location').toUpperCase()}</div>
       </div>
-      <div className="info-item ipv4-item">
-        <div className="info-item-label">IPv4</div>
-        <div className="info-item-value">{server ? server.ip : 'N/A'}</div>
+
+      <div className="info-triple-row">
+        <div className="info-triple-col">
+          <div className="info-triple-label">
+            {translate('ipv4').toUpperCase()}
+          </div>
+          <div className="info-triple-value">{ip}</div>
+        </div>
+        <div className="info-triple-col">
+          <div className="info-triple-label">
+            {translate('user').toUpperCase()}
+          </div>
+          <div className="info-triple-value">{user}</div>
+        </div>
+        <div className="info-triple-col">
+          <div className="info-triple-label">
+            {translate('auth').toUpperCase()}
+          </div>
+          <div className="info-triple-value">{authed ? 'YES' : 'NO'}</div>
+        </div>
       </div>
     </div>
   );
 };
+
+
 
 // Icontainer for both info boxes and planet gif
 const InfoBoxes = ({ language, server }) => {
