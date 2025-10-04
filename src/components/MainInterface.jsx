@@ -90,6 +90,7 @@ const MainInterface = ({
   };
   
   const handleConnect = (newServer) => {
+    console.log("handling")
     setAuthenticatedServer(newServer);
     if (onConnect) {
       onConnect(newServer);
@@ -131,7 +132,8 @@ const MainInterface = ({
               <div className="inventory-items">
                 <Inventory 
                   language={language} 
-                  onConnect={handleConnect} 
+                  onConnect={handleConnect}
+                  onAuthenticate={handleAuthenticate}
                 />
               </div>
             </div>

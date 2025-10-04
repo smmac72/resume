@@ -4,7 +4,7 @@ import translations from '../utils/translations';
 import analytics from '../utils/analytics';
 import fileSystem from '../utils/fileSystem';
 
-const Inventory = ({ language, onConnect }) => {
+const Inventory = ({ language, onConnect, onAuthenticate }) => {
   const [knownLogins, setKnownLogins] = useState(() => 
     commandProcessor.getKnownLogins()
   );
@@ -28,15 +28,12 @@ const Inventory = ({ language, onConnect }) => {
   
   const handleInventoryClick = (ip, username, password) => {
     const now = Date.now();
-    const lastClicked = inventoryClicksTracker.current[ip] || 0;
 
+    const lastClicked = inventoryClicksTracker.current[ip] || 0;
     if (now - lastClicked > 5000) {
       analytics.trackEvent('Inventory', 'UseCredentials', `${username}@${ip}`);
       inventoryClicksTracker.current[ip] = now;
     }
-
-    const isCurrent = fileSystem.currentServer === ip;
-    const isAuthed = !!fileSystem.authenticatedServers[ip];
 
     const echo = (msg) => {
       if (!msg) return;
@@ -45,25 +42,34 @@ const Inventory = ({ language, onConnect }) => {
       } catch {}
     };
 
+    const isCurrent = fileSystem.currentServer === ip;
+    const isAuthed = !!fileSystem.authenticatedServers[ip];
+
     if (!isCurrent) {
-      // 1) Подключение (без авто-логина)
-      const res = commandProcessor.processCommand(`connect ${ip}`, { 
-        onConnect: () => {} 
+      const res = commandProcessor.processCommand(`connect ${ip}`, {
+        onConnect: (server) => {
+          if (typeof onConnect === 'function') onConnect(server);
+
+          const meta = fileSystem.root.servers?.[ip];
+          if (meta?.protected && !isAuthed) {
+            echo('Authentication required. Use login [user] [pass]');
+          }
+        },
       });
       if (res?.success && res.message) echo(res.message);
       return;
     }
 
     if (isCurrent && !isAuthed) {
-      // 2) Авторизация сохранёнными кредами
-      const res = commandProcessor.processCommand(`login ${username} ${password}`, { 
-        onAuthenticate: () => {} 
+      const res = commandProcessor.processCommand(`login ${username} ${password}`, {
+        onAuthenticate: (server) => {
+          if (typeof onAuthenticate === 'function') onAuthenticate(server);
+        },
       });
       if (res?.success && res.message) echo(res.message);
       return;
     }
 
-    // 3) Уже авторизованы
     echo(`Already authenticated on ${ip}`);
     analytics.trackEvent('Server', 'AlreadyAuthenticated', ip);
   };
