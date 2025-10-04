@@ -318,71 +318,58 @@ class CommandProcessor {
       };
     }
 
-    const filePath = args[0];
-    const result = fileSystem.getFileContent(filePath);  
-    if (result.success) {
-      this.unlockAchievement('any_file', filePath);
-      
-      // analytics track
-      analytics.trackFileOpen(filePath, result.type, fileSystem.currentServer);
-      
-      if (result.type === 'url') {
-        window.open(result.content.trim(), '_blank');
-        this.unlockAchievement('link_opened', filePath);
-        return {
-          success: true,
-          message: `Opening link: ${result.content}`,
-        };
-      }
-      
-      // http/https are acceptable
-      if (result.type === 'text' && 
-          (result.content.trim().startsWith('http://') || 
-          result.content.trim().startsWith('https://'))) {
-        window.open(result.content.trim(), '_blank');
-        
-        this.unlockAchievement('link_opened', filePath);
-        
-        return {
-          success: true,
-          message: `Opening link: ${result.content}`,
-        };
-      }
-      
-      // other types are opened in a contentbox
-      if (callbacks.onRun) {
-        callbacks.onRun({
-          title: filePath,
-          content: result.content,
-          type: result.type,
-        });
-      }
+    const openSafe = (url) => {
+      try {
+        if (!/^https?:\/\//i.test(url)) return;
+        const w = window.open(url, '_blank', 'noopener,noreferrer');
+        if (w) w.opener = null;
+      } catch {}
+    };
 
-      if (result.type === 'image') {
-        this.unlockAchievement('image_opened', filePath);
-      } else if (result.type === 'timeline') {
-        this.unlockAchievement('timeline_opened', filePath);
+    const filePath = args[0];
+    const result = fileSystem.getFileContent(filePath);
+
+    if (!result.success) return result;
+
+    this.unlockAchievement('any_file', filePath);
+    analytics.trackFileOpen(filePath, result.type, fileSystem.currentServer);
+
+    if (result.type === 'url') {
+      openSafe(result.content.trim());
+      this.unlockAchievement('link_opened', filePath);
+      return { success: true, message: `Opening link: ${result.content}` };
+    }
+
+    if (result.type === 'text') {
+      const trimmed = result.content.trim();
+      if (/^https?:\/\//i.test(trimmed)) {
+        openSafe(trimmed);
+        this.unlockAchievement('link_opened', filePath);
+        return { success: true, message: `Opening link: ${trimmed}` };
       }
-      
-      // cat txt files
-      if (result.type === 'text') {
-        const content = result.content.replace(/\\n/g, '\r\n');
-        
-        this.processLoginInfo(content);
-        
-        return {
-          success: true,
-          message: `${this.translate('running')}: ${filePath}\n\n${content}`,
-        };
-      }
-      
+    }
+
+    if (callbacks.onRun) {
+      callbacks.onRun({
+        title: filePath,
+        content: result.content,
+        type: result.type,
+      });
+    }
+
+    if (result.type === 'image') this.unlockAchievement('image_opened', filePath);
+    else if (result.type === 'timeline') this.unlockAchievement('timeline_opened', filePath);
+
+    if (result.type === 'text') {
+      const content = result.content.replace(/\\n/g, '\r\n');
+      this.processLoginInfo(content);
       return {
         success: true,
-        message: `${this.translate('running')}: ${filePath}`,
+        message: `${this.translate('running')}: ${filePath}\n\n${content}`,
       };
     }
 
-    return result;
+    return { success: true, message: `${this.translate('running')}: ${filePath}` };
   }
 
   handleScan() {

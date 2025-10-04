@@ -199,45 +199,51 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
   };
   
   const handleFileClick = (file) => {
+    const openSafe = (url) => {
+      try {
+        if (!/^https?:\/\//i.test(url)) return;
+        const w = window.open(url, '_blank', 'noopener,noreferrer');
+        if (w) w.opener = null;
+      } catch {}
+    };
+
     const filePath = innerPath === '/' ? `/${file}` : `${innerPath}/${file}`;
     const fileResult = fileSystem.getFileContent(filePath);
-    
-    if (fileResult.success) {
-      // Отслеживаем клик по файлу с троттлингом
-      checkAndTrackFile(file, fileResult.type, fileSystem.currentServer);
-      
-      // url checking for opening _blank
-      if (fileResult.type === 'url' || 
-          (fileResult.type === 'text' && 
-           (fileResult.content.trim().startsWith('http://') || 
-            fileResult.content.trim().startsWith('https://')))) {
-        window.open(fileResult.content.trim(), '_blank');
-        
-        // for achievement purposes
-        import('../utils/commandProcessor').then(module => {
-          const commandProcessor = module.default;
-          commandProcessor.unlockAchievement('link_opened', file);
-        });
-        
-        return;
-      }
-      const fileObject = {
-        title: file,
-        content: fileResult.content,
-        type: fileResult.type,
-      };
-      
-      // analyze credentials
-      if (fileResult.type === 'text') {
-        import('../utils/commandProcessor').then(module => {
-          const commandProcessor = module.default;
-          const content = fileResult.content.replace(/\\n/g, '\r\n');
-          commandProcessor.processLoginInfo(content);
-        });
-      }
-      
-      onExecute(fileObject);
+
+    if (!fileResult.success) return;
+
+    checkAndTrackFile(file, fileResult.type, fileSystem.currentServer);
+
+    if (
+      fileResult.type === 'url' ||
+      (fileResult.type === 'text' && /^https?:\/\//i.test(fileResult.content.trim()))
+    ) {
+      openSafe(fileResult.content.trim());
+
+      // для ачивки
+      import('../utils/commandProcessor').then(module => {
+        const commandProcessor = module.default;
+        commandProcessor.unlockAchievement('link_opened', file);
+      });
+
+      return;
     }
+
+    const fileObject = {
+      title: file,
+      content: fileResult.content,
+      type: fileResult.type,
+    };
+
+    if (fileResult.type === 'text') {
+      import('../utils/commandProcessor').then(module => {
+        const commandProcessor = module.default;
+        const content = fileResult.content.replace(/\\n/g, '\r\n');
+        commandProcessor.processLoginInfo(content);
+      });
+    }
+
+    onExecute(fileObject);
   };
   
   const handleGoUp = () => {
