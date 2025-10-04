@@ -15,6 +15,7 @@ const App = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [interfaceKey, setInterfaceKey] = useState(0);
 
 
   useEffect(() => {
@@ -83,8 +84,24 @@ const App = () => {
     if (confirmAction) {
       confirmAction();
     }
+
     localStorage.removeItem('knownLogins');
     localStorage.removeItem('achievements');
+    window.dispatchEvent(new Event('knownLogins:changed'));
+
+    setInterfaceKey((k) => k + 1);
+
+    setCurrentServer(null);
+    setIsConnected(false);
+
+    const defaultIp = '31.31.201.1';
+    const result = fileSystem.connectToServer(defaultIp);
+    if (result.success) {
+      setCurrentServer(result.server);
+      setIsConnected(true);
+      analytics.trackServerConnection(defaultIp, result.server.name);
+    }
+
     setShowConfirmDialog(false);
     setConfirmAction(null);
   };
@@ -105,6 +122,7 @@ const App = () => {
       ) : (
         <>
           <MainInterface 
+            key={`mi-${interfaceKey}`}
             language={language}
             server={currentServer}
             onLanguageChange={handleLanguageChange}

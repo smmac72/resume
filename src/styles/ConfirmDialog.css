@@ -78,3 +78,26 @@
   background-color: #666;
   transform: translateY(-0.125rem);
 }
+
+.confirm-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 0.75rem 0 1rem 0;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.confirm-checkbox-row input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent-color);
+}
+
+.confirm-btn[disabled],
+.confirm-btn[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}

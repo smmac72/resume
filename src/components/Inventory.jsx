@@ -17,8 +17,10 @@ const Inventory = ({ language, onConnect, onAuthenticate }) => {
     };
     
     window.addEventListener('storage', updateLogins);
+    window.addEventListener('knownLogins:changed', updateLogins);
     return () => {
       window.removeEventListener('storage', updateLogins);
+      window.removeEventListener('knownLogins:changed', updateLogins);
     };
   }, []);
 
@@ -56,11 +58,6 @@ const Inventory = ({ language, onConnect, onAuthenticate }) => {
       const res = commandProcessor.processCommand(`connect ${ip}`, {
         onConnect: (server) => {
           if (typeof onConnect === 'function') onConnect(server);
-
-          const meta = fileSystem.root.servers?.[ip];
-          if (meta?.protected && !isAuthed) {
-            echo('Authentication required. Use login [user] [pass]');
-          }
         },
       });
       if (res?.success && res.message) echo(res.message);
@@ -77,7 +74,6 @@ const Inventory = ({ language, onConnect, onAuthenticate }) => {
       return;
     }
 
-    echo(`Already authenticated on ${ip}`);
     analytics.trackEvent('Server', 'AlreadyAuthenticated', ip);
   };
 

@@ -198,6 +198,7 @@ class CommandProcessor {
         formatted: `${username}:${password}@${fileSystem.currentServer}`
       };
       localStorage.setItem('knownLogins', JSON.stringify(this.knownLogins));
+      window.dispatchEvent(new Event('knownLogins:changed'));
 
       try { window.dispatchEvent(new CustomEvent('inventory:updated')); } catch {}
 
@@ -547,6 +548,7 @@ class CommandProcessor {
             known[server].password !== password) {
           known[server] = loginEntry;
           localStorage.setItem('knownLogins', JSON.stringify(known));
+          window.dispatchEvent(new Event('knownLogins:changed'));
           changed = true;
           this.unlockAchievement('logins_found', server);
         }
@@ -588,6 +590,7 @@ class CommandProcessor {
   clearKnownLogins() {
     this.knownLogins = {};
     localStorage.removeItem('knownLogins');
+    window.dispatchEvent(new Event('knownLogins:changed'));
     try { window.dispatchEvent(new CustomEvent('inventory:updated')); } catch {}
   }
 
@@ -639,9 +642,24 @@ class CommandProcessor {
   }
 
   getKnownLogins() {
-    const savedLogins = localStorage.getItem('knownLogins');
-    return savedLogins ? JSON.parse(savedLogins) : {};
-    //return this.knownLogins;
+    try {
+      const saved = localStorage.getItem('knownLogins');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          this.knownLogins = parsed;
+          return parsed;
+        }
+      }
+      
+      this.knownLogins = {};
+      return {};
+    } catch (e) {
+      console.warn('[knownLogins] parse error, using in-memory cache');
+      return this.knownLogins && typeof this.knownLogins === 'object'
+        ? this.knownLogins
+        : {};
+    }
   }
 
   translate(key) {

@@ -19,9 +19,9 @@ const translations = {
     connected_to: 'Connected to server',
     
     // Commands
-    command_not_found: 'Command not found:',
+    command_not_found: 'Command not found',
     connect: 'Connected to',
-    disconnect: 'Disconnected from',
+    disconnect: 'Client disconnected',
     invalid_args: 'Invalid arguments',
     file_not_found: 'Not found',
     dir_not_found: 'Directory not found',
@@ -31,15 +31,15 @@ const translations = {
     cat_usage: 'Usage: cat [file]',
     lang_usage: 'Usage: lang [ru/en]',
     network_scan_complete: 'Network scan completed',
-    available_servers: 'Found servers:',
+    available_servers: 'Found servers',
     playmusic_start: 'Music playing - NieR Automata Chiptune Cover by Retro TV',
     playmusic_stop: 'Music stopped',
 
     
     // File system
     empty_directory: 'Empty directory',
-    directory_not_found: 'Directory not found:',
-    not_a_directory: 'Not a directory:',
+    directory_not_found: 'Directory not found',
+    not_a_directory: 'Not a directory',
     not_a_file: 'Not a file:',
     auth_required_filesystem: 'Authentication required',
     not_connected_filesystem: 'Not connected to any server',
@@ -149,9 +149,9 @@ Available commands:
     connected_to: 'Подключен к серверу',
     
     // Commands
-    command_not_found: 'Команда не найдена:',
+    command_not_found: 'Команда не найдена',
     connect: 'Подключено к',
-    disconnect: 'Отключено от',
+    disconnect: 'Клиент отключен',
     invalid_args: 'Неверные аргументы',
     file_not_found: 'Не существует',
     dir_not_found: 'Директория не найдена',
@@ -167,9 +167,9 @@ Available commands:
     
     // File system
     empty_directory: 'Пустая директория',
-    directory_not_found: 'Директория не найдена:',
-    not_a_directory: 'Не директория:',
-    not_a_file: 'Не файл:',
+    directory_not_found: 'Директория не найдена',
+    not_a_directory: 'Не директория',
+    not_a_file: 'Не файл',
     auth_required_filesystem: 'Требуется аутентификация',
     not_connected_filesystem: 'Нет подключения к серверу',
     
