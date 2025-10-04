@@ -96,8 +96,8 @@ const translations = {
     
     // File Content Translations
     readme_backup: 'note to the future me - if you don\'t know what this server is, amnesia came. check the logins.txt if you\'re still making games. read my old dev notes and make me proud mate!\notherwise, if you aren\'t me but interested in my personal data, use the \'help\' command - there\'s a custom terminal here. gl mate!\np.s. 7 servers here in total. this machine is connected to the main 3\n\n- me',
-    logins_txt: 'zeromac:naughtshad@31.31.201.2\nzeromac:allsspent@31.31.201.3\nzeromac:whereourdesire@31.31.201.4',
-    servers_conf: 'Available servers on network:\n31.31.201.2 - Work Server\n31.31.201.3 - Pet Projects\n31.31.201.4 - Personal Server',
+    logins_txt: 'zeromac:naughtshad@87.251.78.2\nzeromac:allsspent@87.251.78.3\nzeromac:whereourdesire@87.251.78.4',
+    servers_conf: 'Available servers on network:\n87.251.78.2 - Work Server\n87.251.78.3 - Pet Projects\n87.251.78.4 - Personal Server',
     readme_projects: 'a small compilation of my workplaces. timeline files contain the most important events and achievements. due to a little funny document, i won\'t be storing any sensitive documents here\nbut if you want to know what i did - you\'re welcome',
     readme_renderer: 'note to self - making game content is cool, but you know what is cooler? low-level programming. god i miss my risc-v days...\nanyways, a cool thing i did on my redbull-driven three-night bonanza. code is acceptable by my standards',
     readme_chernograd: 'a small piece of our kgb-simulator indie game. pretty hard to finish rn, but i had finally returned to the developer me, not gamedesigner me\nit is broken, but i will get to chernograd when my happiness is back',
@@ -225,8 +225,8 @@ Available commands:
     
     // File Content Translations
     readme_backup: 'заметка для будущего меня - если ты не знаешь, что это за сервер, значит пришла амнезия. проверь logins.txt, если ты всё ещё делаешь игры. прочитай мои старые заметки и стань моей гордостю снова!\nв противном случае, если ты не я, но заинтересован в моей жизни или карьере, используй команду \'help\' - здесь есть собственный терминал. успехов, друже!\nп.с. у меня всего 7 серверов. эта машина подключена только к трем главным\n\n- я',
-    logins_txt: 'zeromac:naughtshad@31.31.201.2\nzeromac:allsspent@31.31.201.3\nzeromac:whereourdesire@31.31.201.4',
-    servers_conf: 'Доступные серверы в сети:\n31.31.201.2 - Рабочий сервер\n31.31.201.3 - Персональные проекты\n31.31.201.4 - Личный сервер',
+    logins_txt: 'zeromac:naughtshad@87.251.78.2\nzeromac:allsspent@87.251.78.3\nzeromac:whereourdesire@87.251.78.4',
+    servers_conf: 'Доступные серверы в сети:\n87.251.78.2 - Рабочий сервер\n87.251.78.3 - Персональные проекты\n87.251.78.4 - Личный сервер',
     readme_projects: 'небольшая подборка моих рабочих мест. файлы с таймлайном содержат наиболее важные события и достижения. из-за одного забавного документа (начинается на н, заканчивается на да) я не буду хранить здесь никаких конфиденциальных документов\nно если вы хотите узнать, чем я занимался - добро пожаловать',
     readme_renderer: 'заметка для себя - создавать игровой контент - это круто, но знаешь, что ещё круче? низкоуровневое программирование. как же я скучаю по дням risc-v...\nв любом случае, это крутая штука, которую я сделал за три ночи во время своей редбулльной экстраваганзы. код приемлемый по моим стандартам',
     readme_chernograd: 'небольшая часть нашей инди-игры симулятора кгб. сейчас довольно сложно закончить, но я наконец вернулся к себе как разработчику, а не геймдизайнеру\nона сломана, но я вернусь к чернограду, когда буду к этому готов!',

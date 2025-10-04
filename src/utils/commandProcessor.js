@@ -206,7 +206,7 @@ class CommandProcessor {
 
       analytics.trackAuthentication(fileSystem.currentServer, true);
 
-      if (fileSystem.currentServer === '31.31.201.69') {
+      if (fileSystem.currentServer === '87.251.78.69') {
         this.unlockAchievement('secret_server_access', fileSystem.currentServer);
       }
       return {
@@ -374,17 +374,17 @@ class CommandProcessor {
   handleScan() {
     const discoveredServers = [];
     
-    if (fileSystem.currentServer === '31.31.201.1') {
-      discoveredServers.push('31.31.201.2', '31.31.201.3', '31.31.201.4');
+    if (fileSystem.currentServer === '87.251.78.216') {
+      discoveredServers.push('87.251.78.2', '87.251.78.3', '87.251.78.4');
     }
-    else if (fileSystem.currentServer === '31.31.201.4') {
-      discoveredServers.push('31.31.201.10');
+    else if (fileSystem.currentServer === '87.251.78.4') {
+      discoveredServers.push('87.251.78.2160');
     }
-    else if (fileSystem.currentServer === '31.31.201.10') {
-      discoveredServers.push('31.31.201.24');
+    else if (fileSystem.currentServer === '87.251.78.2160') {
+      discoveredServers.push('87.251.78.24');
     }
-    else if (fileSystem.currentServer === '31.31.201.24') {
-      discoveredServers.push('31.31.201.69');
+    else if (fileSystem.currentServer === '87.251.78.24') {
+      discoveredServers.push('87.251.78.69');
     }
     
     let output = this.translate('network_scan_complete') + '\n\n' + this.translate('available_servers') + ':\n';

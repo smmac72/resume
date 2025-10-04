@@ -128,7 +128,7 @@ const LoadingScreen = () => {
     { text: "  service: terminal...............[OK]", type: "success", delay: 40 },
     { text: "Scanning for available servers........", type: "normal", delay: 150 },
     { text: "Found 3 servers on network.", type: "info", delay: 100 },
-    { text: "Connecting to default server 31.31.201.1...", type: "normal", delay: 200 },
+    { text: "Connecting to default server 87.251.78.216...", type: "normal", delay: 200 },
     { text: "Connection established.", type: "success", delay: 150 },
     { text: "Loading user interface...............", type: "normal", delay: 150 },
     { text: "Starting AmongOS Terminal Interface", type: "info", delay: 100 },

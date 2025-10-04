@@ -46,7 +46,7 @@ const App = () => {
       await new Promise(resolve => setTimeout(resolve, 5000));
       analytics.trackEvent('System', 'LoadingComplete');
       
-      const defaultIp = '31.31.201.1';
+      const defaultIp = '87.251.78.216';
       const result = fileSystem.connectToServer(defaultIp);
       
       if (result.success) {
@@ -94,7 +94,7 @@ const App = () => {
     setCurrentServer(null);
     setIsConnected(false);
 
-    const defaultIp = '31.31.201.1';
+    const defaultIp = '87.251.78.216';
     const result = fileSystem.connectToServer(defaultIp);
     if (result.success) {
       setCurrentServer(result.server);

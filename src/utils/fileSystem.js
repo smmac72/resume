@@ -37,7 +37,7 @@ class FileSystem {
   initializeFileSystem() {
     return {
       servers: {
-        '31.31.201.1': {
+        '87.251.78.216': {
           name: 'Backup Server',
           username: 'guest',
           password: 'nopass',
@@ -55,7 +55,7 @@ class FileSystem {
           },
           background: 'server1_bg.jpg',
         },
-        '31.31.201.2': {
+        '87.251.78.2': {
           name: 'Work Server',
           username: 'zeromac',
           password: 'naughtshad',
@@ -70,7 +70,7 @@ class FileSystem {
           },
           background: 'server2_bg.jpg',
         },
-        '31.31.201.3': {
+        '87.251.78.3': {
           name: 'Pet Projects',
           username: 'zeromac',
           password: 'allsspent',
@@ -109,7 +109,7 @@ class FileSystem {
           },
           background: 'server3_bg.jpg',
         },
-        '31.31.201.4': {
+        '87.251.78.4': {
           name: 'Personal Server',
           username: 'zeromac',
           password: 'whereourdesire',
@@ -125,7 +125,7 @@ class FileSystem {
           },
           background: 'server3_bg.jpg',
         },
-        '31.31.201.10': {
+        '87.251.78.2160': {
           name: 'Meme Storage',
           username: 'guest',
           password: 'guest',
@@ -145,7 +145,7 @@ class FileSystem {
           },
           background: 'server1_bg.jpg',
         },
-        '31.31.201.24': {
+        '87.251.78.24': {
           name: 'Nothing',
           username: 'guest',
           password: 'guest',
@@ -158,7 +158,7 @@ class FileSystem {
           },
           background: 'server2_bg.jpg',
         },
-        '31.31.201.69': {
+        '87.251.78.69': {
           name: 'Absolute Top Secret Server',
           username: 'root',
           password: 'BYTHEMYRIADTRUTHS',
@@ -184,7 +184,7 @@ class FileSystem {
       
       // If the server is not protected or we're already authenticated, return it directly
       if (!this.root.servers[ip].protected || this.authenticatedServers[ip]) {
-        if (ip === '31.31.201.69') {
+        if (ip === '87.251.78.69') {
           import('./commandProcessor').then(module => {
             const commandProcessor = module.default;
             commandProcessor.unlockAchievement('secret_server_access', ip);
