@@ -227,123 +227,40 @@
   pointer-events: none;
   z-index: 100;
   min-width: 6.875rem;
-  width: auto;
   max-width: 10rem;
   text-align: center;
   box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.3);
-  /* Adjust tooltip position for scaled container */
-  transform: scale(1.5);
+
+  left: 50%;
+  transform: translateX(-50%) scale(1.5);
   transform-origin: center center;
+}
+
+.achievement-tooltip.tooltip-top {
+  top: auto;
+  bottom: calc(100% - 2.5rem);
+}
+.achievement-tooltip.tooltip-bottom {
+  bottom: auto;
+  top: calc(100% - 3.5rem);
 }
 
 .achievement-tooltip::after {
   content: '';
   position: absolute;
-  top: 100%;
   left: 50%;
-  margin-left: -0.3125rem;
+  transform: translateX(-50%);
   border-width: 0.3125rem;
   border-style: solid;
-  border-color: var(--accent-color) transparent transparent transparent;
 }
 
-.tooltip-title {
-  font-weight: bold;
-  margin-bottom: 0.1875rem;
-  color: var(--info-color);
-  font-size: 0.8rem;
-}
-
-.tooltip-description {
-  font-size: 0.7rem;
-  opacity: 0.9;
-}
-
-.achievements-locked {
-  color: var(--error-color);
-  font-weight: bold;
-  text-align: center;
-  font-size: 1rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.achievements-unlocked-animation {
-  color: var(--success-color);
-  font-weight: bold;
-  text-align: center;
-  font-size: 1rem; /* Same size as locked message */
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden; /* Match the locked style */
-  animation: blink 0.5s infinite alternate;
-}
-
-.achievement-tooltip.tooltip-top {
-  bottom: calc(100% - 2.5rem); /* Position above with enough space for scaled tooltip */
-  z-index: 110;
-}
-
-.achievement-tooltip.tooltip-bottom {
-  top: calc(100% - 6.5rem); /* Position below with enough space for scaled tooltip */
-  z-index: 110;
-}
-
-/* Positioning classes - horizontal */
-.achievement-tooltip.tooltip-center {
-  left: 50%;
-  transform: scale(1.5) translateX(-33%); /* Adjusted for scale */
-}
-
-.achievement-tooltip.tooltip-left {
-  left: 0;
-  transform: scale(1.5);
-  transform-origin: left center;
-}
-
-.achievement-tooltip.tooltip-right {
-  right: 0;
-  transform: scale(1.5);
-  transform-origin: right center;
-}
-
-/* Arrow for tooltip pointing up (bottom tooltip) */
-.achievement-tooltip.tooltip-bottom::after {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  border-width: 0.3125rem;
-  border-style: solid;
-  border-color: transparent transparent var(--accent-color) transparent;
-}
-
-/* Arrow for tooltip pointing down (top tooltip) */
 .achievement-tooltip.tooltip-top::after {
-  content: '';
-  position: absolute;
   top: 100%;
-  border-width: 0.3125rem;
-  border-style: solid;
-  border-color: var(--accent-color) transparent transparent transparent;
+  border-color: transparent transparent var(--accent-color) transparent; /* ▼ */
 }
-
-/* Arrow positioning for center, left, right */
-.achievement-tooltip.tooltip-center::after {
-  left: 50%;
-  margin-left: -0.3125rem;
-}
-
-.achievement-tooltip.tooltip-left::after {
-  left: 1.25rem;
-}
-
-.achievement-tooltip.tooltip-right::after {
-  right: 1.25rem;
+.achievement-tooltip.tooltip-bottom::after {
+  bottom: 100%;
+  border-color: var(--accent-color) transparent transparent transparent; /* ▲ */
 }
 
 @keyframes blink {

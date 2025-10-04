@@ -4,7 +4,6 @@ import commandProcessor from '../utils/commandProcessor';
 import analytics from '../utils/analytics';
 
 const Achievements = ({ language }) => {
-  // Используем персистентное состояние для достижений
   const [achievements, setAchievements] = usePersistentState('achievements', []);
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
@@ -104,28 +103,8 @@ const Achievements = ({ language }) => {
 
   // get tooltip position class based on the icon's position in the grid
   const getTooltipPositionClass = (index) => {
-    const row = Math.floor(index / 4); // only four icons per row
-    const col = index % 4;
-    
-    let positionClass = '';
-    
-    // determine vertical position (top/bottom)
-    if (row === 0) {
-      positionClass += 'tooltip-top '; // show tooltip ABOVE for top row
-    } else {
-      positionClass += 'tooltip-bottom '; // show tooltip BELOW for bottom row
-    }
-    
-    // determine horizontal alignment (left/center/right)
-    if (col === 0) {
-      positionClass += 'tooltip-left';
-    } else if (col === 3) {
-      positionClass += 'tooltip-right';
-    } else {
-      positionClass += 'tooltip-center';
-    }
-    
-    return positionClass;
+    const row = Math.floor(index / 4);
+    return row === 0 ? 'tooltip-bottom' : 'tooltip-top';
   };
 
   // unlocking animation
