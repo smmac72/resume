@@ -576,35 +576,39 @@ class CommandProcessor {
   }
 
   unlockAchievement(type, data) {
-    // Загрузка текущих достижений из localStorage
     const savedAchievements = JSON.parse(localStorage.getItem('achievements') || '[]');
-    
+
     const exists = savedAchievements.some(a => a.type === type);
     const isServerSpecific = ['secret_server_access'].includes(type);
-    const serverExists = isServerSpecific && 
+    const serverExists = isServerSpecific &&
       savedAchievements.some(a => a.type === type && a.data === data);
-      
+
     if (isServerSpecific ? !serverExists : !exists) {
       const achievement = {
         type,
         data,
         timestamp: new Date().toISOString(),
       };
-      
+
       const updatedAchievements = [...savedAchievements, achievement];
-      
-      // saving to local storage
+
       localStorage.setItem('achievements', JSON.stringify(updatedAchievements));
-      
+
       console.log(`${this.translate('achievement_unlocked')}: ${type}`);
-      
       analytics.trackAchievement(type, data);
-      
+
       this.achievementsUnlocked = true;
       this.playAchievementSound();
+
+      try {
+        window.dispatchEvent(new CustomEvent('achievements:updated', {
+          detail: { type, data, total: updatedAchievements.length }
+        }));
+      } catch {}
+
       return achievement;
     }
-    
+
     return null;
   }
 

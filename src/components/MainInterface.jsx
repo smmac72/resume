@@ -21,7 +21,6 @@ const MainInterface = ({
   const [openTabs, setOpenTabs] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const [currentPath, setCurrentPath] = useState('/');
-  const [updateCounter, setUpdateCounter] = useState(0);
   
   // максимум табов
   const MAX_TABS = 6;
@@ -29,14 +28,6 @@ const MainInterface = ({
   const translate = (key) => {
     return translations[language]?.[key] || translations.en[key] || key;
   };
-  
-  useEffect(() => {
-    const updateInterval = setInterval(() => {
-      setUpdateCounter(prev => prev + 1);
-    }, 500);
-    
-    return () => clearInterval(updateInterval);
-  }, []);
   
   // Для устранения частых вызовов событий, добавляем троттлинг для событий табов
   const tabEventThrottleRef = useRef(false);
@@ -76,7 +67,6 @@ const MainInterface = ({
       
       setOpenTabs(newTabs);
     } 
-    setUpdateCounter(prev => prev + 1);
   };
   
   const handleTabClose = (index) => {
@@ -106,13 +96,10 @@ const MainInterface = ({
     }
     setCurrentPath('/');
     setActiveTab(0);
-    
-    setUpdateCounter(prev => prev + 1);
   };
   
   const handleAuthenticate = (authServer) => {
     setAuthenticatedServer(authServer);
-    setUpdateCounter(prev => prev + 1);
   };
 
   const handlePathChange = (newPath) => {
@@ -144,7 +131,6 @@ const MainInterface = ({
               <div className="inventory-items">
                 <Inventory 
                   language={language} 
-                  key={`inv-${updateCounter}`} 
                   onConnect={handleConnect} 
                 />
               </div>
@@ -154,7 +140,7 @@ const MainInterface = ({
                 {translate('achievements')}
               </div>
               <div className="achievements-items">
-                <Achievements language={language} key={`ach-${updateCounter}`} />
+                <Achievements language={language} />
               </div>
             </div>
           </div>

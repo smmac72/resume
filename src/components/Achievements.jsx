@@ -12,6 +12,23 @@ const Achievements = ({ language }) => {
   const containerRefs = useRef({});
   const totalAchievements = 8;
 
+  useEffect(() => {
+    const handler = (e) => {
+      try {
+        const latest = JSON.parse(localStorage.getItem('achievements') || '[]');
+        setAchievements(latest);
+
+        setShowUnlockAnimation(true);
+        const t = setTimeout(() => setShowUnlockAnimation(false), 3000);
+        return () => clearTimeout(t);
+      } catch {}
+    };
+
+    window.addEventListener('achievements:updated', handler);
+    return () => window.removeEventListener('achievements:updated', handler);
+  }, [setAchievements]);
+
+
   // defining achievements and their details
   const achievementDetails = {
     any_file: {
