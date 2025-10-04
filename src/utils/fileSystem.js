@@ -62,6 +62,7 @@ class FileSystem {
           protected: true, // This server requires authentication
           root: {
             projects: {
+              'majestic.sh': 'timeline:majesticrp',
               'globalcity.sh': 'timeline:globalcity',
               'nextrp.sh': 'timeline:nextrp',
               'samprp.sh': 'timeline:samprp',
