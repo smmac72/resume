@@ -1,71 +1,64 @@
-// for Google Analytics
 class Analytics {
   constructor() {
     this.initialized = false;
-    this.measurementId = null;
+    this.counterId = null;
     this.debugMode = process.env.NODE_ENV === 'development';
+    this.queue = [];
   }
-  
-  init(measurementId) {
-    this.measurementId = measurementId;
+
+  log(...args) {
+    if (this.debugMode) console.log('[Analytics]', ...args);
+  }
+
+  warn(...args) {
+    if (this.debugMode) console.warn('[Analytics]', ...args);
+  }
+
+  _ym(method, ...args) {
+    if (typeof window !== 'undefined' && typeof window.ym === 'function' && this.initialized) {
+      try {
+        window.ym(this.counterId, method, ...args);
+      } catch (e) {
+        this.warn('ym call failed', method, args, e);
+      }
+    } else {
+      this.queue.push([method, ...args]);
+      this.warn('ym not ready, queued:', method, args);
+    }
+  }
+
+  init(counterId) {
+    this.counterId = counterId;
     this.initialized = true;
-    
-    if (this.debugMode) {
-      console.log(`[Analytics] Initialized with GA4 Measurement ID: ${measurementId}`);
-    }
+    this.log('Yandex Metrica ready with counter', counterId);
   }
 
-  trackEvent(category, action, label = null, value = null) {
-    if (!this.initialized) {
-      if (this.debugMode) {
-        console.warn('[Analytics] Not initialized. Call init() first.');
-      }
-      return;
-    }
+  _hit(url, referrer) {
+    const params = { referer: referrer || document.referrer || '' };
+    this._ym('hit', url, params);
+    this.log('hit', url, params);
+  }
 
-    try {
-      if (!window.gtag) {
-        if (this.debugMode) {
-          console.warn('[Analytics] Google Analytics not available');
-        }
-        return;
-      }
-      
-      const eventParams = {
-        event_category: category,
-        event_action: action
-      };
+  trackEvent(category, action, label = null, value = null, extra = {}) {
+    if (!this.counterId) return;
 
-      if (label !== null) {
-        eventParams.event_label = label;
-      }
+    const goal = this._sanitize(`${category}_${action}`)
+    const params = {
+      label: label ?? undefined,
+      value: typeof value === 'number' ? value : undefined,
+      ...extra
+    };
 
-      if (value !== null && !isNaN(value)) {
-        eventParams.value = value;
-      }
-
-      window.gtag('event', action, eventParams);
-
-      if (this.debugMode) {
-        console.log(`[Analytics] Event tracked: ${category} / ${action} / ${label} / ${value}`);
-      }
-    } catch (error) {
-      if (this.debugMode) {
-        console.error('[Analytics] Error tracking event:', error);
-      }
-    }
+    this._ym('reachGoal', goal, params);
+    this.log('reachGoal', goal, params);
   }
 
   trackCommand(command, success, args = '') {
-    this.trackEvent(
-      'Command', 
-      command, 
-      `${success ? 'Success' : 'Failed'}${args ? ': ' + args : ''}`
-    );
+    this.trackEvent('Command', command, `${success ? 'Success' : 'Failed'}${args ? ': ' + args : ''}`);
   }
 
-  trackServerConnection(serverIp, serverName) {
-    this.trackEvent('Server', 'Connect', `${serverIp} (${serverName})`);
+  trackServerConnection(serverIp, serverNameOrState) {
+    this.trackEvent('Server', 'Connect', `${serverIp} (${serverNameOrState})`);
   }
 
   trackAuthentication(serverIp, success) {
@@ -77,7 +70,7 @@ class Analytics {
   }
 
   trackAchievement(achievementType, data) {
-    this.trackEvent('Achievement', 'Unlock', `${achievementType}: ${data}`);
+    this.trackEvent('Achievement', 'Unlock', `${achievementType}: ${data ?? ''}`);
   }
 
   trackLanguageChange(language) {
@@ -86,6 +79,10 @@ class Analytics {
 
   trackDirectoryChange(path) {
     this.trackEvent('Navigation', 'DirectoryChange', path);
+  }
+
+  _sanitize(name) {
+    return String(name).replace(/[^\w]+/g, '_').replace(/^_+|_+$/g, '');
   }
 }
 

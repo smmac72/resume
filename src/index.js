@@ -1,28 +1,29 @@
+// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles/global.css';
 import analytics from './utils/analytics';
 
-const GA_MEASUREMENT_ID = 'G-61E7X1YNTK';
+const YM_COUNTER_ID = Number(100250172 || 0);
 
-const initGoogleAnalytics = () => {
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
-  
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
-  window.gtag = gtag;
-  gtag('js', new Date());
-  gtag('config', GA_MEASUREMENT_ID);
-  
-  analytics.init(GA_MEASUREMENT_ID);
+const YM_OPTIONS = {
+  clickmap: true,
+  trackLinks: true,
+  accurateTrackBounce: true,
+  webvisor: true,
+  defer: true,
+  triggerEvent: true
+};
+
+const initMetrica = () => {
+  analytics.init(YM_COUNTER_ID, YM_OPTIONS);
+
   analytics.trackEvent('System', 'PageLoad', window.location.href);
 };
 
-document.addEventListener('DOMContentLoaded', initGoogleAnalytics);
+document.addEventListener('DOMContentLoaded', initMetrica);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
