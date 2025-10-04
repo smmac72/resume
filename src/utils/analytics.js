@@ -2,7 +2,7 @@ class Analytics {
   constructor() {
     this.initialized = false;
     this.counterId = null;
-    this.debugMode = process.env.NODE_ENV === 'development';
+    this.debugMode = false;
     this.queue = [];
   }
 

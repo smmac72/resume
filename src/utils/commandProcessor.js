@@ -498,7 +498,6 @@ class CommandProcessor {
       if (matchingCommands.length === 1) {
         return matchingCommands[0] + ' ';
       } else if (matchingCommands.length > 1) {
-        console.log('Matching commands:', matchingCommands.join(', '));
         return cmd;
       }
     }
@@ -515,7 +514,6 @@ class CommandProcessor {
           if (result.matches.length === 1) {
             return `${cmd} ${result.matches[0]}`;
           } else {
-            console.log('Matching items:', result.matches.join(', '));
             return input;
           }
         }
@@ -613,7 +611,6 @@ class CommandProcessor {
 
       localStorage.setItem('achievements', JSON.stringify(updatedAchievements));
 
-      console.log(`${this.translate('achievement_unlocked')}: ${type}`);
       analytics.trackAchievement(type, data);
 
       this.achievementsUnlocked = true;
