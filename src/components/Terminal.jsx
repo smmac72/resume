@@ -49,10 +49,10 @@ const Terminal = ({
   }, [input]);
 
   useEffect(() => {
-    if (currentPath !== fileSystem.currentPath) {
+    if (server?.ip && fileSystem.currentPath !== currentPath) {
       fileSystem.changeDirectory(currentPath);
     }
-  }, [currentPath]);
+  }, [currentPath, server?.ip]);
 
   useEffect(() => {
     if (output.length === 0) {
@@ -83,30 +83,31 @@ const Terminal = ({
 
   const renderPrompt = () => {
     if (server) {
-      const username = fileSystem.authenticatedServers[fileSystem.currentServer]?.username || 'guest';
+      const username =
+        fileSystem.authenticatedServers[server.ip]?.username || 'guest';
       return (
         <span className="terminal-prompt">
           <span className="terminal-user">{username}</span>
           <span className="terminal-at">@</span>
-          <span className="terminal-server">{fileSystem.currentServer}</span>
+          <span className="terminal-server">{server.ip}</span>
           <span className="terminal-colon">:</span>
-          <span className="terminal-path">{fileSystem.currentPath}</span>
+          <span className="terminal-path">{currentPath}</span>
           <span className="terminal-dollar">$ </span>
         </span>
       );
-    } else {
-      return <span className="terminal-prompt">{'> '}</span>;
     }
+    return <span className="terminal-prompt">{'> '}</span>;
   };
 
   const getPromptString = () => {
     if (server) {
-      const username = fileSystem.authenticatedServers[fileSystem.currentServer]?.username || 'guest'; 
-      return `${username}@${fileSystem.currentServer}:${fileSystem.currentPath}$ `;
-    } else {
-      return '> ';
+      const username =
+        fileSystem.authenticatedServers[server.ip]?.username || 'guest';
+      return `${username}@${server.ip}:${currentPath}$ `;
     }
+    return '> ';
   };
+
 
   const handleSubmit = () => {
     const command = input.trim();

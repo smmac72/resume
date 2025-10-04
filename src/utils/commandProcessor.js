@@ -36,33 +36,34 @@ class CommandProcessor {
   processCommand(command, callbacks) {
     if (!command) return { success: false, message: '' };
 
-    // add command to history
     this.commandHistory.push(command);
     this.historyIndex = this.commandHistory.length;
 
-    // split command - name, args
     const parts = command.trim().split(' ');
     const cmd = parts[0].toLowerCase();
     const args = parts.slice(1);
 
-    // analytics track
     analytics.trackCommand(cmd, true, args.join(' '));
 
-    // if connected to non-authenticated server
     const currentServer = fileSystem.currentServer;
-    const isProtectedServer = currentServer && 
-                             fileSystem.root.servers[currentServer]?.protected;
-    const isAuthenticated = currentServer && 
-                           fileSystem.authenticatedServers[currentServer];
-    
+    const isProtectedServer = currentServer &&
+      fileSystem.root.servers[currentServer]?.protected;
+    const isAuthenticated = currentServer &&
+      fileSystem.authenticatedServers[currentServer];
+
     const alwaysAvailableCommands = ['connect', 'disconnect', 'lang', 'playmusic', 'help', 'login'];
-    
-    // restrict commands for non-authenticated servers
+
     if (isProtectedServer && !isAuthenticated && !alwaysAvailableCommands.includes(cmd)) {
-      return {
+      const res = {
         success: false,
         message: this.translate('auth_required'),
       };
+      res.prompt = {
+        user: fileSystem.getCurrentUser(),
+        server: fileSystem.currentServer,
+        path: fileSystem.currentPath,
+      };
+      return res;
     }
 
     let result;
@@ -110,6 +111,12 @@ class CommandProcessor {
     if (this.commandHints[cmd] && !result.success && !result.hint) {
       result.hint = this.translate(this.commandHints[cmd]);
     }
+
+    result.prompt = {
+      user: fileSystem.getCurrentUser(),
+      server: fileSystem.currentServer,
+      path: fileSystem.currentPath,
+    };
 
     return result;
   }

@@ -184,6 +184,12 @@ class FileSystem {
     };
   }
 
+  getCurrentUser() {
+    if (!this.currentServer) return 'guest';
+    const auth = this.authenticatedServers[this.currentServer];
+    return (auth && auth.username) ? auth.username : 'guest';
+  }
+
   // Connect to a server
   connectToServer(ip) {
     if (this.root.servers[ip]) {

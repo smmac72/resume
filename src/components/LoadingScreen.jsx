@@ -169,7 +169,7 @@ const LoadingScreen = () => {
       
       for (let i = 0; i < bootSequenceLogs.length; i++) {
         setLogs(prevLogs => {
-	  // delete old logs
+	        // delete old logs
           if (prevLogs.length >= maxLines) {
             return [...prevLogs.slice(1), bootSequenceLogs[i]];
           } else {

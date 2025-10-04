@@ -153,15 +153,13 @@ const FileBrowser = ({ server, language, onExecute, currentPath, onPathChange })
     return translations[language]?.[key] || translations.en[key] || key;
   };
   
-  // Функция для проверки и установки троттлинга для файлов
   const checkAndTrackFile = (fileName, fileType, serverIp) => {
     const fileKey = `${fileName}-${fileType}-${serverIp}`;
     
-    // Если у нас нет записи об этом файле или прошло больше 5 минут с последнего события
     const now = Date.now();
     const lastTracked = fileEventThrottleRef.current[fileKey] || 0;
     
-    if (now - lastTracked > 5 * 60 * 1000) { // 5 минут
+    if (now - lastTracked > 5 * 60 * 1000) {
       analytics.trackFileOpen(fileName, fileType, serverIp);
       fileEventThrottleRef.current[fileKey] = now;
       return true;

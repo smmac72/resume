@@ -90,7 +90,6 @@ const MainInterface = ({
   };
   
   const handleConnect = (newServer) => {
-    console.log("handling")
     setAuthenticatedServer(newServer);
     if (onConnect) {
       onConnect(newServer);
