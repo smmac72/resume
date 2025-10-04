@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import commandProcessor from '../utils/commandProcessor';
 import translations from '../utils/translations';
 import analytics from '../utils/analytics';
+import fileSystem from '../utils/fileSystem';
 
 const Inventory = ({ language, onConnect }) => {
   const [knownLogins, setKnownLogins] = useState(() => 
@@ -28,20 +29,43 @@ const Inventory = ({ language, onConnect }) => {
   const handleInventoryClick = (ip, username, password) => {
     const now = Date.now();
     const lastClicked = inventoryClicksTracker.current[ip] || 0;
-    
-    if (now - lastClicked > 5000) { // to avoid unnecessary tracking
+
+    if (now - lastClicked > 5000) {
       analytics.trackEvent('Inventory', 'UseCredentials', `${username}@${ip}`);
       inventoryClicksTracker.current[ip] = now;
     }
-    
-    const connectResult = commandProcessor.processCommand(`connect ${ip}`, { onConnect });
-    
-    if (connectResult.success) {
-      // authenticate with stored credentials
-      setTimeout(() => {
-        commandProcessor.processCommand(`login ${username} ${password}`, { onConnect });
-      }, 100); // small delay to ensure the connect finishes
+
+    const isCurrent = fileSystem.currentServer === ip;
+    const isAuthed = !!fileSystem.authenticatedServers[ip];
+
+    const echo = (msg) => {
+      if (!msg) return;
+      try {
+        window.dispatchEvent(new CustomEvent('terminal:echo', { detail: msg }));
+      } catch {}
+    };
+
+    if (!isCurrent) {
+      // 1) Подключение (без авто-логина)
+      const res = commandProcessor.processCommand(`connect ${ip}`, { 
+        onConnect: () => {} 
+      });
+      if (res?.success && res.message) echo(res.message);
+      return;
     }
+
+    if (isCurrent && !isAuthed) {
+      // 2) Авторизация сохранёнными кредами
+      const res = commandProcessor.processCommand(`login ${username} ${password}`, { 
+        onAuthenticate: () => {} 
+      });
+      if (res?.success && res.message) echo(res.message);
+      return;
+    }
+
+    // 3) Уже авторизованы
+    echo(`Already authenticated on ${ip}`);
+    analytics.trackEvent('Server', 'AlreadyAuthenticated', ip);
   };
 
   const clearInventory = () => {
@@ -61,7 +85,7 @@ const Inventory = ({ language, onConnect }) => {
             <div 
               key={ip} 
               className="inventory-item"
-              onClick={() => handleInventoryClick(ip, username, password)}
+              onMouseDown={() => handleInventoryClick(ip, username, password)}
               style={{ cursor: 'pointer' }}
             >
               <div className="inventory-item-header">{formatted}</div>

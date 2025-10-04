@@ -17,7 +17,7 @@ const Terminal = ({
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
   const [pendingAuthentication, setPendingAuthentication] = useState(false);
-  const [setPendingAuthServer] = useState(null);
+  const [pendingAuthServer, setPendingAuthServer] = useState(null);
   const [pendingUsername, setPendingUsername] = useState('');
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
@@ -26,6 +26,17 @@ const Terminal = ({
   useEffect(() => {
     commandProcessor.setLanguage(language);
   }, [language]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      const msg = e?.detail;
+      if (msg) {
+        addToOutput(msg);
+      }
+    };
+    window.addEventListener('terminal:echo', handler);
+    return () => window.removeEventListener('terminal:echo', handler);
+  }, []);
 
   useEffect(() => {
     if (currentPath !== fileSystem.currentPath) {
@@ -62,7 +73,7 @@ const Terminal = ({
 
   const renderPrompt = () => {
     if (server) {
-      const username = fileSystem.authenticatedServers[fileSystem.currentServer]?.username || server.username;
+      const username = fileSystem.authenticatedServers[fileSystem.currentServer]?.username || 'guest';
       return (
         <span className="terminal-prompt">
           <span className="terminal-user">{username}</span>
@@ -80,7 +91,8 @@ const Terminal = ({
 
   const getPromptString = () => {
     if (server) {
-      return `${server.username}@${fileSystem.currentServer}:${fileSystem.currentPath}$ `;
+      const username = fileSystem.authenticatedServers[fileSystem.currentServer]?.username || 'guest'; 
+      return `${username}@${fileSystem.currentServer}:${fileSystem.currentPath}$ `;
     } else {
       return '> ';
     }

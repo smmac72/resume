@@ -124,37 +124,38 @@ class CommandProcessor {
     }
 
     const ip = args[0];
-    console.log(ip);
     const result = fileSystem.connectToServer(ip);
+
     if (result.success) {
-      // check login:pass knowledge
-      if (this.knownLogins[ip]) {
-        const { username, password } = this.knownLogins[ip];
-        const authResult = fileSystem.authenticate(username, password);
-        
-        if (authResult.success && callbacks.onAuthenticate) {
-          callbacks.onAuthenticate(authResult.server);
-        }
-      }
+      const alreadyAuthed = !!fileSystem.authenticatedServers[ip];
+      const meta = fileSystem.root.servers?.[ip];
 
       if (callbacks.onConnect) {
         callbacks.onConnect(result.server);
       }
-      
-      // analytics track
-      analytics.trackServerConnection(ip, result.server.name);
-      
+
+      let msg = `${this.translate('connect')} ${ip}`;
+
+      if (meta?.protected && !alreadyAuthed) {
+        msg += `\n${this.translate('auth_required')}`;
+      }
+
+      if (alreadyAuthed) {
+        analytics.trackEvent('Server', 'AlreadyAuthenticated', ip);
+      } else {
+        analytics.trackServerConnection(ip, result.server?.name || 'Unknown');
+      }
+
       return {
         success: true,
-        message: `${this.translate('connect')} ${ip}`,
+        message: msg
       };
     }
 
-    // analytics track
     analytics.trackServerConnection(ip, 'Failed');
-    
     return result;
   }
+
 
   handleDisconnect(callbacks) {
     const result = fileSystem.disconnect();
