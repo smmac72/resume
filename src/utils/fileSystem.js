@@ -548,9 +548,7 @@ class FileSystem {
 
   // Disconnect from server
   disconnect() {
-    if (this.currentServer && this.authenticatedServers[this.currentServer]) {
-      delete this.authenticatedServers[this.currentServer];
-    }
+    this.authenticatedServers = {};
 
     this.currentServer = null;
     this.currentPath = '/';
