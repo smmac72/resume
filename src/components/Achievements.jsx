@@ -208,41 +208,43 @@ const Achievements = ({ language }) => {
 
   // if no achievements, show locked message, otherwise show grid
   if (achievements.length === 0) {
-    return (
-      <>
-        <div className="achievements-header-line">
-          {language === 'ru' ? 'Достижения' : 'Achievements'}: 0/{totalAchievements}
+  return (
+    <div className="achievements-inner" style={{height: '100%', overflow: 'hidden'}}>
+      <div className="achievements-header-line">
+        {language === 'ru' ? 'Достижения' : 'Achievements'}: 0/{totalAchievements}
+      </div>
+      <div className="achievements-items no-scroll">
+        <div className="achievements-locked">
+          {language === 'ru' ? 'ДОСТИЖЕНИЯ ЗАБЛОКИРОВАНЫ' : 'ACHIEVEMENTS LOCKED'}
         </div>
-        
-        <div className="achievements-items no-scroll">
-          <div className="achievements-locked">
-            {language === 'ru' ? 'ДОСТИЖЕНИЯ ЗАБЛОКИРОВАНЫ' : 'ACHIEVEMENTS LOCKED'}
-          </div>
-        </div>
-      </>
-    );
-  }
+      </div>
+    </div>
+  );
+}
+
 
   if (showUnlockAnimation) {
     return (
-      <>
+      <div className="achievements-inner" style={{height: '100%', overflow: 'hidden'}}>
         <div className="achievements-header-line">
           {language === 'ru' ? 'Достижения' : 'Achievements'}: {achievements.length}/{totalAchievements}
         </div>
-        <div className="achievements-unlocked-animation">
-          {language === 'ru' ? 'ДОСТИЖЕНИЯ РАЗБЛОКИРОВАНЫ' : 'ACHIEVEMENTS UNLOCKED'}
+        <div className="achievements-items no-scroll">
+          <div className="achievements-unlocked-animation">
+            {language === 'ru' ? 'ДОСТИЖЕНИЕ РАЗБЛОКИРОВАНО' : 'ACHIEVEMENT UNLOCKED'}
+          </div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="achievements-inner" style={{height: '100%', overflow: 'hidden'}}>
       <div className="achievements-header-line">
         {language === 'ru' ? 'Достижения' : 'Achievements'}: {achievements.length}/{totalAchievements}
       </div>
       {renderAchievementGrid()}
-    </>
+    </div>
   );
 };
 

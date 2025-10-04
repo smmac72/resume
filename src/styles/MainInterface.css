@@ -263,6 +263,52 @@
   border-color: var(--accent-color) transparent transparent transparent; /* ▲ */
 }
 
+.achievements-locked {
+  color: var(--error-color);
+  font-weight: 600;
+  text-align: center;
+  font-size: 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.achievements-unlocked-animation {
+  color: var(--success-color);
+  font-weight: 600;
+  text-align: center;
+  font-size: 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  overflow: hidden;
+  opacity: 0;
+  animation: achievementFade 1.6s ease-out forwards;
+}
+
+@keyframes achievementFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+
+
 @keyframes blink {
   from { opacity: 0.6; }
   to { opacity: 1; }
