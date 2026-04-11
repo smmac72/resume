@@ -1,5 +1,6 @@
 # My Resume
 This project is a small interactive web-game of mine, simulating an Uplink/Hacken/EdenUI-inspired shell interface in order to become a small journey through my projects and personal files. Some gamification (achievements/secret levels) and you have a complete game for a short while!
+Available at [https://zeromac.ru](zeromac.ru)
 ## Features
 
 - **Linux-style Terminal Interface**: Use commands like `cd`, `ls`, `cat`, and custom commands to navigate and interact with the system.
